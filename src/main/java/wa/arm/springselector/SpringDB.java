@@ -19,8 +19,6 @@ import java.util.Properties;
 public class SpringDB {
 
   // Table column constants
-  private static final String SPRING_ID = "spring_id";
-
   private static final String ORDER_NUM = "order_num";
   private static final String SUPPLIER = "supplier";
   private static final String MAX_POTENTIAL_ENERGY_NMM = "max_potential_energy_nnm";
@@ -66,6 +64,8 @@ public class SpringDB {
       mConnection.createStatement().execute("SET TABLE Springs SOURCE \"" + dataSetPath + ";ignore_first=true\" DESC");
       // Create the spring selection table
 //      mConnection.createStatement()
+      
+      
 //          .execute("CREATE TABLE SelectedSprings (" + generateSelectedSpringTableDescription() + ")");
     } catch (SQLException e) {
       e.printStackTrace();

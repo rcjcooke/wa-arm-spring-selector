@@ -175,7 +175,7 @@ public class SpringSelector {
 //		ortho(); // Start in ortho view mode
   }
   
-  private List<Spring> runScenario(Scenario scenario) {
+  public List<Spring> runScenario(Scenario scenario) {
     // Calculate scaled values
     double mass_sc = scenario.getMass()/scenario.getNumberOfParallelSprings();
     double mechanicalAdvantage = scenario.getMechanicalAdvantageZaehler()/scenario.getMechanicalAdvantageNenner();
