@@ -9,10 +9,13 @@ package wa.arm.springselector;
  */
 public class Spring {
 
+  // Spring details
   private String mOrderNum;
   private String mManufacturer;
   private double mRate;
   private double mRelevantLength;
+  
+  // Scenario specific values
   private double mR2Min;
   private double mR2Max;
   private double mAMin;

@@ -1,0 +1,19 @@
+durchmesser - diameter
+draht - wire
+Windungs - Coil
+Ausseren - outside
+Huelsen - Strands (?)
+kleinster - smallest
+stellung - position
+laenge - length
+unbelastete - unloaded
+Feder - Spring
+ungespannte - unstrained
+koerper - body
+abstend - distance
+kante - edge
+innen - inner
+vorspann - preload
+kraft - force
+statischer - static
+belastung - load

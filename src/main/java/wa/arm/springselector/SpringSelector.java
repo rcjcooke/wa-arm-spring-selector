@@ -14,7 +14,7 @@ public class SpringSelector {
   // gravitational acceleration [km/(s*s)]
   private static double GRAVITY = 0.00980665;
   // Relative or absolute path to the Spring dataset
-  private static String DATASET_PATH = "Databases/Federndatenbank2.csv";
+  private static String DATASET_PATH = "data/Databases/basicData.csv";
   
   // The Spring Database
   private SpringDB mSpringDB;
