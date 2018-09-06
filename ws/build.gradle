@@ -1,0 +1,23 @@
+/****************************
+ * Project Descriptors
+ ****************************/
+description = "Workshop Automation: Workshop Arm: Spring selection service: Web Service"
+
+/****************************
+ * Project Output
+ ****************************/
+jar {
+    manifest {
+        attributes 'Main-Class': 'wa.arm.springselector.ws.WebServer'
+    }
+}
+
+/****************************
+ * Project Dependencies
+ ****************************/
+dependencies {
+    // Web Services dependencies
+    compile "org.glassfish.jersey.containers:jersey-container-grizzly2-http:2.27"
+    compile "org.glassfish.jersey.inject:jersey-hk2:2.27"
+    compile "org.glassfish.jersey.media:jersey-media-json-binding:2.27"
+}

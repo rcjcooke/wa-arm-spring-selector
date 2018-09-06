@@ -1,0 +1,34 @@
+/****************************
+ * Build Environment Setup
+ ****************************/
+apply plugin: 'application'
+
+/****************************
+ * Project Descriptors
+ ****************************/
+description = "Workshop Automation: Workshop Arm: Spring selection Service: Application"
+mainClassName = 'wa.arm.springselector.SpringSelector'
+
+/****************************
+ * Project Output
+ ****************************/
+jar {
+    manifest {
+        attributes 'Main-Class': 'wa.arm.springselector.SpringSelector'
+    }
+}
+
+/****************************
+ * Process Dependencies
+ ****************************/
+dependencies {
+    // This dependency is found on compile classpath of this component and consumers.
+    // compile 'com.google.guava:guava:23.0'
+	// https://mvnrepository.com/artifact/org.processing/core
+	//compile group: 'org.processing', name: 'core', version: '3.3.7'
+    
+    // Database dependencies
+    compile "org.hsqldb:hsqldb:2.4.1"
+    compile "org.hsqldb:hsqldb:2.4.1:sources"
+    compile "org.hsqldb:hsqldb:2.4.1:javadoc"
+}
