@@ -1,7 +1,18 @@
 /****************************
+ * Build Environment Setup
+ ****************************/
+apply plugin: 'application'
+
+/****************************
  * Project Descriptors
  ****************************/
 description = "Workshop Automation: Workshop Arm: Spring selection service: Web Service"
+mainClassName = 'wa.arm.springselector.ws.WebServer'
+
+// Make sure gradle run takes user input (the app is designed to terminate on key press)
+run{
+	standardInput = System.in
+}
 
 /****************************
  * Project Output

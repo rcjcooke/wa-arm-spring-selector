@@ -61,7 +61,7 @@ subprojects {
         classpath = sourceSets.intTest.runtimeClasspath
         shouldRunAfter test
     }
-    tasks.integrationTest.workingDir = buildDir
+    //tasks.integrationTest.workingDir = buildDir
     check.dependsOn integrationTest
 
 }
