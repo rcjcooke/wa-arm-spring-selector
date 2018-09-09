@@ -61,7 +61,7 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
         final List<Spring> springs = target
             .request(MediaType.APPLICATION_JSON_TYPE)
             .post(
-                Entity.entity(new Scenario(15000, 1, 1, 1, 100, 200, 100, 200, 1200), MediaType.APPLICATION_JSON_TYPE), 
+                Entity.entity(TEST_SCENARIO, MediaType.APPLICATION_JSON_TYPE), 
                 new GenericType<List<Spring>>(){});
 
         assertEquals(EXPECTED_SPRINGS, springs);
