@@ -45,8 +45,8 @@ public class SpringSelector {
         System.exit(INVALID_NUMBER_OF_ARGUMENTS_EXIT_CODE);
       }
       scenario = new Scenario(Float.parseFloat(args[1]), Integer.parseInt(args[2]), Float.parseFloat(args[3]),
-          Float.parseFloat(args[4]), new float[] { Float.parseFloat(args[5]), Float.parseFloat(args[6]) },
-          new float[] { Float.parseFloat(args[7]), Float.parseFloat(args[8]) }, Float.parseFloat(args[9]));
+          Float.parseFloat(args[4]), Float.parseFloat(args[5]), Float.parseFloat(args[6]),
+          Float.parseFloat(args[7]), Float.parseFloat(args[8]), Float.parseFloat(args[9]));
     } catch (Exception e) {
       // Some kind of parsing exception, we don't care what it was
       System.err.println("Problem parsing command line arguments");

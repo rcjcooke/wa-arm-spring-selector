@@ -11,38 +11,54 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Scenario {
 
+  // NOTE: THESE FIELDS HAVE TO BE PUBLIC FOR SERIALISATION PURPOSES
   // System mass + payload mass [g]
-  private float mMassGrams = 1000;
+  public float mMassGrams;
   // Number of equivalent parallel springs
-  private int mNumberOfParallelSprings = 1;
-  private float mMechanicalAdvantageZaehler = 1; // TODO
-  private float mMechanicalAdvantageNenner = 1; // TODO
+  public int mNumberOfParallelSprings;
+  public float mMechanicalAdvantageZaehler; // TODO
+  public float mMechanicalAdvantageNenner; // TODO
   // Distance spring connection on lever to Pivot [mm]
-  private float[] mAllowedRangeR2Millimeters = { 100, 200 };
+  public float mAllowedRangeR2MillimetersMin;
+  public float mAllowedRangeR2MillimetersMax;
   // Distance spring connection on fixed y-Axis to Pivot [mm]
-  private float[] mAllowedRangeAMillimeters = { 100, 200 };
+  public float mAllowedRangeAMillimetersMin;
+  public float mAllowedRangeAMillimetersMax;
   // Lever => distance CoM to Pivot [mm]
-  private float mR1 = 1000;
+  public float mR1;
 
   /**
-   * @param massGrams                  - System mass + payload mass [g]
-   * @param numberOfParallelSprings    - Number of equivalent parallel springs
+   * Empty constructor for de/serialisation
+   */
+  public Scenario() {
+  }
+  
+  /**
+   * @param massGrams                    System mass + payload mass [g]
+   * @param numberOfParallelSprings      Number of equivalent parallel springs
    * @param mechanicalAdvantageZaehler
    * @param mechanicalAdvantageNenner
-   * @param allowedRangeR2Millimeters  - Distance spring connection on lever to
-   *                                   Pivot {min, max} [mm]
-   * @param allowedRangeAMillimeters   - Distance spring connection on fixed
-   *                                   y-Axis to Pivot {min, max} [mm]
-   * @param r1                         - Lever => distance CoM to Pivot [mm]
+   * @param allowedRangeR2MillimetersMin Minimum distance spring connection on
+   *                                     lever to Pivot [mm]
+   * @param allowedRangeR2MillimetersMax Maximum distance spring connection on
+   *                                     lever to Pivot [mm]
+   * @param allowedRangeR2MillimetersMin Minimum distance spring connection on
+   *                                     lever to Pivot [mm]
+   * @param allowedRangeR2MillimetersMax Maximum distance spring connection on
+   *                                     lever to Pivot [mm]
+   * @param r1                           Lever => distance CoM to Pivot [mm]
    */
   public Scenario(float massGrams, int numberOfParallelSprings, float mechanicalAdvantageZaehler,
-      float mechanicalAdvantageNenner, float[] allowedRangeR2Millimeters, float[] allowedRangeAMillimeters, float r1) {
+      float mechanicalAdvantageNenner, float allowedRangeR2MillimetersMin, float allowedRangeR2MillimetersMax,
+      float allowedRangeAMillimetersMin, float allowedRangeAMillimetersMax, float r1) {
     mMassGrams = massGrams;
     mNumberOfParallelSprings = numberOfParallelSprings;
     mMechanicalAdvantageZaehler = mechanicalAdvantageZaehler;
     mMechanicalAdvantageNenner = mechanicalAdvantageNenner;
-    mAllowedRangeR2Millimeters = allowedRangeR2Millimeters;
-    mAllowedRangeAMillimeters = allowedRangeAMillimeters;
+    mAllowedRangeR2MillimetersMin = allowedRangeR2MillimetersMin;
+    mAllowedRangeR2MillimetersMax = allowedRangeR2MillimetersMax;
+    mAllowedRangeAMillimetersMin = allowedRangeAMillimetersMin;
+    mAllowedRangeAMillimetersMax = allowedRangeAMillimetersMax;
     mR1 = r1;
   }
 
@@ -101,14 +117,14 @@ public class Scenario {
    * @return the allowedRangeR2
    */
   public float[] getAllowedRangeR2() {
-    return mAllowedRangeR2Millimeters;
+    return new float[] { mAllowedRangeR2MillimetersMin, mAllowedRangeR2MillimetersMax };
   }
 
   /**
    * @return the allowedRangeA
    */
   public float[] getAllowedRangeA() {
-    return mAllowedRangeAMillimeters;
+    return new float[] { mAllowedRangeAMillimetersMin, mAllowedRangeAMillimetersMax };
   }
 
   /**
@@ -116,6 +132,41 @@ public class Scenario {
    */
   public float getR1() {
     return mR1;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object arg0) {
+    if (arg0 instanceof Scenario) {
+      Scenario other = (Scenario) arg0;
+      if (other.mMassGrams != mMassGrams)
+        return false;
+      if (other.mNumberOfParallelSprings != mNumberOfParallelSprings)
+        return false;
+      if (other.mMechanicalAdvantageNenner != mMechanicalAdvantageNenner)
+        return false;
+      if (other.mMechanicalAdvantageZaehler != mMechanicalAdvantageZaehler)
+        return false;
+      if (other.mAllowedRangeAMillimetersMax != mAllowedRangeAMillimetersMax)
+        return false;
+      if (other.mAllowedRangeAMillimetersMin != mAllowedRangeAMillimetersMin)
+        return false;
+      if (other.mAllowedRangeR2MillimetersMax != mAllowedRangeR2MillimetersMax)
+        return false;
+      if (other.mAllowedRangeR2MillimetersMin != mAllowedRangeR2MillimetersMin)
+        return false;
+      if (other.mAllowedRangeR2MillimetersMin != mAllowedRangeR2MillimetersMin)
+        return false;
+      if (other.mR1 != mR1)
+        return false;
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

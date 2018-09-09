@@ -12,6 +12,8 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.logging.LoggingFeature;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import org.junit.Test;
@@ -22,7 +24,7 @@ import wa.arm.springselector.Spring;
 public class SpringSelectorWebServiceTest extends JerseyTest {
 
   // The scenario used for test purposes
-  private static final Scenario TEST_SCENARIO = new Scenario(15000, 1, 1, 1, new float[] {100, 200}, new float[] {100, 200}, 1200);
+  private static final Scenario TEST_SCENARIO = new Scenario(15000, 1, 1, 1, 100, 200, 100, 200, 1200);
 
   private static final List<Spring> EXPECTED_SPRINGS = Arrays.asList(
       new Spring("Z-377I","Gutekunst",6.382,334.0645566,0,0,0,0),
@@ -37,10 +39,15 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
   
   @Override
   protected Application configure() {
+    
+    ResourceConfig config = WebServerMoxy.createApp();
+
+    // Set up traffic logging - http://www.indestructiblevinyl.com/2016/07/23/logging-with-jersey-and-maven.html
     enable(TestProperties.LOG_TRAFFIC);
     enable(TestProperties.DUMP_ENTITY);
-
-    return WebServerMoxy.createApp();
+    config.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, "WARNING");
+    
+    return config;
   }
 
   @Override
@@ -50,10 +57,12 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
 
   @Test
     public void testRunScenario() {
-        final WebTarget target = target("springselector");
+        final WebTarget target = target("springselector");        
         final List<Spring> springs = target
             .request(MediaType.APPLICATION_JSON_TYPE)
-            .post(Entity.entity(TEST_SCENARIO, MediaType.APPLICATION_JSON_TYPE), new GenericType<List<Spring>>(){});
+            .post(
+                Entity.entity(new Scenario(15000, 1, 1, 1, 100, 200, 100, 200, 1200), MediaType.APPLICATION_JSON_TYPE), 
+                new GenericType<List<Spring>>(){});
 
         assertEquals(EXPECTED_SPRINGS, springs);
     }

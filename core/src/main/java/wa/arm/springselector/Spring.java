@@ -14,18 +14,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Spring {
 
+  // NOTE: THESE FIELDS HAVE TO BE PUBLIC FOR SERIALISATION PURPOSES
   // Spring details
-  private String mOrderNum;
-  private String mManufacturer;
-  private double mRate;
-  private double mRelevantLength;
+  public String mOrderNum;
+  public String mManufacturer;
+  public double mRate;
+  public double mRelevantLength;
 
   // Scenario specific values
-  private double mR2Min;
-  private double mR2Max;
-  private double mAMin;
-  private double mAMax;
+  public double mR2Min;
+  public double mR2Max;
+  public double mAMin;
+  public double mAMax;
 
+  /**
+   * Empty constructor for de/serialisation 
+   */
+  public Spring() {
+  }
+  
   /**
    * @param orderNum
    * @param manufacturer
@@ -102,6 +109,19 @@ public class Spring {
    */
   public double getAMax() {
     return mAMax;
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Spring)  {
+      Spring s = (Spring) obj;
+      return (s.mOrderNum.equals(mOrderNum) && s.mManufacturer.equals(mManufacturer));
+    } else {
+      return false;
+    }
   }
 
   /*

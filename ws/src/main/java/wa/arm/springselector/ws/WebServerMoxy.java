@@ -33,17 +33,19 @@ public class WebServerMoxy {
         }
       }));
       server.start();
-
+      
       System.out.println(String.format("Application started.%nStop the application using CTRL+C"));
 
       Thread.currentThread().join();
     } catch (IOException | InterruptedException ex) {
-      Logger.getLogger(WebServerMoxy.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(WebServerMoxy.class.getName()).log(Level.SEVERE, "Problem starting web server", ex);
     }
   }
 
   public static ResourceConfig createApp() {
-    return new ResourceConfig().packages("wa.arm.springselector.ws").register(createMoxyJsonResolver());
+    return new ResourceConfig()
+        .packages("wa.arm.springselector.ws")
+        .register(createMoxyJsonResolver());
   }
 
   public static ContextResolver<MoxyJsonConfig> createMoxyJsonResolver() {

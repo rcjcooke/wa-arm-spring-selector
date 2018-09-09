@@ -1,12 +1,10 @@
-/**
- * 
- */
 package wa.arm.springselector.ws;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,10 +15,10 @@ import wa.arm.springselector.Spring;
 import wa.arm.springselector.SpringSelector;
 
 /**
- * @author rcjco
- *
+ * JSON web wrapper around the Spring Selector.
+ * 
+ * @author Ray Cooke
  */
-//@WebService
 @Path("springselector")
 public class SpringSelectorWebService {
   
@@ -31,12 +29,10 @@ public class SpringSelectorWebService {
       // TODO: Put the path in configuration
       mSpringSelector = new SpringSelector("data/Databases/basicData.csv");
     } catch (InstantiationException e) {
-      System.err.println("Failed to create Spring Selector");
-      e.printStackTrace();
+      Logger.getLogger(SpringSelectorWebService.class.getName()).log(Level.SEVERE, "Failed to create Spring Selector", e);
     }
   }
   
-  //@WebMethod(action="runScenario")
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
