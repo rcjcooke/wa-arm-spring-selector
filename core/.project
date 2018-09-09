@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>wa-arm-spring-selector</name>
-	<comment></comment>
+	<name>core</name>
+	<comment>Project core created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>

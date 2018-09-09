@@ -27,8 +27,14 @@ jar {
  * Project Dependencies
  ****************************/
 dependencies {
-    // Web Services dependencies
+    // Web Server
     compile "org.glassfish.jersey.containers:jersey-container-grizzly2-http:2.27"
+    // Web Services annotations etc.
     compile "org.glassfish.jersey.inject:jersey-hk2:2.27"
-    compile "org.glassfish.jersey.media:jersey-media-json-binding:2.27"
+    // Provide JSON support
+    compile "org.glassfish.jersey.media:jersey-media-moxy:2.27"
+    
+    // Test helpers
+    testCompile group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-bundle', version:'2.27'
+    
 }

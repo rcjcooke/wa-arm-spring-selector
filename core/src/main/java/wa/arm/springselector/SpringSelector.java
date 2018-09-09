@@ -11,41 +11,70 @@ import java.util.List;
  */
 public class SpringSelector {
 
+  private static final int INVALID_NUMBER_OF_ARGUMENTS_EXIT_CODE = 1;
+  private static final int INVALID_ARGUMENTS_EXIT_CODE = 2;
+  private static final int DB_INIT_FAILURE_EXIT_CODE = 3;
+
   // gravitational acceleration [km/(s*s)]
   private static double GRAVITY = 0.00980665;
-  // Relative or absolute path to the Spring dataset
-  private static String DATASET_PATH = "data/Databases/basicData.csv";
-  
+
   // The Spring Database
   private SpringDB mSpringDB;
-  
+
   /**
    * Creates a new SpringSelector and runs it.
    * 
-   * @throws InstantiationException if there's a problem setting up the database from the dataset
+   * @param datasetPath Relative or absolute path to the Spring dataset (e.g.
+   *                    "data/Databases/basicData.csv")
+   * @throws InstantiationException if there's a problem setting up the database
+   *                                from the dataset
    */
-  public SpringSelector() throws InstantiationException {
-    mSpringDB = new SpringDB(DATASET_PATH);
+  public SpringSelector(String datasetPath) throws InstantiationException {
+    mSpringDB = new SpringDB(datasetPath);
   }
-  
+
   /**
    * @param args
    */
   public static void main(String[] args) {
+
+    Scenario scenario = null;
     try {
-      SpringSelector ss = new SpringSelector();
-      List<Spring> matchingSprings = ss.runScenario(new Scenario());
+      if (args.length != 10) {
+        printUsage();
+        System.exit(INVALID_NUMBER_OF_ARGUMENTS_EXIT_CODE);
+      }
+      scenario = new Scenario(Float.parseFloat(args[1]), Integer.parseInt(args[2]), Float.parseFloat(args[3]),
+          Float.parseFloat(args[4]), new float[] { Float.parseFloat(args[5]), Float.parseFloat(args[6]) },
+          new float[] { Float.parseFloat(args[7]), Float.parseFloat(args[8]) }, Float.parseFloat(args[9]));
+    } catch (Exception e) {
+      // Some kind of parsing exception, we don't care what it was
+      System.err.println("Problem parsing command line arguments");
+      e.printStackTrace();
+      printUsage();
+      System.exit(INVALID_ARGUMENTS_EXIT_CODE);
+    }
+
+    try {
+      SpringSelector ss = new SpringSelector(args[0]);
+      List<Spring> matchingSprings = ss.runScenario(scenario);
       for (Spring s : matchingSprings) {
         System.out.println(s.toString());
       }
     } catch (InstantiationException e) {
-      System.err.println("Failed to initialise service, please check that the dataset file is available at: " + DATASET_PATH);
+      System.err
+          .println("Failed to initialise service, please check that the dataset file is available at: " + args[0]);
       e.printStackTrace();
+      System.exit(DB_INIT_FAILURE_EXIT_CODE);
     }
   }
 
+  public static void printUsage() {
+    // TODO: Print usage
+  }
+
   void setup() {
-    
+
 //		SpringParameterList = new ArrayList<SpringParameter>(); // Create empty ArrayList for SpringParameters
 //		TableSpringParameters = loadTable(mDataSet, "header");// GutekunstFull.csv //Load Springparameters from *.csv to
 //																// Table Object TableSpringParameters
@@ -68,7 +97,7 @@ public class SpringSelector {
 //		All3DPlots = new ArrayList<ScatterPlot>();
 //
 
-      // TODO: Dynamic Spring parameters
+    // TODO: Dynamic Spring parameters
 //		// get all Parameternames(types) in TableSpringParameters and collect them in
 //		// SpringParameterList
 //		for (int i = 0; i < TableSpringParameters.getColumnCount(); i++) {
@@ -108,8 +137,7 @@ public class SpringSelector {
 //			}
 //		}
 
-
-      // TODO: Control UI
+    // TODO: Control UI
 //
 //		// Make ControlWindow
 //		cf = addControlFrame("Parameter Selector -- Basic Mass Spring Balancer Calculator", SpringParameterList, 1500,
@@ -129,7 +157,7 @@ public class SpringSelector {
 //			row.setInt("Selected", 1);
 //		}
 //
-    
+
     // TODO: Visual Plotting
 //		// 2D Scatter-Plots added to ArrayList All2DPlots
 //		for (SpringParameter P : SpringParameterList) {
@@ -174,25 +202,27 @@ public class SpringSelector {
 //		TestCharacteristicsPlot = new SpringCharacteristics(0, 0, 0);
 //		ortho(); // Start in ortho view mode
   }
-  
+
   public List<Spring> runScenario(Scenario scenario) {
     // Calculate scaled values
-    double mass_sc = scenario.getMass()/scenario.getNumberOfParallelSprings();
-    double mechanicalAdvantage = scenario.getMechanicalAdvantageZaehler()/scenario.getMechanicalAdvantageNenner();
-    
+    double mass_sc = scenario.getMass() / scenario.getNumberOfParallelSprings();
+    double mechanicalAdvantage = scenario.getMechanicalAdvantageZaehler() / scenario.getMechanicalAdvantageNenner();
+
     // Scaled mass and scaled Allowed Ranges R2 and A
-    double[] allowedRangeR2_sc = {0, 0};
-    double[] allowedRangeA_sc = {0, 0};
-    allowedRangeA_sc[0] = scenario.getAllowedRangeA()[0]/mechanicalAdvantage;
-    allowedRangeA_sc[1] = scenario.getAllowedRangeA()[1]/mechanicalAdvantage;
-    allowedRangeR2_sc[0] = scenario.getAllowedRangeR2()[0]/mechanicalAdvantage;
-    allowedRangeR2_sc[1] = scenario.getAllowedRangeR2()[1]/mechanicalAdvantage;
-    
-    // Maximum Potential Energy of the mass in the system divided by 2 (to reduce calculation overhead later)
+    double[] allowedRangeR2_sc = { 0, 0 };
+    double[] allowedRangeA_sc = { 0, 0 };
+    allowedRangeA_sc[0] = scenario.getAllowedRangeA()[0] / mechanicalAdvantage;
+    allowedRangeA_sc[1] = scenario.getAllowedRangeA()[1] / mechanicalAdvantage;
+    allowedRangeR2_sc[0] = scenario.getAllowedRangeR2()[0] / mechanicalAdvantage;
+    allowedRangeR2_sc[1] = scenario.getAllowedRangeR2()[1] / mechanicalAdvantage;
+
+    // Maximum Potential Energy of the mass in the system divided by 2 (to reduce
+    // calculation overhead later)
     double halfMassPotentialEnergy = mass_sc * GRAVITY * scenario.getR1();
-    
-    List<Spring> matchingSprings = mSpringDB.getMatchingSprings(halfMassPotentialEnergy, allowedRangeA_sc, allowedRangeR2_sc, mechanicalAdvantage);
-    
+
+    List<Spring> matchingSprings = mSpringDB.getMatchingSprings(halfMassPotentialEnergy, allowedRangeA_sc,
+        allowedRangeR2_sc, mechanicalAdvantage);
+
     // TODO: Filter based on other dynamic parameters
 //      for (int i = 0; i < SpringParameterList.size();i++) {
 //        if(SpringParameterList.get(i).isTypeFloat())
@@ -206,7 +236,7 @@ public class SpringSelector {
 //        }
 //        
     // TODO: Find minimum mass spring
-    //Find minimum mass of single spring
+    // Find minimum mass of single spring
 //    int selectionCounter = 0;
 //    for(TableRow row : TableSpringParameters.rows()){
 //      if(row.getInt("Selected") ==1){

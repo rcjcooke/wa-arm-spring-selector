@@ -1,3 +1,7 @@
+/* 
+Note: Useful reference for integration test addition: 
+  https://spin.atomicobject.com/2018/07/18/gradle-integration-tests/
+*/
 subprojects {
 
     /****************************
@@ -22,8 +26,9 @@ subprojects {
     sourceSets {
         // Add integration tests
         intTest {
-            compileClasspath += sourceSets.main.output
-            runtimeClasspath += sourceSets.main.output
+        	// Note: configuration.testCompile includes (unit) testCompile dependencies in compilation of integration tests 
+            compileClasspath += sourceSets.main.output + configurations.testCompile
+            runtimeClasspath += output + compileClasspath + configurations.testRuntime
         }
     }
 
@@ -59,9 +64,15 @@ subprojects {
 
         testClassesDirs = sourceSets.intTest.output.classesDirs
         classpath = sourceSets.intTest.runtimeClasspath
+        /* Forces Gradle to always run the integration tests when asked to. 
+        By default, Gradle attempts to optimize task execution by not re-running 
+        tasks whose inputs have not changed. Since integration tests may fail 
+        due to external systems, we want to run them even if no code has changed. */
+        outputs.upToDateWhen { false }
         shouldRunAfter test
     }
-    //tasks.integrationTest.workingDir = buildDir
+    
+    // Adds integration tests to the "check" task list 
     check.dependsOn integrationTest
 
 }

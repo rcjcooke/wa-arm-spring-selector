@@ -3,10 +3,15 @@
  */
 package wa.arm.springselector;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
- * @author rcjco
- *
+ * A description of a specific Spring. Note that this is serialisable to and
+ * from JSON.
+ * 
+ * @author Ray Cooke
  */
+@XmlRootElement
 public class Spring {
 
   // Spring details
@@ -14,13 +19,13 @@ public class Spring {
   private String mManufacturer;
   private double mRate;
   private double mRelevantLength;
-  
+
   // Scenario specific values
   private double mR2Min;
   private double mR2Max;
   private double mAMin;
   private double mAMax;
-  
+
   /**
    * @param orderNum
    * @param manufacturer
@@ -99,7 +104,9 @@ public class Spring {
     return mAMax;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#toString()
    */
   @Override

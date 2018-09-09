@@ -1,50 +1,60 @@
 package wa.arm.springselector.ws;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-
-import org.glassfish.grizzly.http.server.HttpServer;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
-public class SpringSelectorWebServiceTest {
+import java.util.Arrays;
+import java.util.List;
 
-  private HttpServer mServer;
-  private WebTarget mTarget;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 
-  @Before
-  public void setUp() throws Exception {
-    // start the server
-    mServer = WebServer.startServer();
-    // create the client
-    Client c = ClientBuilder.newClient();
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.TestProperties;
+import org.junit.Test;
 
-    // uncomment the following line if you want to enable
-    // support for JSON in the client (you also have to uncomment
-    // dependency on jersey-media-json module in pom.xml and Main.startServer())
-    // Enable JSON Support
-    // TODO: Work out what's wrong with this
-//        c.getConfiguration().enable(new org.glassfish.jersey.media.json.JsonJaxbFeature());
+import wa.arm.springselector.Scenario;
+import wa.arm.springselector.Spring;
 
-    mTarget = c.target(WebServer.BASE_URI);
+public class SpringSelectorWebServiceTest extends JerseyTest {
+
+  // The scenario used for test purposes
+  private static final Scenario TEST_SCENARIO = new Scenario(15000, 1, 1, 1, new float[] {100, 200}, new float[] {100, 200}, 1200);
+
+  private static final List<Spring> EXPECTED_SPRINGS = Arrays.asList(
+      new Spring("Z-377I","Gutekunst",6.382,334.0645566,0,0,0,0),
+      new Spring("Z-377X","Gutekunst",6.348,335.8538122,0,0,0,0),
+      new Spring("Z-378I","Gutekunst",5.547,384.3519019,0,0,0,0),
+      new Spring("Z-378X","Gutekunst",5.521,386.1619272,0,0,0,0),
+      new Spring("Z-379I","Gutekunst",4.826,441.7737257,0,0,0,0),
+      new Spring("Z-379X","Gutekunst",4.806,443.6121515,0,0,0,0),
+      new Spring("Z-387I","Gutekunst",8.104,310.3405726,0,0,0,0),
+      new Spring("Z-387X","Gutekunst",8.075,311.4551084,0,0,0,0)
+      );  
+  
+  @Override
+  protected Application configure() {
+    enable(TestProperties.LOG_TRAFFIC);
+    enable(TestProperties.DUMP_ENTITY);
+
+    return WebServerMoxy.createApp();
   }
 
-  @After
-  public void tearDown() throws Exception {
-    mServer.shutdown();
+  @Override
+  protected void configureClient(ClientConfig config) {
+    config.register(WebServerMoxy.createMoxyJsonResolver());
   }
 
-  /**
-   * Test to see that the message "Got it!" is sent in the response.
-   */
   @Test
-  public void testRunScenario() {
-    String responseMsg = mTarget.path("springselector").request().get(String.class);
-    assertEquals("Got it!", responseMsg);
-  }
+    public void testRunScenario() {
+        final WebTarget target = target("springselector");
+        final List<Spring> springs = target
+            .request(MediaType.APPLICATION_JSON_TYPE)
+            .post(Entity.entity(TEST_SCENARIO, MediaType.APPLICATION_JSON_TYPE), new GenericType<List<Spring>>(){});
+
+        assertEquals(EXPECTED_SPRINGS, springs);
+    }
 }
