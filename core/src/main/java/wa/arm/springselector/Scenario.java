@@ -32,7 +32,7 @@ public class Scenario {
    */
   public Scenario() {
   }
-  
+
   /**
    * @param massGrams                    System mass + payload mass [g]
    * @param numberOfParallelSprings      Number of equivalent parallel springs
@@ -42,10 +42,10 @@ public class Scenario {
    *                                     lever to Pivot [mm]
    * @param allowedRangeR2MillimetersMax Maximum distance spring connection on
    *                                     lever to Pivot [mm]
-   * @param allowedRangeR2MillimetersMin Minimum distance spring connection on
-   *                                     lever to Pivot [mm]
-   * @param allowedRangeR2MillimetersMax Maximum distance spring connection on
-   *                                     lever to Pivot [mm]
+   * @param allowedRangeAMillimetersMin  Minimum distance spring connection on
+   *                                     fixed y-Axis to Pivot [mm]
+   * @param allowedRangeAMillimetersMax  Maximum distance spring connection on
+   *                                     fixed y-Axis to Pivot [mm]
    * @param r1                           Lever => distance CoM to Pivot [mm]
    */
   public Scenario(float massGrams, int numberOfParallelSprings, float mechanicalAdvantageZaehler,
