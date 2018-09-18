@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+import { HttpClientModule }    from '@angular/common/http';
 
 // Materials imports
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,18 +12,20 @@ import { MatButtonModule } from '@angular/material';
 // Component imports
 import { AppComponent } from './app.component';
 import { ScenarioSelectorComponent } from './scenario-selector/scenario-selector.component';
-// import { SpringListComponent } from './spring-list/spring-list.component';
+import { SpringListComponent } from './spring-list/spring-list.component';
 // import { SpringSelectionVisualiserComponent } from './spring-selection-visualiser/spring-selection-visualiser.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ScenarioSelectorComponent
-    // SpringListComponent,
+    ScenarioSelectorComponent,
+    SpringListComponent
     // SpringSelectionVisualiserComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatInputModule,

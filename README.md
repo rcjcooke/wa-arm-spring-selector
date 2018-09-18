@@ -24,3 +24,4 @@ Please note that, at the time of writing, Gradle test and Eclipse debug capabili
 * Angular + D3.js: https://jaxenter.com/d3-js-busy-angular-developer-146873.html
 * Angular + D3.js: https://medium.com/@balramchavan/integrating-d3js-with-angular-5-0-848ed45a8e19
 * Angular tutorial: https://angular.io/tutorial
+* Angular event distribution: https://angularfirebase.com/lessons/sharing-data-between-angular-components-four-methods/

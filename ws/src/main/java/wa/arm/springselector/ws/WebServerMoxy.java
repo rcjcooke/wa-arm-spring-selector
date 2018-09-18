@@ -13,15 +13,47 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.moxy.json.MoxyJsonConfig;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import wa.arm.springselector.SpringSelector;
+
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 /**
  * @author rcjco
  *
  */
-public class WebServerMoxy {
+public class WebServerMoxy extends ResourceConfig {
 
-  private static final URI BASE_URI = URI.create("http://localhost:8080/springselector/");
+  private static final URI BASE_URI = URI.create("http://localhost:8080/");
+
+  private final SpringSelector mSpringSelector;
+
+  public WebServerMoxy() throws InstantiationException {
+    // Create our singleton Spring Selector instance
+    // TODO: Put the path in configuration
+    mSpringSelector = new SpringSelector("data/Databases/basicData.csv");
+    // Pull in our web resources
+    packages("wa.arm.springselector.ws");
+    // Make sure we can talk JSON
+    register(createMoxyJsonResolver());
+    // Handle Cross-Origin Resource Sharing (CORS)
+    // http://www.codingpedia.org/ama/how-to-add-cors-support-on-the-server-side-in-java-with-jersey/
+    register(CORSResponseFilter.class);
+    // Sort out Spring Selector singleton dependency
+    register(new AbstractBinder() {
+      @Override
+      protected void configure() {
+        /*
+         * Immediate scope is singleton and created on startup (not first request)
+         * http://www.riptutorial.com/jersey/example/23632/basic-dependency-injection-
+         * using-jersey-s-hk2 As we're creating a local instance first, we don't need to
+         * specify the scope, otherwise we would add <code>.in(Immediate.class);</code>
+         * to the end
+         */
+        bind(mSpringSelector).to(SpringSelector.class);
+      }
+    });
+  }
 
   public static void main(String[] args) {
     try {
@@ -33,19 +65,17 @@ public class WebServerMoxy {
         }
       }));
       server.start();
-      
+
       System.out.println(String.format("Application started.%nStop the application using CTRL+C"));
 
       Thread.currentThread().join();
-    } catch (IOException | InterruptedException ex) {
+    } catch (IOException | InstantiationException | InterruptedException ex) {
       Logger.getLogger(WebServerMoxy.class.getName()).log(Level.SEVERE, "Problem starting web server", ex);
     }
   }
 
-  public static ResourceConfig createApp() {
-    return new ResourceConfig()
-        .packages("wa.arm.springselector.ws")
-        .register(createMoxyJsonResolver());
+  public static ResourceConfig createApp() throws InstantiationException {
+    return new WebServerMoxy();
   }
 
   public static ContextResolver<MoxyJsonConfig> createMoxyJsonResolver() {

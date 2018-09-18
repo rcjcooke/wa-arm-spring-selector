@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SpringSelectorServiceService } from './spring-selector-service.service';
+import { SpringSelectorService } from './spring-selector.service';
 
 describe('SpringSelectorServiceService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: SpringSelectorServiceService = TestBed.get(SpringSelectorServiceService);
+    const service: SpringSelectorService = TestBed.get(SpringSelectorService);
     expect(service).toBeTruthy();
   });
 });

@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -40,14 +42,19 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
   @Override
   protected Application configure() {
     
-    ResourceConfig config = WebServerMoxy.createApp();
-
-    // Set up traffic logging - http://www.indestructiblevinyl.com/2016/07/23/logging-with-jersey-and-maven.html
-    enable(TestProperties.LOG_TRAFFIC);
-    enable(TestProperties.DUMP_ENTITY);
-    config.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, "WARNING");
-    
-    return config;
+    try {
+      ResourceConfig config = WebServerMoxy.createApp();
+  
+      // Set up traffic logging - http://www.indestructiblevinyl.com/2016/07/23/logging-with-jersey-and-maven.html
+      enable(TestProperties.LOG_TRAFFIC);
+      enable(TestProperties.DUMP_ENTITY);
+      config.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, "WARNING");
+      
+      return config;
+    } catch (InstantiationException e) {
+      Logger.getLogger(SpringSelectorWebServiceTest.class.getName()).log(Level.SEVERE, "Problem creating Spring Selector", e);
+      return null;
+    }
   }
 
   @Override
@@ -57,7 +64,7 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
 
   @Test
     public void testRunScenario() {
-        final WebTarget target = target("springselector");        
+        final WebTarget target = target("springselector/runscenario");        
         final List<Spring> springs = target
             .request(MediaType.APPLICATION_JSON_TYPE)
             .post(

@@ -1,13 +1,13 @@
 <form class="scenario-selector-form-container">
   <!-- Mass -->
   <mat-form-field class="scenario-selector-full-width">
-    <input matInput type="number" placeholder="Combined System and Load Mass" min="1" />
+    <input [(ngModel)]="scenario.mMassGrams" name="mMassGrams" matInput type="number" placeholder="Combined System and Load Mass" min="1" />
     <span matSuffix>g</span>
   </mat-form-field>
 
   <!-- Number of Springs -->
   <mat-form-field class="scenario-selector-full-width">
-    <input matInput type="number" placeholder="Number of parallel springs" />
+    <input [(ngModel)]="scenario.mNumberOfParallelSprings" name="mNumberOfParallelSprings" matInput type="number" placeholder="Number of parallel springs" />
   </mat-form-field>
 
   <!-- Mechanical Advantage -->
@@ -15,13 +15,13 @@
     <td>
       <mat-form-field class="scenario-selector-full-width">
         <mat-label>Mechanical Advantage</mat-label>
-        <input matInput type="number" class="scenario-selector-right-align" />
+        <input [(ngModel)]="scenario.mMechanicalAdvantageZaehler" name="mMechanicalAdvantageZaehler" matInput type="number" class="scenario-selector-right-align" />
       </mat-form-field>
     </td>
     <td>:</td>
     <td>
       <mat-form-field class="scenario-selector-full-width">
-        <input matInput type="number" />
+        <input [(ngModel)]="scenario.mMechanicalAdvantageNenner" name="mMechanicalAdvantageNenner" matInput type="number" />
       </mat-form-field>
     </td>      
   </tr></table>
@@ -31,14 +31,14 @@
   <table class="example-full-width" cellspacing="0"><tr>
     <td>
       <mat-form-field class="scenario-selector-full-width">
-        <input matInput type="number" placeholder="min"/>
+        <input [(ngModel)]="scenario.mAllowedRangeR2MillimetersMin" name="mAllowedRangeR2MillimetersMin" matInput type="number" placeholder="min"/>
         <span matSuffix>mm</span>
       </mat-form-field>
     </td>
     <td>-></td>
     <td>
       <mat-form-field class="scenario-selector-full-width">
-        <input matInput type="number" placeholder="max"/>
+        <input [(ngModel)]="scenario.mAllowedRangeR2MillimetersMax" name="mAllowedRangeR2MillimetersMax" matInput type="number" placeholder="max"/>
         <span matSuffix>mm</span>
       </mat-form-field>
     </td>      
@@ -49,14 +49,14 @@
   <table class="example-full-width" cellspacing="0"><tr>
     <td>
       <mat-form-field class="scenario-selector-full-width">
-        <input matInput type="number" placeholder="min"/>
+        <input [(ngModel)]="scenario.mAllowedRangeAMillimetersMin" name="mAllowedRangeAMillimetersMin" matInput type="number" placeholder="min"/>
         <span matSuffix>mm</span>
       </mat-form-field>
     </td>
     <td>-></td>
     <td>
       <mat-form-field class="scenario-selector-full-width">
-        <input matInput type="number" placeholder="max"/>
+        <input [(ngModel)]="scenario.mAllowedRangeAMillimetersMax" name="mAllowedRangeAMillimetersMax" matInput type="number" placeholder="max"/>
         <span matSuffix>mm</span>
       </mat-form-field>
     </td>      
@@ -64,8 +64,9 @@
 
   <!-- Mass -->
   <mat-form-field class="scenario-selector-full-width">
-    <input matInput type="number" placeholder="Distance of centre of mass to pivot" min="1" />
+    <input [(ngModel)]="scenario.mR1" name="mR1" matInput type="number" placeholder="Distance of centre of mass to pivot" min="1" />
     <span matSuffix>mm</span>
   </mat-form-field>
 
 </form>
+<button mat-flat-button (click)="findSprings()">Find Springs</button>
