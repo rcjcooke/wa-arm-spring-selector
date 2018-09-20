@@ -8,7 +8,7 @@ import { DataModelService } from '../data-model.service';
   styleUrls: ['./spring-list.component.css']
 })
 export class SpringListComponent implements OnInit {
-  displayedColumns: string[] = ['mOrderNum', 'mManufacturer', 'mRate', 'mRelevantLength', 'mMaximumForceUnderStaticLoad, mMass'];
+  displayedColumns: string[] = ['mOrderNum', 'mManufacturer', 'mRate', 'mRelevantLength', 'mMaximumForceUnderStaticLoad', 'mMass'];
   springs: Spring[];
   
   constructor(
