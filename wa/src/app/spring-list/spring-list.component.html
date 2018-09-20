@@ -1,9 +1,4 @@
-<h2>Springs</h2>
-<!-- <ul>
-  <li *ngFor="let spring of springs">
-    {{spring.mOrderNum}}
-  </li>
-</ul> -->
+<h2>Springs ({{springs.length}})</h2>
 <table mat-table [dataSource]="springs">
 
   <!-- Order Number Column -->
@@ -38,4 +33,5 @@
   
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
 </table>
