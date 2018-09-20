@@ -25,6 +25,7 @@ public class SpringDB {
   private static final String RELEVENT_LENGTH_MM = "relevent_length_mm";
   private static final String RATE_N_MM = "rate_n_mm";
   private static final String MASS_KG = "mass_kg";
+  private static final String MAX_FORCE_UNDER_STATIC_LOAD = "max_force_under_static_load";
 
 //  private static final String SELECTED = "selected";
 //  private static final String R2MIN = "r2min";
@@ -160,7 +161,7 @@ public class SpringDB {
 //    for (int i=0; i<numColumns; i++) {
 //    }
     return new Spring(rs.getString(ORDER_NUM), rs.getString(SUPPLIER), rs.getDouble(RATE_N_MM),
-        rs.getDouble(RELEVENT_LENGTH_MM), r2Min, r2Max, aMin, aMax);
+        rs.getDouble(RELEVENT_LENGTH_MM), rs.getDouble(MAX_FORCE_UNDER_STATIC_LOAD), r2Min, r2Max, aMin, aMax);
   }
 
   private String generateSpringTableDescription() {
@@ -176,6 +177,7 @@ public class SpringDB {
     sb.append(',').append(MASS_KG).append(' ').append(DECIMAL); // Masse
     sb.append(',').append(RELEVENT_LENGTH_MM).append(' ').append(DECIMAL); // Lr[mm] Relevante Laenge
     sb.append(',').append(MAX_POTENTIAL_ENERGY_NMM).append(' ').append(DECIMAL); // V[Nmm] Maximale potentielle Energie
+    sb.append(',').append(MAX_FORCE_UNDER_STATIC_LOAD).append(' ').append(DECIMAL); // V[Nmm] Maximale potentielle Energie
     return sb.toString();
   }
 

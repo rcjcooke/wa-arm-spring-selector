@@ -29,14 +29,14 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
   private static final Scenario TEST_SCENARIO = new Scenario(15000, 1, 1, 1, 100, 200, 100, 200, 1200);
 
   private static final List<Spring> EXPECTED_SPRINGS = Arrays.asList(
-      new Spring("Z-377I","Gutekunst",6.382,334.0645566,0,0,0,0),
-      new Spring("Z-377X","Gutekunst",6.348,335.8538122,0,0,0,0),
-      new Spring("Z-378I","Gutekunst",5.547,384.3519019,0,0,0,0),
-      new Spring("Z-378X","Gutekunst",5.521,386.1619272,0,0,0,0),
-      new Spring("Z-379I","Gutekunst",4.826,441.7737257,0,0,0,0),
-      new Spring("Z-379X","Gutekunst",4.806,443.6121515,0,0,0,0),
-      new Spring("Z-387I","Gutekunst",8.104,310.3405726,0,0,0,0),
-      new Spring("Z-387X","Gutekunst",8.075,311.4551084,0,0,0,0)
+      new Spring("Z-377I","Gutekunst",2132,6.382,334.0645566,0,0,0,0),
+      new Spring("Z-377X","Gutekunst",2132,6.348,335.8538122,0,0,0,0),
+      new Spring("Z-378I","Gutekunst",2132,5.547,384.3519019,0,0,0,0),
+      new Spring("Z-378X","Gutekunst",2132,5.521,386.1619272,0,0,0,0),
+      new Spring("Z-379I","Gutekunst",2132,4.826,441.7737257,0,0,0,0),
+      new Spring("Z-379X","Gutekunst",2132,4.806,443.6121515,0,0,0,0),
+      new Spring("Z-387I","Gutekunst",2515,8.104,310.3405726,0,0,0,0),
+      new Spring("Z-387X","Gutekunst",2515,8.075,311.4551084,0,0,0,0)
       );  
   
   @Override

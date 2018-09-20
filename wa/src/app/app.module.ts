@@ -13,14 +13,14 @@ import { MatButtonModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { ScenarioSelectorComponent } from './scenario-selector/scenario-selector.component';
 import { SpringListComponent } from './spring-list/spring-list.component';
-// import { SpringSelectionVisualiserComponent } from './spring-selection-visualiser/spring-selection-visualiser.component';
+import { SpringSelectionVisualiserComponent } from './spring-selection-visualiser/spring-selection-visualiser.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ScenarioSelectorComponent,
-    SpringListComponent
-    // SpringSelectionVisualiserComponent
+    SpringListComponent,
+    SpringSelectionVisualiserComponent
   ],
   imports: [
     BrowserModule,

@@ -18,10 +18,16 @@ Please note that, at the time of writing, Gradle test and Eclipse debug capabili
 * Jersey: https://jersey.github.io/documentation/latest/media.html#json.moxy
 * HSQLDB Text Tables: http://hsqldb.org/doc/guide/texttables-chapt.html
 * D3.JS / C3.JS / REST Example: https://github.com/Automattic/grasshopper
+* Angular tutorial: https://angular.io/tutorial
+* Angular event distribution: https://angularfirebase.com/lessons/sharing-data-between-angular-components-four-methods/
+* Angular + C3.js: https://stackoverflow.com/questions/46250941/how-add-c3-charts-to-angular-2-project
+* Angular observables: https://angular.io/guide/observables
+
+
+
+* Angular + D3.js: https://jaxenter.com/d3-js-busy-angular-developer-146873.html
+* Angular + D3.js: https://medium.com/@balramchavan/integrating-d3js-with-angular-5-0-848ed45a8e19
 * Using Gradle with Javascript: https://dzone.com/articles/javascript-webapps-gradle
 * Gradle + WebPack: https://objectpartners.com/2016/04/22/using-webpack-with-gradle/
 * Gradle Javascript dependency resolution: https://docs.gradle.org/current/userguide/declaring_dependencies.html
-* Angular + D3.js: https://jaxenter.com/d3-js-busy-angular-developer-146873.html
-* Angular + D3.js: https://medium.com/@balramchavan/integrating-d3js-with-angular-5-0-848ed45a8e19
-* Angular tutorial: https://angular.io/tutorial
-* Angular event distribution: https://angularfirebase.com/lessons/sharing-data-between-angular-components-four-methods/
+

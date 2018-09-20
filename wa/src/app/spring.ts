@@ -3,6 +3,7 @@ export class Spring {
   mManufacturer: string;
   mRate: number;
   mRelevantLength: number;
+  mMaximumForceUnderStaticLoad: number;
 
   mR2Min: number;
   mR2Max: number;

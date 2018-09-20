@@ -17,3 +17,4 @@ vorspann - preload
 kraft - force
 statischer - static
 belastung - load
+Hoechstkraft bei statischer Belastung - Maximum force under static load
