@@ -27,19 +27,40 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
           springs: 'Relevent Length / mm'
         },
         columns: [
-        ]
-      }
+        ],
+        type: 'scatter'
+      },
+      axis: {
+        x: {
+            label: 'Relevent Length / mm',
+            tick: {
+                fit: false
+            }
+        },
+        y: {
+            label: 'Maximum Force under Static Load / N'
+        }
+      },
+      legend: {
+        show: false
+      }      
     });
     
-    this.dataModelService.springs.subscribe({
-      next(sps) {
-        this.springChart.load({
-          columns: [
-            ["Relevent Length / mm", ...sps.map(a => a.mRelevantLength)],
-            ["springs", ...sps.map(a => a.mMaximumForceUnderStaticLoad)]
-          ]
-        })
-      }
+    this.springChart.resize();
+    
+    this.dataModelService.springs.subscribe(sps => {
+      var cols = [];
+      var xs = {};
+      sps.forEach(s => {
+        cols.push([s.mOrderNum.concat("-rl"), s.mRelevantLength]);
+        cols.push([s.mOrderNum, s.mMaximumForceUnderStaticLoad]);
+        xs[s.mOrderNum] = s.mOrderNum.concat("-rl");
+      });
+
+      this.springChart.load({
+        xs: xs,
+        columns: cols
+      })
     })
   }
 }
