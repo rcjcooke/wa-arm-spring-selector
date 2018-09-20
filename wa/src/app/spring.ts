@@ -5,7 +5,8 @@ export class Spring {
   mRate: number = 0;
   mRelevantLength: number = 0;
   mMaximumForceUnderStaticLoad: number = 0;
-
+  mMass: number = 0;
+  
   mR2Min: number = 0;
   mR2Max: number = 0;
   mAMin: number = 0;

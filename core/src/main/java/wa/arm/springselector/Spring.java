@@ -21,6 +21,7 @@ public class Spring {
   public double mRate;
   public double mRelevantLength;
   public double mMaximumForceUnderStaticLoad;
+  public double mMass;
   // Scenario specific values
   public double mR2Min;
   public double mR2Max;
@@ -39,18 +40,20 @@ public class Spring {
    * @param rate
    * @param relevantLength
    * @param maximumForceUnderStaticLoad
+   * @param mass
    * @param r2Min
    * @param r2Max
    * @param aMin
    * @param aMax
    */
-  public Spring(String orderNum, String manufacturer, double rate, double relevantLength, double maximumForceUnderStaticLoad, double r2Min, double r2Max,
+  public Spring(String orderNum, String manufacturer, double rate, double relevantLength, double maximumForceUnderStaticLoad, double mass, double r2Min, double r2Max,
       double aMin, double aMax) {
     mOrderNum = orderNum;
     mManufacturer = manufacturer;
     mRate = rate;
     mRelevantLength = relevantLength;
     mMaximumForceUnderStaticLoad = maximumForceUnderStaticLoad;
+    mMass = mass;
     mR2Min = r2Min;
     mR2Max = r2Max;
     mAMin = aMin;

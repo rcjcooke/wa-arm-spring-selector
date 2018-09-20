@@ -160,7 +160,7 @@ public class SpringDB {
 //    int numColumns = rs.getMetaData().getColumnCount();
 //    for (int i=0; i<numColumns; i++) {
 //    }
-    return new Spring(rs.getString(ORDER_NUM), rs.getString(SUPPLIER), rs.getDouble(RATE_N_MM),
+    return new Spring(rs.getString(ORDER_NUM), rs.getString(SUPPLIER), rs.getDouble(RATE_N_MM), rs.getDouble(MASS_KG),
         rs.getDouble(RELEVENT_LENGTH_MM), rs.getDouble(MAX_FORCE_UNDER_STATIC_LOAD), r2Min, r2Max, aMin, aMax);
   }
 
