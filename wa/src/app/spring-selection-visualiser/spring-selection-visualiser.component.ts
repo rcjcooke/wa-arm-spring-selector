@@ -11,6 +11,7 @@ import { Spring } from '../spring';
 export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit {
 
   springChart: c3.ChartAPI;
+  currentSpringIDs: string[] = []; // orderNum-manufacturer
 
   constructor(
     private dataModelService: DataModelService
@@ -22,6 +23,9 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
   ngAfterViewInit() {
     this.springChart = c3.generate({
       bindto: '#chart',
+      size: {
+        height: 488
+      },
       data: {
         xs: {
           springs: 'Relevent Length / mm'
@@ -43,24 +47,36 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       },
       legend: {
         show: false
-      }      
+      }
     });
     
     this.springChart.resize();
     
     this.dataModelService.springs.subscribe(sps => {
+      // Put together the new data set
       var cols = [];
       var xs = {};
       sps.forEach(s => {
-        cols.push([s.mOrderNum.concat("-rl"), s.mRelevantLength]);
-        cols.push([s.mOrderNum, s.mMaximumForceUnderStaticLoad]);
-        xs[s.mOrderNum] = s.mOrderNum.concat("-rl");
+        cols.push([this.getSpringID(s).concat("-rl"), s.mRelevantLength]);
+        cols.push([this.getSpringID(s), s.mMaximumForceUnderStaticLoad]);
+        xs[this.getSpringID(s)] = this.getSpringID(s).concat("-rl");
       });
+
+      // Work out what data sets need unloading - i.e. which springs are no longer present
+      let springIDs = sps.map(s => this.getSpringID(s));
+      let springsToUnload = this.currentSpringIDs.filter(curSpring => !springIDs.includes(curSpring));
+      springsToUnload = [...springsToUnload, ...springsToUnload.map(s => s.concat("-rl"))];
+      this.currentSpringIDs = springIDs;
 
       this.springChart.load({
         xs: xs,
-        columns: cols
-      })
+        columns: cols,
+        unload: springsToUnload
+      });
     })
+  }
+
+  private getSpringID(s: Spring): string {
+    return s.mManufacturer.concat('/').concat(s.mOrderNum);
   }
 }
