@@ -9,13 +9,18 @@ table {
   padding: 1em;
 }
 
-/* app-scenario-selector {
+app-spring-list {
+  width: 100%;
+  padding: 1em;
+}
+
+app-scenario-selector {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   margin: 1em auto;
   padding: 1em;
-} */
+}
 
 app-spring-selection-visualiser {
   width: 100%;

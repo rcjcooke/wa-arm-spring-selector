@@ -8,12 +8,12 @@ import { DataModelService } from '../data-model.service';
   styleUrls: ['./spring-list.component.css']
 })
 export class SpringListComponent implements OnInit {
-
-  springs: Spring[]; 
+  displayedColumns: string[] = ['mOrderNum', 'mManufacturer', 'mRate', 'mRelevantLength', 'mMaximumForceUnderStaticLoad'];
+  springs: Spring[];
 
   constructor(
     private dataModelService: DataModelService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.dataModelService.springs.subscribe(sps => this.springs = sps);
