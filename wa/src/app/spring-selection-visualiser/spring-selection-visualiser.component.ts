@@ -36,7 +36,7 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       },
       axis: {
         x: {
-            label: 'Relevent Length / mm',
+            label: 'Maximum Length / mm',
             tick: {
                 fit: false
             }

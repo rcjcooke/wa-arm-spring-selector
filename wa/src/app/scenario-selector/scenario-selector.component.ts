@@ -13,15 +13,15 @@ export class ScenarioSelectorComponent implements OnInit {
   
   // A pre-populated default scenario for ease of use
   scenario: Scenario = {
-    mMassGrams: 15000,
+    mMassGrams: 17500,
     mNumberOfParallelSprings: 1,
     mMechanicalAdvantageZaehler: 1,
     mMechanicalAdvantageNenner: 1,
-    mAllowedRangeR2MillimetersMin: 100,
-    mAllowedRangeR2MillimetersMax: 200,
-    mAllowedRangeAMillimetersMin: 100,
-    mAllowedRangeAMillimetersMax: 200,
-    mR1: 1200
+    mAllowedRangeR2MillimetersMin: 50,
+    mAllowedRangeR2MillimetersMax: 350,
+    mAllowedRangeAMillimetersMin: 50,
+    mAllowedRangeAMillimetersMax: 150,
+    mR1: 750
   };
 
   constructor(

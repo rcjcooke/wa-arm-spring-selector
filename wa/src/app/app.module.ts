@@ -9,7 +9,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material';
 import { MatCardModule } from '@angular/material/card';
+
 
 // Component imports
 import { AppComponent } from './app.component';
@@ -32,6 +34,7 @@ import { SpringSelectionVisualiserComponent } from './spring-selection-visualise
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
+    MatSortModule,
     MatCardModule,
     MatButtonModule
   ],
