@@ -21,7 +21,8 @@ export class ScenarioSelectorComponent implements OnInit {
     mAllowedRangeR2MillimetersMax: 350,
     mAllowedRangeAMillimetersMin: 50,
     mAllowedRangeAMillimetersMax: 150,
-    mR1: 750
+    mR1: 750,
+    mIncludeSpringMassInSystem: true
   };
 
   constructor(
@@ -30,18 +31,20 @@ export class ScenarioSelectorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.findSprings();
   }
 
-/*
-Request should look something like the following:
-  1 > POST http://localhost:9998/springselector/runscenario
-  1 > accept: application/json
-  1 > connection: keep-alive
-  1 > content-length: 281
-  1 > content-type: application/json
-  1 > host: localhost:9998
-  1 > user-agent: Jersey/2.27 (HttpUrlConnection 1.8.0_181)
-  {"mMassGrams":15000.0,"mNumberOfParallelSprings":1,"mMechanicalAdvantageZaehler":1.0,"mMechanicalAdvantageNenner":1.0,"mAllowedRangeR2MillimetersMin":100.0,"mAllowedRangeR2MillimetersMax":200.0,"mAllowedRangeAMillimetersMin":100.0,"mAllowedRangeAMillimetersMax":200.0,"mR1":1200.0}
+  /*
+  Request should look something like the following:
+
+    1 > POST http://localhost:9998/springselector/runscenario
+    1 > accept: application/json
+    1 > connection: keep-alive
+    1 > content-length: 281
+    1 > content-type: application/json
+    1 > host: localhost:9998
+    1 > user-agent: Jersey/2.27 (HttpUrlConnection 1.8.0_181)
+    {"mMassGrams":15000.0,"mNumberOfParallelSprings":1,"mMechanicalAdvantageZaehler":1.0,"mMechanicalAdvantageNenner":1.0,"mAllowedRangeR2MillimetersMin":100.0,"mAllowedRangeR2MillimetersMax":200.0,"mAllowedRangeAMillimetersMin":100.0,"mAllowedRangeAMillimetersMax":200.0,"mR1":1200.0}
 
   PRETTY VERSION:
 
@@ -56,7 +59,6 @@ Request should look something like the following:
     "mAllowedRangeAMillimetersMax": 200.0,
     "mR1": 1200.0
   }
-
   */
 
   findSprings() {

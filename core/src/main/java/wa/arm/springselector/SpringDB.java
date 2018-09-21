@@ -29,6 +29,8 @@ public class SpringDB {
   private static final String RATE_N_MM = "rate_n_mm";
   private static final String MASS_KG = "mass_kg";
   private static final String MAX_FORCE_UNDER_STATIC_LOAD = "max_force_under_static_load";
+  private static final String OUTSIDE_DIAMETER_MM = "outside_diameter";
+  private static final String WIRE_DIAMETER_MM = "wire_diameter";
 
   // Relevant type constants
   private static final String DECIMAL = "DECIMAL(20,20)";
@@ -176,9 +178,14 @@ public class SpringDB {
   private Spring createNewSpringFromCurrentResultSetRow(ResultSet rs, double r2Min, double r2Max, double aMin,
       double aMax) throws SQLException {
     // TODO: Future upgrade: make this dynamic
-    return new Spring(rs.getString(ORDER_NUM), rs.getString(SUPPLIER), rs.getDouble(RATE_N_MM),
-        rs.getDouble(RELEVENT_LENGTH_MM), rs.getDouble(MAX_FORCE_UNDER_STATIC_LOAD), rs.getDouble(MASS_KG), r2Min,
-        r2Max, aMin, aMax);
+    Spring spring = new Spring(rs.getString(ORDER_NUM), rs.getString(SUPPLIER), rs.getDouble(RATE_N_MM),
+        rs.getDouble(RELEVENT_LENGTH_MM), rs.getDouble(MAX_FORCE_UNDER_STATIC_LOAD), rs.getDouble(MASS_KG),
+        rs.getDouble(WIRE_DIAMETER_MM), rs.getDouble(OUTSIDE_DIAMETER_MM));
+    spring.setR2Min(r2Min);
+    spring.setR2Max(r2Max);
+    spring.setAMin(aMin);
+    spring.setAMax(aMax);
+    return spring;
   }
 
   private String generateSpringTableDescription() {
@@ -195,6 +202,8 @@ public class SpringDB {
     sb.append(',').append(MAX_POTENTIAL_ENERGY_NMM).append(' ').append(DECIMAL); // V[Nmm] Maximale potentielle Energie
     sb.append(',').append(MAX_FORCE_UNDER_STATIC_LOAD).append(' ').append(DECIMAL); // V[Nmm] Maximale potentielle
                                                                                     // Energie
+    sb.append(',').append(OUTSIDE_DIAMETER_MM).append(' ').append(DECIMAL); // De
+    sb.append(',').append(WIRE_DIAMETER_MM).append(' ').append(DECIMAL); // d
     return sb.toString();
   }
 

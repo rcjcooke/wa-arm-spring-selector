@@ -22,6 +22,9 @@ public class Spring {
   public double mRelevantLength;
   public double mMaximumForceUnderStaticLoad;
   public double mMass;
+  public double mOutsideDiameter;
+  public double mWireDiameter;
+  
   // Scenario specific values
   public double mR2Min;
   public double mR2Max;
@@ -43,23 +46,19 @@ public class Spring {
    * @param maximumForceUnderStaticLoad The maximum static force that can be
    *                                    applied to the spring
    * @param mass                        The mass of the spring
-   * @param r2Min
-   * @param r2Max
-   * @param aMin
-   * @param aMax
+   * @param wireDiameter                The diameter of the spring wire
+   * @param outsideDiameter             The outside diameter of the spring
    */
   public Spring(String orderNum, String manufacturer, double rate, double relevantLength,
-      double maximumForceUnderStaticLoad, double mass, double r2Min, double r2Max, double aMin, double aMax) {
+      double maximumForceUnderStaticLoad, double mass, double wireDiameter, double outsideDiameter) {
     mOrderNum = orderNum;
     mManufacturer = manufacturer;
     mRate = rate;
     mRelevantLength = relevantLength;
     mMaximumForceUnderStaticLoad = maximumForceUnderStaticLoad;
     mMass = mass;
-    mR2Min = r2Min;
-    mR2Max = r2Max;
-    mAMin = aMin;
-    mAMax = aMax;
+    mOutsideDiameter = outsideDiameter;
+    mWireDiameter = wireDiameter;
   }
 
   /**
@@ -116,6 +115,62 @@ public class Spring {
    */
   public double getAMax() {
     return mAMax;
+  }
+
+  /**
+   * @return the maximumForceUnderStaticLoad
+   */
+  public double getMaximumForceUnderStaticLoad() {
+    return mMaximumForceUnderStaticLoad;
+  }
+
+  /**
+   * @return the mass
+   */
+  public double getMass() {
+    return mMass;
+  }
+
+  /**
+   * @return the outsideDiameter
+   */
+  public double getOutsideDiameter() {
+    return mOutsideDiameter;
+  }
+
+  /**
+   * @return the wireDiameter
+   */
+  public double getWireDiameter() {
+    return mWireDiameter;
+  }
+
+  /**
+   * @param r2Min the r2Min to set
+   */
+  public void setR2Min(double r2Min) {
+    mR2Min = r2Min;
+  }
+
+  /**
+   * @param r2Max the r2Max to set
+   */
+  public void setR2Max(double r2Max) {
+    mR2Max = r2Max;
+  }
+
+  /**
+   * @param aMin the aMin to set
+   */
+  public void setAMin(double aMin) {
+    mAMin = aMin;
+  }
+
+  /**
+   * @param aMax the aMax to set
+   */
+  public void setAMax(double aMax) {
+    mAMax = aMax;
   }
 
   /*

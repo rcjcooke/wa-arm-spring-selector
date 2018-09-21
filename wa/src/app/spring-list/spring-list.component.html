@@ -31,10 +31,22 @@
     <td mat-cell *matCellDef="let element"> {{element.mMaximumForceUnderStaticLoad}} </td>
   </ng-container>
 
-  <!-- Rate Column -->
+  <!-- Mass Column -->
   <ng-container matColumnDef="mMass">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Mass / Kg</th>
       <td mat-cell *matCellDef="let element"> {{element.mMass}} </td>
+  </ng-container>
+
+  <!-- Outside Diameter Column -->
+  <ng-container matColumnDef="mOutsideDiameter">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Outside Diameter / mm</th>
+      <td mat-cell *matCellDef="let element"> {{element.mOutsideDiameter}} </td>
+  </ng-container>
+  
+  <!-- Wire Diameter Column -->
+  <ng-container matColumnDef="mWireDiameter">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Wire Diameter / mm</th>
+      <td mat-cell *matCellDef="let element"> {{element.mWireDiameter}} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

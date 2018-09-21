@@ -24,7 +24,7 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
     this.springChart = c3.generate({
       bindto: '#chart',
       size: {
-        height: 488
+        height: 512
       },
       data: {
         xs: {
@@ -36,13 +36,13 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       },
       axis: {
         x: {
-            label: 'Maximum Length / mm',
-            tick: {
-                fit: false
-            }
+          label: 'Maximum Length / mm',
+          tick: {
+            fit: false
+          }
         },
         y: {
-            label: 'Maximum Force under Static Load / N'
+          label: 'Maximum Force under Static Load / N'
         }
       },
       legend: {

@@ -29,30 +29,31 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
   private static final Scenario TEST_SCENARIO = new Scenario(15000, 1, 1, 1, 100, 200, 100, 200, 1200, false);
 
   private static final List<Spring> EXPECTED_SPRINGS = Arrays.asList(
-      new Spring("Z-377I","Gutekunst",2132,6.382,334.0645566,0,0,0,0,0),
-      new Spring("Z-377X","Gutekunst",2132,6.348,335.8538122,0,0,0,0,0),
-      new Spring("Z-378I","Gutekunst",2132,5.547,384.3519019,0,0,0,0,0),
-      new Spring("Z-378X","Gutekunst",2132,5.521,386.1619272,0,0,0,0,0),
-      new Spring("Z-379I","Gutekunst",2132,4.826,441.7737257,0,0,0,0,0),
-      new Spring("Z-379X","Gutekunst",2132,4.806,443.6121515,0,0,0,0,0),
-      new Spring("Z-387I","Gutekunst",2515,8.104,310.3405726,0,0,0,0,0),
-      new Spring("Z-387X","Gutekunst",2515,8.075,311.4551084,0,0,0,0,0)
-      );  
-  
+      new Spring("Z-377I", "Gutekunst", 2132, 6.382, 334.0645566, 0, 0, 0),
+      new Spring("Z-377X", "Gutekunst", 2132, 6.348, 335.8538122, 0, 0, 0),
+      new Spring("Z-378I", "Gutekunst", 2132, 5.547, 384.3519019, 0, 0, 0),
+      new Spring("Z-378X", "Gutekunst", 2132, 5.521, 386.1619272, 0, 0, 0),
+      new Spring("Z-379I", "Gutekunst", 2132, 4.826, 441.7737257, 0, 0, 0),
+      new Spring("Z-379X", "Gutekunst", 2132, 4.806, 443.6121515, 0, 0, 0),
+      new Spring("Z-387I", "Gutekunst", 2515, 8.104, 310.3405726, 0, 0, 0),
+      new Spring("Z-387X", "Gutekunst", 2515, 8.075, 311.4551084, 0, 0, 0));
+
   @Override
   protected Application configure() {
-    
+
     try {
       ResourceConfig config = WebServerMoxy.createApp();
-  
-      // Set up traffic logging - http://www.indestructiblevinyl.com/2016/07/23/logging-with-jersey-and-maven.html
+
+      // Set up traffic logging -
+      // http://www.indestructiblevinyl.com/2016/07/23/logging-with-jersey-and-maven.html
       enable(TestProperties.LOG_TRAFFIC);
       enable(TestProperties.DUMP_ENTITY);
       config.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, "WARNING");
-      
+
       return config;
     } catch (InstantiationException e) {
-      Logger.getLogger(SpringSelectorWebServiceTest.class.getName()).log(Level.SEVERE, "Problem creating Spring Selector", e);
+      Logger.getLogger(SpringSelectorWebServiceTest.class.getName()).log(Level.SEVERE,
+          "Problem creating Spring Selector", e);
       return null;
     }
   }
@@ -63,14 +64,12 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
   }
 
   @Test
-    public void testRunScenario() {
-        final WebTarget target = target("springselector/runscenario");        
-        final List<Spring> springs = target
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .post(
-                Entity.entity(TEST_SCENARIO, MediaType.APPLICATION_JSON_TYPE), 
-                new GenericType<List<Spring>>(){});
+  public void testRunScenario() {
+    final WebTarget target = target("springselector/runscenario");
+    final List<Spring> springs = target.request(MediaType.APPLICATION_JSON_TYPE)
+        .post(Entity.entity(TEST_SCENARIO, MediaType.APPLICATION_JSON_TYPE), new GenericType<List<Spring>>() {
+        });
 
-        assertEquals(EXPECTED_SPRINGS, springs);
-    }
+    assertEquals(EXPECTED_SPRINGS, springs);
+  }
 }
