@@ -8,6 +8,11 @@ mat-checkbox {
   float: right;
 }
 
+.range-icon  {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
 .scenario-selector-full-width {
   width: 100%;
 }
