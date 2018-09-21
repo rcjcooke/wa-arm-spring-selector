@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import * as c3 from 'c3';
 import { DataModelService } from '../data-model.service';
 import { Spring } from '../spring';
+import * as d3 from 'd3';
 
 @Component({
   selector: 'app-spring-selection-visualiser',
@@ -32,7 +33,11 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
         },
         columns: [
         ],
-        type: 'scatter'
+        type: 'scatter',
+        color: function (color, d) {
+          // d will be 'id' when called for legends
+          return d3.rgb("#c2185b");
+        }
       },
       axis: {
         x: {
@@ -47,7 +52,7 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       },
       legend: {
         show: false
-      }
+      } 
     });
     
     this.springChart.resize();

@@ -20,3 +20,7 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
 .c3-tooltip .name, .c3-tooltip .value {
   color: black;
 }
+
+.c3-circle {
+  opacity: 1 !important;
+}
