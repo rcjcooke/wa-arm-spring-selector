@@ -1,3 +1,9 @@
 table {
   width: 100%;
 }
+
+h2 {
+  font-size: 1.2em;
+  color: #999;
+  margin-bottom: 0;
+}
