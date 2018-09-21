@@ -15,9 +15,6 @@ public class SpringSelector {
   private static final int INVALID_ARGUMENTS_EXIT_CODE = 2;
   private static final int DB_INIT_FAILURE_EXIT_CODE = 3;
 
-  // gravitational acceleration [km/(s*s)]
-  private static double GRAVITY = 0.00980665;
-
   // The Spring Database
   private SpringDB mSpringDB;
 
@@ -40,13 +37,13 @@ public class SpringSelector {
 
     Scenario scenario = null;
     try {
-      if (args.length != 10) {
+      if (args.length != 11) {
         printUsage();
         System.exit(INVALID_NUMBER_OF_ARGUMENTS_EXIT_CODE);
       }
       scenario = new Scenario(Float.parseFloat(args[1]), Integer.parseInt(args[2]), Float.parseFloat(args[3]),
           Float.parseFloat(args[4]), Float.parseFloat(args[5]), Float.parseFloat(args[6]),
-          Float.parseFloat(args[7]), Float.parseFloat(args[8]), Float.parseFloat(args[9]));
+          Float.parseFloat(args[7]), Float.parseFloat(args[8]), Float.parseFloat(args[9]), Boolean.parseBoolean(args[10]));
     } catch (Exception e) {
       // Some kind of parsing exception, we don't care what it was
       System.err.println("Problem parsing command line arguments");
@@ -218,10 +215,9 @@ public class SpringSelector {
 
     // Maximum Potential Energy of the mass in the system divided by 2 (to reduce
     // calculation overhead later)
-    double halfMassPotentialEnergy = mass_sc * GRAVITY * scenario.getR1();
 
-    List<Spring> matchingSprings = mSpringDB.getMatchingSprings(halfMassPotentialEnergy, allowedRangeA_sc,
-        allowedRangeR2_sc, mechanicalAdvantage);
+    List<Spring> matchingSprings = mSpringDB.getMatchingSprings(mass_sc, scenario.getR1(), allowedRangeA_sc,
+        allowedRangeR2_sc, mechanicalAdvantage, scenario.includeSpringMassInSystem());
 
     // TODO: Filter based on other dynamic parameters
 //      for (int i = 0; i < SpringParameterList.size();i++) {

@@ -11,7 +11,7 @@ import { MatButtonModule } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material';
 import { MatCardModule } from '@angular/material/card';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // Component imports
 import { AppComponent } from './app.component';
@@ -36,6 +36,7 @@ import { SpringSelectionVisualiserComponent } from './spring-selection-visualise
     MatTableModule,
     MatSortModule,
     MatCardModule,
+    MatCheckboxModule,
     MatButtonModule
   ],
   providers: [],

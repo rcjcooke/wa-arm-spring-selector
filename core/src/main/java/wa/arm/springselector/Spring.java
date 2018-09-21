@@ -29,25 +29,27 @@ public class Spring {
   public double mAMax;
 
   /**
-   * Empty constructor for de/serialisation 
+   * Empty constructor for de/serialisation
    */
   public Spring() {
   }
-  
+
   /**
-   * @param orderNum
-   * @param manufacturer
-   * @param rate
-   * @param relevantLength
-   * @param maximumForceUnderStaticLoad
-   * @param mass
+   * @param orderNum                    The manufacturer's order number
+   * @param manufacturer                The manufacturer
+   * @param rate                        The spring constant for the spring / Nm-1
+   * @param relevantLength              The maximum length of the spring under
+   *                                    it's maximum static force / m
+   * @param maximumForceUnderStaticLoad The maximum static force that can be
+   *                                    applied to the spring
+   * @param mass                        The mass of the spring
    * @param r2Min
    * @param r2Max
    * @param aMin
    * @param aMax
    */
-  public Spring(String orderNum, String manufacturer, double rate, double relevantLength, double maximumForceUnderStaticLoad, double mass, double r2Min, double r2Max,
-      double aMin, double aMax) {
+  public Spring(String orderNum, String manufacturer, double rate, double relevantLength,
+      double maximumForceUnderStaticLoad, double mass, double r2Min, double r2Max, double aMin, double aMax) {
     mOrderNum = orderNum;
     mManufacturer = manufacturer;
     mRate = rate;
@@ -116,12 +118,14 @@ public class Spring {
     return mAMax;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof Spring)  {
+    if (obj instanceof Spring) {
       Spring s = (Spring) obj;
       return (s.mOrderNum.equals(mOrderNum) && s.mManufacturer.equals(mManufacturer));
     } else {

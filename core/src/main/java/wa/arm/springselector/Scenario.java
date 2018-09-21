@@ -26,6 +26,8 @@ public class Scenario {
   public float mAllowedRangeAMillimetersMax;
   // Lever => distance CoM to Pivot [mm]
   public float mR1;
+  // True if the spring(s) are to be part of the system being balanced
+  public boolean mIncludeSpringMassInSystem;
 
   /**
    * Empty constructor for de/serialisation
@@ -34,7 +36,9 @@ public class Scenario {
   }
 
   /**
-   * @param massGrams                    System mass + payload mass [g]
+   * @param massGrams                    System mass + payload mass (excluding the
+   *                                     spring mass if relevant. See
+   *                                     includeSpringMassInSystem.) [g]
    * @param numberOfParallelSprings      Number of equivalent parallel springs
    * @param mechanicalAdvantageZaehler
    * @param mechanicalAdvantageNenner
@@ -47,10 +51,14 @@ public class Scenario {
    * @param allowedRangeAMillimetersMax  Maximum distance spring connection on
    *                                     fixed y-Axis to Pivot [mm]
    * @param r1                           Lever => distance CoM to Pivot [mm]
+   * @param includeSpringMassInSystem    True if the spring(s) are to be part of
+   *                                     the system being balanced
+   * 
    */
   public Scenario(float massGrams, int numberOfParallelSprings, float mechanicalAdvantageZaehler,
       float mechanicalAdvantageNenner, float allowedRangeR2MillimetersMin, float allowedRangeR2MillimetersMax,
-      float allowedRangeAMillimetersMin, float allowedRangeAMillimetersMax, float r1) {
+      float allowedRangeAMillimetersMin, float allowedRangeAMillimetersMax, float r1,
+      boolean includeSpringMassInSystem) {
     mMassGrams = massGrams;
     mNumberOfParallelSprings = numberOfParallelSprings;
     mMechanicalAdvantageZaehler = mechanicalAdvantageZaehler;
@@ -60,6 +68,7 @@ public class Scenario {
     mAllowedRangeAMillimetersMin = allowedRangeAMillimetersMin;
     mAllowedRangeAMillimetersMax = allowedRangeAMillimetersMax;
     mR1 = r1;
+    mIncludeSpringMassInSystem = includeSpringMassInSystem;
   }
 
 //  // constrains for the balancing system
@@ -134,6 +143,13 @@ public class Scenario {
     return mR1;
   }
 
+  /**
+   * @return true if the spring(s) are to be part of the system being balanced
+   */
+  public boolean includeSpringMassInSystem() {
+    return mIncludeSpringMassInSystem;
+  }
+
   /*
    * (non-Javadoc)
    * 
@@ -168,5 +184,4 @@ public class Scenario {
       return false;
     }
   }
-
 }

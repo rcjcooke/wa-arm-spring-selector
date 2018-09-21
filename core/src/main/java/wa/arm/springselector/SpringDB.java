@@ -18,6 +18,9 @@ import java.util.Properties;
  */
 public class SpringDB {
 
+  // gravitational acceleration [km/(s*s)]
+  public static double GRAVITY = 0.00980665;
+
   // Table column constants
   private static final String ORDER_NUM = "order_num";
   private static final String SUPPLIER = "supplier";
@@ -42,12 +45,12 @@ public class SpringDB {
    * @throws InstationException if there was a problem setting up the database
    */
   public SpringDB(String dataSetPath) throws InstantiationException {
-    
+
     // Add a system property to allow a text table to be used in an all-in-memory DB
     Properties p = new Properties(System.getProperties());
     p.setProperty("textdb.allow_full_path", "true");
     System.setProperties(p);
-    
+
     try {
       // Create an in-memory database for the Springs
       mConnection = DriverManager.getConnection("jdbc:hsqldb:mem:inMemSpringDB", "SA", "");
@@ -62,19 +65,47 @@ public class SpringDB {
     }
   }
 
-  public List<Spring> getMatchingSprings(double halfMassPotentialEnergy, double[] allowedRangeA_sc,
-      double[] allowedRangeR2_sc, double mechanicalAdvantage) {
+  /**
+   * A list of springs from the spring database that matches the criteria.
+   * 
+   * @param massPerSpring             System mass handled by each spring
+   * @param lengthToCOM               the length from the pivot to the Centre of
+   *                                  Mass of the system being balanced
+   * @param allowedRangeA_sc          The allowed vertical connection range
+   * @param allowedRangeR2_sc         The allowed "along arm" connection range
+   * @param mechanicalAdvantage       The mechanical advantage of the system
+   * @param includeSpringMassInSystem True of the spring is to be situated inside
+   *                                  the system being balanced - i.e. the mass of
+   *                                  the spring is being balanced as well
+   * @return A list of springs that match the requirements
+   */
+  public List<Spring> getMatchingSprings(double massPerSpring, double lengthToCOM, double[] allowedRangeA_sc,
+      double[] allowedRangeR2_sc, double mechanicalAdvantage, boolean includeSpringMassInSystem) {
 
     ArrayList<Spring> selectedSpringList = new ArrayList<Spring>();
 
     try {
       Statement s = mConnection.createStatement();
+      // Different query based on whether the mass of the spring is included in the
+      // problem
+      String query = "";
+      if (includeSpringMassInSystem) {
+        query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= (" + massPerSpring + " + " + MASS_KG
+            + ")*" + GRAVITY * 2 * lengthToCOM;
+      } else {
+        query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= "
+            + massPerSpring * GRAVITY * lengthToCOM * 2;
+      }
       // Get the springs that fit the energy bracket only
-      ResultSet allEnergySpringsRS = s.executeQuery(
-          "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= " + halfMassPotentialEnergy * 2);
+      ResultSet allEnergySpringsRS = s.executeQuery(query);
 
+      double halfMassPotentialEnergy = massPerSpring * GRAVITY * lengthToCOM;
       // Now only keep the springs that fit the criteria
       while (allEnergySpringsRS.next()) {
+
+        if (includeSpringMassInSystem) {
+          halfMassPotentialEnergy = (massPerSpring + allEnergySpringsRS.getDouble(MASS_KG)) * GRAVITY * lengthToCOM;
+        }
 
         double length = allEnergySpringsRS.getDouble(RELEVENT_LENGTH_MM);
         double springConstant = allEnergySpringsRS.getDouble(RATE_N_MM);
@@ -145,8 +176,9 @@ public class SpringDB {
   private Spring createNewSpringFromCurrentResultSetRow(ResultSet rs, double r2Min, double r2Max, double aMin,
       double aMax) throws SQLException {
     // TODO: Future upgrade: make this dynamic
-    return new Spring(rs.getString(ORDER_NUM), rs.getString(SUPPLIER), rs.getDouble(RATE_N_MM), rs.getDouble(MASS_KG),
-        rs.getDouble(RELEVENT_LENGTH_MM), rs.getDouble(MAX_FORCE_UNDER_STATIC_LOAD), r2Min, r2Max, aMin, aMax);
+    return new Spring(rs.getString(ORDER_NUM), rs.getString(SUPPLIER), rs.getDouble(RATE_N_MM),
+        rs.getDouble(RELEVENT_LENGTH_MM), rs.getDouble(MAX_FORCE_UNDER_STATIC_LOAD), rs.getDouble(MASS_KG), r2Min,
+        r2Max, aMin, aMax);
   }
 
   private String generateSpringTableDescription() {
@@ -161,7 +193,8 @@ public class SpringDB {
     sb.append(',').append(MASS_KG).append(' ').append(DECIMAL); // Masse
     sb.append(',').append(RELEVENT_LENGTH_MM).append(' ').append(DECIMAL); // Lr[mm] Relevante Laenge
     sb.append(',').append(MAX_POTENTIAL_ENERGY_NMM).append(' ').append(DECIMAL); // V[Nmm] Maximale potentielle Energie
-    sb.append(',').append(MAX_FORCE_UNDER_STATIC_LOAD).append(' ').append(DECIMAL); // V[Nmm] Maximale potentielle Energie
+    sb.append(',').append(MAX_FORCE_UNDER_STATIC_LOAD).append(' ').append(DECIMAL); // V[Nmm] Maximale potentielle
+                                                                                    // Energie
     return sb.toString();
   }
 

@@ -8,4 +8,5 @@ export class Scenario {
   mAllowedRangeAMillimetersMin  : number;
   mAllowedRangeAMillimetersMax  : number;
   mR1                           : number;
+  mIncludeSpringMassInSystem    : boolean;
 }
