@@ -10,6 +10,14 @@ This project is Gradle driven and consists of several sub-projects:
 
 Executing `gradle tasks` in the root folder of the main project or any of the sub-projects will provide a relevant lists of tasks that can be executed against that projeoct, e.g. gradle run or gradle build.
 
+### Dependencies
+While most of the projects use Gradle for dependency management, the Web App project (wa sub-folder) uses NPM via Angular to manage dependencies. This will result in the creation of a local `node_modules` folder. Please see the Web App section below for details on it's dependencies.
+
+The other projects all require:
+
+* Java 1.8+ : http://www.oracle.com/technetwork/java/javase/downloads/index.html
+* Gradle 4+ : https://gradle.org/install/ 
+
 ### Core
 This is the core logic and database executable as a command line application. It is also used as an integrated dependency of the web service. To run the application:
 
@@ -38,9 +46,6 @@ Make sure the web service is already running on the local machine as this app wi
 * Change to the `wa` directory
 * Run `npm i` to download all javascript dependencies. This will take a while the first time.
 * Run `ng serve --open`. This will start the web app running on a local Node web server instance and open the web app in your system's default web browser.
-
-### Dependencies
-While most of the projects use Gradle for dependency management, the Web App project (wa sub-folder) uses NPM via Angular to manage dependencies. This will result in the creation of a local `node_modules` folder.
 
 ### IDEs
 #### Eclipse
