@@ -44,7 +44,7 @@ Note: To run the web app (wa sub-project) you will need the following pre-requis
 Make sure the web service is already running on the local machine as this app will connect to it.
 
 * Change to the `wa` directory
-* Run `npm i` to download all javascript dependencies. This will take a while the first time.
+* Run `npm i` to download all javascript dependencies. This will take a while the first time and you don't need to do it again.
 * Run `ng serve --open`. This will start the web app running on a local Node web server instance and open the web app in your system's default web browser.
 
 ### IDEs
