@@ -5,8 +5,10 @@ apply plugin: 'application'
 
 // Default arguments when executing the app directly with Gradle
 run {
-    args = ["data/Databases/basicData.csv", 15000, 1, 1, 1, 100, 200, 100, 200, 1200]
+    logging.captureStandardOutput LogLevel.LIFECYCLE
+    args = ["data/Databases/basicData.csv", 1000, 1, 1, 1, 100, 200, 100, 200, 1000, "false"]
 }
+
 
 /****************************
  * Project Descriptors

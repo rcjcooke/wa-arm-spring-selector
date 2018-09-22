@@ -6,7 +6,10 @@ package wa.arm.springselector;
 import java.util.List;
 
 /**
- * @author rcjco
+ * The core logic application for finding appropriate springs for gravity
+ * balancing a mechanical arm.
+ * 
+ * @author Ray Cooke
  *
  */
 public class SpringSelector {
@@ -42,11 +45,11 @@ public class SpringSelector {
         System.exit(INVALID_NUMBER_OF_ARGUMENTS_EXIT_CODE);
       }
       scenario = new Scenario(Float.parseFloat(args[1]), Integer.parseInt(args[2]), Float.parseFloat(args[3]),
-          Float.parseFloat(args[4]), Float.parseFloat(args[5]), Float.parseFloat(args[6]),
-          Float.parseFloat(args[7]), Float.parseFloat(args[8]), Float.parseFloat(args[9]), Boolean.parseBoolean(args[10]));
+          Float.parseFloat(args[4]), Float.parseFloat(args[5]), Float.parseFloat(args[6]), Float.parseFloat(args[7]),
+          Float.parseFloat(args[8]), Float.parseFloat(args[9]), Boolean.parseBoolean(args[10]));
     } catch (Exception e) {
       // Some kind of parsing exception, we don't care what it was
-      System.err.println("Problem parsing command line arguments");
+      System.out.println("Problem parsing command line arguments");
       e.printStackTrace();
       printUsage();
       System.exit(INVALID_ARGUMENTS_EXIT_CODE);
@@ -59,7 +62,7 @@ public class SpringSelector {
         System.out.println(s.toString());
       }
     } catch (InstantiationException e) {
-      System.err
+      System.out
           .println("Failed to initialise service, please check that the dataset file is available at: " + args[0]);
       e.printStackTrace();
       System.exit(DB_INIT_FAILURE_EXIT_CODE);
@@ -67,7 +70,29 @@ public class SpringSelector {
   }
 
   public static void printUsage() {
-    // TODO: Print usage
+    StringBuilder sb = new StringBuilder();
+    sb.append("Usage: gradle run --args='<DBDataPath> <massGrams> <numberOfParallelSprings> "
+        + "<mechanicalAdvantageNumerator> <mechanicalAdvantageDenominator> "
+        + "<allowedRangeR2MillimetersMin> <allowedRangeR2MillimetersMax> "
+        + "<allowedRangeAMillimetersMin> <allowedRangeAMillimetersMax> "
+        + "<r1> <includeSpringMassInSystem>'\n");
+    sb.append('\n');
+    sb.append("\tDBDataPath                     - The path to the spring database.\n");
+    sb.append("\tmassGrams                      - System mass + payload mass (excluding thespring mass if relevant. SeeincludeSpringMassInSystem.) / grams\n");
+    sb.append("\tnumberOfParallelSprings        - Number of equivalent parallel springs\n");
+    sb.append("\tmechanicalAdvantageNumerator   - The numerator of the mechanical advantage\n");
+    sb.append("\tmechanicalAdvantageDenominator - The denominator of the mechanical advantage\n");
+    sb.append("\tallowedRangeR2MillimetersMin   - Minimum distance spring connection onlever to Pivot / mm\n");
+    sb.append("\tallowedRangeR2MillimetersMax   - Maximum distance spring connection onlever to Pivot / mm\n");
+    sb.append("\tallowedRangeAMillimetersMin    - Minimum distance spring connection onfixed y-Axis to Pivot / mm\n");
+    sb.append("\tallowedRangeAMillimetersMax    - Maximum distance spring connection onfixed y-Axis to Pivot / mm\n");
+    sb.append("\tr1                             - Lever => distance CoM to Pivot / mm\n");
+    sb.append("\tincludeSpringMassInSystem      - \"true\" if the spring(s) are to be part of the system being balanced, otherwise \"false\".\n");
+    sb.append('\n');
+    sb.append("Example:\n");
+    sb.append("\tgradle run --args='data/Databases/basicData.csv 1000 1 1 1 100 200 100 200 1000 false'\n");
+    sb.append('\n');
+    System.out.print(sb.toString());
   }
 
   void setup() {

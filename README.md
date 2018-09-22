@@ -2,14 +2,48 @@
 Workshop Automation: Workshop Arm: Spring selection service
 
 This project is Gradle driven and consists of several sub-projects:
-* core - Core: The spring selection application. This is a command line app that contains the core logic.
-* ws - Web Service: The RESTful web service wrapper around core
-* wa - Wep App: A GUI web front end for interacting with the web service
+* **core** - Core: The spring selection application. This is a command line app that contains the core logic.
+* **ws** - Web Service: The RESTful web service wrapper around core
+* **wa** - Wep App: A GUI web front end for interacting with the web service
  
+## Usage
+
 Executing `gradle tasks` in the root folder of the main project or any of the sub-projects will provide a relevant lists of tasks that can be executed against that projeoct, e.g. gradle run or gradle build.
 
-## IDEs
-### Eclipse
+### Core
+This is the core logic and database executable as a command line application. It is also used as an integrated dependency of the web service. To run the application:
+
+* Change to the `core` directory
+* Execute `gradle run`. This will tell you what command line parameters are required to use it.
+
+For example:
+
+### Web Service
+This is the RESTful web service that allows for remote connection and use of the Core app and database.
+
+* Change to the `ws` directory
+* Execute `gradle run`. This will start up the web service at http://localhost:8080/.
+
+### Web App
+This is the graphical front end interface to the web service.
+
+At present this sub-project is not integrated into the gradle build.
+
+Note: To run the web app (wa sub-project) you will need the following pre-requisites installed:
+* Node.js and NPM: https://nodejs.org/en/download/
+* Angular CLI: To install this, execute `npm install -g @angular/cli`
+
+Make sure the web service is already running on the local machine as this app will connect to it.
+
+* Change to the `wa` directory
+* Run `npm i` to download all javascript dependencies. This will take a while the first time.
+* Run `ng serve --open`. This will start the web app running on a local Node web server instance and open the web app in your system's default web browser.
+
+### Dependencies
+While most of the projects use Gradle for dependency management, the Web App project (wa sub-folder) uses NPM via Angular to manage dependencies. This will result in the creation of a local `node_modules` folder.
+
+### IDEs
+#### Eclipse
 Despite the Gradle Eclipse plugin being applied in the build file, Eclipse integration works best if you *DON'T* use the command line eclipse generation tools in Gradle. Simply check out the project from github and then use the Eclipse->File->Import... function and import an existing Gradle project. The Eclipse project structure should be correctly generated at that point.
 
 Please note that, at the time of writing, Gradle test and Eclipse debug capability are not yet integrated in the Eclipse Gradle buildship plugin, though you can manually set up a remote debug target to a gradle test execution instance in Eclipse.
