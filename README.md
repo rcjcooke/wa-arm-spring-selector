@@ -14,9 +14,9 @@ Executing `gradle tasks` in the root folder of the main project or any of the su
 This is the core logic and database executable as a command line application. It is also used as an integrated dependency of the web service. To run the application:
 
 * Change to the `core` directory
-* Execute `gradle run`. This will tell you what command line parameters are required to use it.
+* Execute `gradle run --args=''`. This will force the app to tell you what command line parameters are required to use it.
 
-For example:
+**Note**: Running `gradle run` with no arguments will execute the app with some default command line arguments. These arguments can be found in the `gradle.build` file under the core sub-project directory.
 
 ### Web Service
 This is the RESTful web service that allows for remote connection and use of the Core app and database.
