@@ -1,11 +1,15 @@
 # wa-arm-spring-selector
 Workshop Automation: Workshop Arm: Spring selection service
 
+This repository contains of a small set of services that work together to provide an interface for selecting stock springs from a spring catalogue that will allow for the gravity balancing of a mechanical arm. This system is founded in earlier work done by Frank Beinersdorf with some minor expansions to allow for the spring mass to be included in the system mass and to allow for spring selections that can be used in dynamic gravity balanced systems.
+
+![Screenshot](media/Screenshot.PNG)
+
 This project is Gradle driven and consists of several sub-projects:
 * **core** - Core: The spring selection application. This is a command line app that contains the core logic.
 * **ws** - Web Service: The RESTful web service wrapper around core
 * **wa** - Wep App: A GUI web front end for interacting with the web service
- 
+
 ## Usage
 
 Executing `gradle tasks` in the root folder of the main project or any of the sub-projects will provide a relevant lists of tasks that can be executed against that projeoct, e.g. gradle run or gradle build.
