@@ -15,7 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Spring selection logic adapted from Frank Beinersdorf's spring selection Processing app.
+ * Spring selection logic adapted from Frank Beinersdorf's spring selection
+ * Processing app.
  * 
  * @author Ray Cooke
  */
@@ -101,32 +102,41 @@ public class SpringDB {
       // Get the springs that fit the energy bracket only
       allEnergySpringsRS = s.executeQuery(query);
     } catch (SQLException e) {
-      Logger.getLogger(SpringDB.class.getName()).log(Level.SEVERE, "Problem executing query: "+ query, e);
+      Logger.getLogger(SpringDB.class.getName()).log(Level.SEVERE, "Problem executing query: " + query, e);
     }
-    
+
     if (allEnergySpringsRS != null) {
       double halfMassPotentialEnergy = massPerSpring * PhysicalConstants.GRAVITY * lengthToCOM;
       // Now only keep the springs that fit the criteria
       try {
         while (allEnergySpringsRS.next()) {
           try {
-            if (includeSpringMassInSystem) {
-              halfMassPotentialEnergy = (massPerSpring + allEnergySpringsRS.getDouble(MASS_KG)) * PhysicalConstants.GRAVITY * lengthToCOM;
-            }
-
             double length = allEnergySpringsRS.getDouble(RELEVENT_LENGTH_MM);
             double springConstant = allEnergySpringsRS.getDouble(RATE_N_MM);
-
-            double[] theoR2 = { 0, 0 };
-            double[] theoA = { 0, 0 };
-
-            double[] finalR2 = { 0, 0 };
-            double[] finalA = { 0, 0 };
 
             /*
              * Calculate TheoAmin, TheoAmax, TheoR2min, TheoR2max for the current spring
              * based on Lr,k and the balancing condition ???
+             * 
+             * k = spring constant = rate Lr = length = relevent length = maximum length the
+             * spring can extend to based on the maximum static force that can be applied to
+             * it
              */
+            if (includeSpringMassInSystem) {
+              /*
+               * If we're not including the mass of the spring then we've already calculated
+               * this earlier and it applies equally to all springs, hence no "else"
+               * statement.
+               */
+              halfMassPotentialEnergy = (massPerSpring + allEnergySpringsRS.getDouble(MASS_KG))
+                  * PhysicalConstants.GRAVITY * lengthToCOM;
+            }
+            
+            double[] theoR2 = { 0, 0 };
+            double[] theoA = { 0, 0 };
+            double[] finalR2 = { 0, 0 };
+            double[] finalA = { 0, 0 };
+            
             theoR2[0] = length / 2 - Math.sqrt(Math.pow(length / 2, 2) - (halfMassPotentialEnergy / springConstant));
             theoR2[1] = length / 2 + Math.sqrt(Math.pow(length / 2, 2) - (halfMassPotentialEnergy / springConstant));
             theoA[0] = theoR2[0];
@@ -169,16 +179,17 @@ public class SpringDB {
              * Record real values for "R2min" ,"R2max", "Amin", "Amax" for the Spring given
              * the selection scenario
              */
-            selectedSpringList
-                .add(createNewSpringFromCurrentResultSetRow(allEnergySpringsRS, mechanicalAdvantage * finalR2[0],
-                    mechanicalAdvantage * finalR2[1], mechanicalAdvantage * finalA[0], mechanicalAdvantage * finalA[1]));
+            selectedSpringList.add(createNewSpringFromCurrentResultSetRow(allEnergySpringsRS,
+                mechanicalAdvantage * finalR2[0], mechanicalAdvantage * finalR2[1], mechanicalAdvantage * finalA[0],
+                mechanicalAdvantage * finalA[1]));
           } catch (SQLException e) {
-            Logger.getLogger(SpringDB.class.getName()).log(Level.WARNING, "Problem processing spring at row " + allEnergySpringsRS.getRow() + " in result setreturned from query: "+ query, e);
+            Logger.getLogger(SpringDB.class.getName()).log(Level.WARNING, "Problem processing spring at row "
+                + allEnergySpringsRS.getRow() + " in result set returned from query: " + query, e);
           }
         }
       } catch (SQLException e) {
-        Logger.getLogger(SpringDB.class.getName()).log(Level.SEVERE, "Problem processing result set from query: "+ query, e);
-        e.printStackTrace();
+        Logger.getLogger(SpringDB.class.getName()).log(Level.SEVERE,
+            "Problem processing result set from query: " + query, e);
       }
     }
 

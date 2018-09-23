@@ -115,9 +115,7 @@ public class SpringSelector {
 //		TableSpringsBalancingSelection.addColumn("OverallMass");
 //		TableSpringsBalancingSelection.addColumn("SpringLength");
 //
-//		All2DPlots = new ArrayList<ScatterPlot>();
-//		All3DPlots = new ArrayList<ScatterPlot>();
-//
+
 
     // TODO: Dynamic Spring parameters
 //		// get all Parameternames(types) in TableSpringParameters and collect them in
@@ -158,71 +156,6 @@ public class SpringSelector {
 //				println(SpringParameterList.get(i).ListOfStringParameterOptions.size());
 //			}
 //		}
-
-    // TODO: Control UI
-//
-//		// Make ControlWindow
-//		cf = addControlFrame("Parameter Selector -- Basic Mass Spring Balancer Calculator", SpringParameterList, 1500,
-//				470); // Add a new Control frame to ControlP5 System
-//
-//		// Add a column Selected acting as a filter flag
-//		TableSpringParameters.addColumn("Selected", Table.INT);
-//
-//		// Add a column "R2min" ,"R2max", "Amin", "Amax" for selected Spring Setup
-//		TableSpringParameters.addColumn("R2min", Table.FLOAT);
-//		TableSpringParameters.addColumn("R2max", Table.FLOAT);
-//		TableSpringParameters.addColumn("Amin", Table.FLOAT);
-//		TableSpringParameters.addColumn("Amax", Table.FLOAT);
-//
-//		// Initialize "Selected" column
-//		for (TableRow row : TableSpringParameters.rows()) {
-//			row.setInt("Selected", 1);
-//		}
-//
-
-    // TODO: Visual Plotting
-//		// 2D Scatter-Plots added to ArrayList All2DPlots
-//		for (SpringParameter P : SpringParameterList) {
-//			if (P.isTypeFloat()) {
-//				for (SpringParameter Q : SpringParameterList) {
-//					if (Q.isTypeFloat()) {
-//						All2DPlots.add(new ScatterPlot(P, Q));
-//					}
-//				}
-//			}
-//		}
-//
-//		// 3D Scatter-Plots added to ArrayList All3DPlots
-//		for (SpringParameter P : SpringParameterList) {
-//			if (P.isTypeFloat()) {
-//				for (SpringParameter Q : SpringParameterList) {
-//					if (Q.isTypeFloat()) {
-//						for (SpringParameter R : SpringParameterList) {
-//							if (R.isTypeFloat()) {
-//								All3DPlots.add(new ScatterPlot(Q, R, P));
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//
-//		// set Diagram Parameters 2D
-//		for (ScatterPlot h : All2DPlots) {
-//			h.setTable(TableSpringParameters).setColor(color(255, 0, 0)).setPointSize(3).setLabelSize(15)
-//					.setPlotOnlySelected(true).setOriginXYZ(75, 75, 0)
-//					.setMaxXYZAxis(width - 150, height - 150, height - 150);
-//		}
-//
-//		// set Diagram Parameters 3D
-//		for (ScatterPlot h : All3DPlots) {
-//			h.setTable(TableSpringParameters).setColor(color(255, 0, 0)).setPointSize(3).setLabelSize(15)
-//					.setPlotOnlySelected(true).setOriginXYZ(75, 75, 0)
-//					.setMaxXYZAxis(width - 150, height - 150, height - 150);
-//		}
-//
-//		TestCharacteristicsPlot = new SpringCharacteristics(0, 0, 0);
-//		ortho(); // Start in ortho view mode
   }
 
   public List<Spring> runScenario(Scenario scenario) {
@@ -237,9 +170,6 @@ public class SpringSelector {
     allowedRangeA_sc[1] = scenario.getAllowedRangeA()[1] / mechanicalAdvantage;
     allowedRangeR2_sc[0] = scenario.getAllowedRangeR2()[0] / mechanicalAdvantage;
     allowedRangeR2_sc[1] = scenario.getAllowedRangeR2()[1] / mechanicalAdvantage;
-
-    // Maximum Potential Energy of the mass in the system divided by 2 (to reduce
-    // calculation overhead later)
 
     List<Spring> matchingSprings = mSpringDB.getMatchingSprings(mass_sc, scenario.getR1(), allowedRangeA_sc,
         allowedRangeR2_sc, mechanicalAdvantage, scenario.includeSpringMassInSystem());
