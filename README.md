@@ -58,6 +58,7 @@ Despite the Gradle Eclipse plugin being applied in the build file, Eclipse integ
 Please note that, at the time of writing, Gradle test and Eclipse debug capability are not yet integrated in the Eclipse Gradle buildship plugin, though you can manually set up a remote debug target to a gradle test execution instance in Eclipse.
 
 ## References
+* Gradle multi-project builds: https://docs.gradle.org/current/userguide/multi_project_builds.html
 * Jersey: https://jersey.github.io/documentation/latest/media.html#json.moxy
 * HSQLDB Text Tables: http://hsqldb.org/doc/guide/texttables-chapt.html
 * D3.JS / C3.JS / REST Example: https://github.com/Automattic/grasshopper
