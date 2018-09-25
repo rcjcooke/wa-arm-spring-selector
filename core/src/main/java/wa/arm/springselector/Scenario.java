@@ -12,7 +12,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Scenario {
 
   // NOTE: THESE FIELDS HAVE TO BE PUBLIC FOR SERIALISATION PURPOSES
-  // System mass + payload mass [g]
+  // System mass / g
+  public float mSystemGrams;
+  // Payload mass / g
   public float mMassGrams;
   // Number of equivalent parallel springs
   public int mNumberOfParallelSprings;
@@ -28,6 +30,9 @@ public class Scenario {
   public float mR1;
   // True if the spring(s) are to be part of the system being balanced
   public boolean mIncludeSpringMassInSystem;
+  // True if the system needs to be able to balance with massPerSpring=0 as well
+  // as massPerSpring
+  public boolean mDynamicBalancingRequired;
 
   /**
    * Empty constructor for de/serialisation
@@ -36,8 +41,11 @@ public class Scenario {
   }
 
   /**
-   * @param massGrams                    System mass + payload mass (excluding the
-   *                                     spring mass if relevant. See
+   * @param systemGrams                  System mass (excluding the spring mass if
+   *                                     relevant. See includeSpringMassInSystem.)
+   *                                     [g]
+   * @param massGrams                    Payload mass (excluding the spring mass
+   *                                     if relevant. See
    *                                     includeSpringMassInSystem.) [g]
    * @param numberOfParallelSprings      Number of equivalent parallel springs
    * @param mechanicalAdvantageZaehler
@@ -53,12 +61,15 @@ public class Scenario {
    * @param r1                           Lever => distance CoM to Pivot [mm]
    * @param includeSpringMassInSystem    True if the spring(s) are to be part of
    *                                     the system being balanced
-   * 
+   * @param dynamicBalancingRequired     True if the system needs to be able to
+   *                                     balance with massPerSpring=0 as well as
+   *                                     massPerSpring
    */
-  public Scenario(float massGrams, int numberOfParallelSprings, float mechanicalAdvantageZaehler,
+  public Scenario(float systemGrams, float massGrams, int numberOfParallelSprings, float mechanicalAdvantageZaehler,
       float mechanicalAdvantageNenner, float allowedRangeR2MillimetersMin, float allowedRangeR2MillimetersMax,
-      float allowedRangeAMillimetersMin, float allowedRangeAMillimetersMax, float r1,
-      boolean includeSpringMassInSystem) {
+      float allowedRangeAMillimetersMin, float allowedRangeAMillimetersMax, float r1, boolean includeSpringMassInSystem,
+      boolean dynamicBalancingRequired) {
+    mSystemGrams = systemGrams;
     mMassGrams = massGrams;
     mNumberOfParallelSprings = numberOfParallelSprings;
     mMechanicalAdvantageZaehler = mechanicalAdvantageZaehler;
@@ -69,6 +80,7 @@ public class Scenario {
     mAllowedRangeAMillimetersMax = allowedRangeAMillimetersMax;
     mR1 = r1;
     mIncludeSpringMassInSystem = includeSpringMassInSystem;
+    mDynamicBalancingRequired = dynamicBalancingRequired;
   }
 
 //  // constrains for the balancing system
@@ -97,6 +109,13 @@ public class Scenario {
 //  private boolean FindAllPossibleSprings = false;
 //  private boolean ExportVariations = false;
 
+  /**
+   * @return the systemGrams
+   */
+  public float getSystemGrams() {
+    return mSystemGrams;
+  }
+  
   public double getMass() {
     return mMassGrams;
   }
@@ -150,6 +169,14 @@ public class Scenario {
     return mIncludeSpringMassInSystem;
   }
 
+  /**
+   * @return True if the system needs to be able to balance with massPerSpring=0
+   *         as well as massPerSpring
+   */
+  public boolean isDynamicBalancingRequired() {
+    return mDynamicBalancingRequired;
+  }
+
   /*
    * (non-Javadoc)
    * 
@@ -178,6 +205,10 @@ public class Scenario {
       if (other.mAllowedRangeR2MillimetersMin != mAllowedRangeR2MillimetersMin)
         return false;
       if (other.mR1 != mR1)
+        return false;
+      if (other.mIncludeSpringMassInSystem != mIncludeSpringMassInSystem)
+        return false;
+      if (other.mDynamicBalancingRequired != mDynamicBalancingRequired)
         return false;
       return true;
     } else {

@@ -25,7 +25,7 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
     this.springChart = c3.generate({
       bindto: '#chart',
       size: {
-        height: 512
+        height: 544
       },
       data: {
         xs: {

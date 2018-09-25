@@ -59,14 +59,14 @@ Please note that, at the time of writing, Gradle test and Eclipse debug capabili
 
 ## References
 * Gradle multi-project builds: https://docs.gradle.org/current/userguide/multi_project_builds.html
-* Jersey: https://jersey.github.io/documentation/latest/media.html#json.moxy
+* Jersey JSON / Moxy: https://jersey.github.io/documentation/latest/media.html#json.moxy
 * HSQLDB Text Tables: http://hsqldb.org/doc/guide/texttables-chapt.html
 * D3.JS / C3.JS / REST Example: https://github.com/Automattic/grasshopper
 * Angular tutorial: https://angular.io/tutorial
 * Angular event distribution: https://angularfirebase.com/lessons/sharing-data-between-angular-components-four-methods/
 * Angular + C3.js: https://stackoverflow.com/questions/46250941/how-add-c3-charts-to-angular-2-project
 * Angular observables: https://angular.io/guide/observables
-
+* Angular material icons: https://material.io/tools/icons/?style=baseline
 
 
 * Angular + D3.js: https://jaxenter.com/d3-js-busy-angular-developer-146873.html

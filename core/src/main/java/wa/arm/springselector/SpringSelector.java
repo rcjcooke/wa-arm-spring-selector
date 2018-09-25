@@ -40,13 +40,13 @@ public class SpringSelector {
 
     Scenario scenario = null;
     try {
-      if (args.length != 11) {
+      if (args.length != 13) {
         printUsage();
         System.exit(INVALID_NUMBER_OF_ARGUMENTS_EXIT_CODE);
       }
-      scenario = new Scenario(Float.parseFloat(args[1]), Integer.parseInt(args[2]), Float.parseFloat(args[3]),
-          Float.parseFloat(args[4]), Float.parseFloat(args[5]), Float.parseFloat(args[6]), Float.parseFloat(args[7]),
-          Float.parseFloat(args[8]), Float.parseFloat(args[9]), Boolean.parseBoolean(args[10]));
+      scenario = new Scenario(Float.parseFloat(args[1]), Float.parseFloat(args[2]), Integer.parseInt(args[3]), Float.parseFloat(args[4]),
+          Float.parseFloat(args[5]), Float.parseFloat(args[6]), Float.parseFloat(args[7]), Float.parseFloat(args[8]),
+          Float.parseFloat(args[9]), Float.parseFloat(args[10]), Boolean.parseBoolean(args[11]), Boolean.parseBoolean(args[12]));
     } catch (Exception e) {
       // Some kind of parsing exception, we don't care what it was
       System.out.println("Problem parsing command line arguments");
@@ -58,8 +58,12 @@ public class SpringSelector {
     try {
       SpringSelector ss = new SpringSelector(args[0]);
       List<Spring> matchingSprings = ss.runScenario(scenario);
-      for (Spring s : matchingSprings) {
-        System.out.println(s.toString());
+      if (matchingSprings.size() == 0) {
+        System.out.println("No springs meet the requirements of the specified scenario");
+      } else {
+        for (Spring s : matchingSprings) {
+          System.out.println(s.toString());
+        }
       }
     } catch (InstantiationException e) {
       System.out
@@ -71,14 +75,15 @@ public class SpringSelector {
 
   public static void printUsage() {
     StringBuilder sb = new StringBuilder();
-    sb.append("Usage: gradle run --args='<DBDataPath> <massGrams> <numberOfParallelSprings> "
+    sb.append("Usage: gradle run --args='<DBDataPath> <systemGrams> <massGrams> <numberOfParallelSprings> "
         + "<mechanicalAdvantageNumerator> <mechanicalAdvantageDenominator> "
         + "<allowedRangeR2MillimetersMin> <allowedRangeR2MillimetersMax> "
         + "<allowedRangeAMillimetersMin> <allowedRangeAMillimetersMax> "
         + "<r1> <includeSpringMassInSystem>'\n");
     sb.append('\n');
     sb.append("\tDBDataPath                     - The path to the spring database.\n");
-    sb.append("\tmassGrams                      - System mass + payload mass (excluding thespring mass if relevant. SeeincludeSpringMassInSystem.) / grams\n");
+    sb.append("\tsystemGrams                    - System mass (excluding thespring mass if relevant. SeeincludeSpringMassInSystem.) / grams\n");
+    sb.append("\tmassGrams                      - Payload mass / grams\n");
     sb.append("\tnumberOfParallelSprings        - Number of equivalent parallel springs\n");
     sb.append("\tmechanicalAdvantageNumerator   - The numerator of the mechanical advantage\n");
     sb.append("\tmechanicalAdvantageDenominator - The denominator of the mechanical advantage\n");
@@ -88,9 +93,10 @@ public class SpringSelector {
     sb.append("\tallowedRangeAMillimetersMax    - Maximum distance spring connection onfixed y-Axis to Pivot / mm\n");
     sb.append("\tr1                             - Lever => distance CoM to Pivot / mm\n");
     sb.append("\tincludeSpringMassInSystem      - \"true\" if the spring(s) are to be part of the system being balanced, otherwise \"false\".\n");
+    sb.append("\tdynamicBalancingRequired       - \"true\" if the system needs to be able to balance with paylod mass=0 as well as payload mass, otherwise \"false\".\n");
     sb.append('\n');
     sb.append("Example:\n");
-    sb.append("\tgradle run --args='data/Databases/basicData.csv 1000 1 1 1 100 200 100 200 1000 false'\n");
+    sb.append("\tgradle run --args='data/Databases/basicData.csv 0 1000 1 1 1 100 200 100 200 1000 false false'\n");
     sb.append('\n');
     System.out.print(sb.toString());
   }
@@ -160,6 +166,7 @@ public class SpringSelector {
 
   public List<Spring> runScenario(Scenario scenario) {
     // Calculate scaled values
+    double system_sc = scenario.getSystemGrams() / scenario.getNumberOfParallelSprings();
     double mass_sc = scenario.getMass() / scenario.getNumberOfParallelSprings();
     double mechanicalAdvantage = scenario.getMechanicalAdvantageZaehler() / scenario.getMechanicalAdvantageNenner();
 
@@ -171,8 +178,8 @@ public class SpringSelector {
     allowedRangeR2_sc[0] = scenario.getAllowedRangeR2()[0] / mechanicalAdvantage;
     allowedRangeR2_sc[1] = scenario.getAllowedRangeR2()[1] / mechanicalAdvantage;
 
-    List<Spring> matchingSprings = mSpringDB.getMatchingSprings(mass_sc, scenario.getR1(), allowedRangeA_sc,
-        allowedRangeR2_sc, mechanicalAdvantage, scenario.includeSpringMassInSystem());
+    List<Spring> matchingSprings = mSpringDB.getMatchingSprings(system_sc, mass_sc, scenario.getR1(), allowedRangeA_sc,
+        allowedRangeR2_sc, mechanicalAdvantage, scenario.includeSpringMassInSystem(), scenario.isDynamicBalancingRequired());
 
     // TODO: Filter based on other dynamic parameters
 //      for (int i = 0; i < SpringParameterList.size();i++) {

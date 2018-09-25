@@ -71,7 +71,8 @@ public class SpringDB {
   /**
    * A list of springs from the spring database that matches the criteria.
    * 
-   * @param massPerSpring             System mass handled by each spring
+   * @param systemMassPerSpring       System mass handled by each spring
+   * @param massPerSpring             Additional load mass handled by each spring
    * @param lengthToCOM               the length from the pivot to the Centre of
    *                                  Mass of the system being balanced
    * @param allowedRangeA_sc          The allowed vertical connection range
@@ -80,10 +81,14 @@ public class SpringDB {
    * @param includeSpringMassInSystem True of the spring is to be situated inside
    *                                  the system being balanced - i.e. the mass of
    *                                  the spring is being balanced as well
+   * @param dynamicBalancingRequired  True if the system needs to be able to
+   *                                  balance with massPerSpring=0 as well as
+   *                                  massPerSpring
    * @return A list of springs that match the requirements
    */
-  public List<Spring> getMatchingSprings(double massPerSpring, double lengthToCOM, double[] allowedRangeA_sc,
-      double[] allowedRangeR2_sc, double mechanicalAdvantage, boolean includeSpringMassInSystem) {
+  public List<Spring> getMatchingSprings(double systemMassPerSpring, double massPerSpring, double lengthToCOM,
+      double[] allowedRangeA_sc, double[] allowedRangeR2_sc, double mechanicalAdvantage,
+      boolean includeSpringMassInSystem, boolean dynamicBalancingRequired) {
 
     ArrayList<Spring> selectedSpringList = new ArrayList<Spring>();
     ResultSet allEnergySpringsRS = null;
@@ -91,11 +96,11 @@ public class SpringDB {
     // problem
     String query = "";
     if (includeSpringMassInSystem) {
-      query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= (" + massPerSpring + " + " + MASS_KG
+      query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= (" + (systemMassPerSpring + massPerSpring) + " + " + MASS_KG
           + ")*" + PhysicalConstants.GRAVITY * 2 * lengthToCOM;
     } else {
       query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= "
-          + massPerSpring * PhysicalConstants.GRAVITY * lengthToCOM * 2;
+          + (systemMassPerSpring + massPerSpring) * PhysicalConstants.GRAVITY * lengthToCOM * 2;
     }
     try {
       Statement s = mConnection.createStatement();
@@ -106,7 +111,7 @@ public class SpringDB {
     }
 
     if (allEnergySpringsRS != null) {
-      double halfMassPotentialEnergy = massPerSpring * PhysicalConstants.GRAVITY * lengthToCOM;
+      double halfMassPotentialEnergy = (systemMassPerSpring + massPerSpring) * PhysicalConstants.GRAVITY * lengthToCOM;
       // Now only keep the springs that fit the criteria
       try {
         while (allEnergySpringsRS.next()) {
@@ -128,15 +133,15 @@ public class SpringDB {
                * this earlier and it applies equally to all springs, hence no "else"
                * statement.
                */
-              halfMassPotentialEnergy = (massPerSpring + allEnergySpringsRS.getDouble(MASS_KG))
+              halfMassPotentialEnergy = (systemMassPerSpring + massPerSpring + allEnergySpringsRS.getDouble(MASS_KG))
                   * PhysicalConstants.GRAVITY * lengthToCOM;
             }
-            
+
             double[] theoR2 = { 0, 0 };
             double[] theoA = { 0, 0 };
             double[] finalR2 = { 0, 0 };
             double[] finalA = { 0, 0 };
-            
+
             theoR2[0] = length / 2 - Math.sqrt(Math.pow(length / 2, 2) - (halfMassPotentialEnergy / springConstant));
             theoR2[1] = length / 2 + Math.sqrt(Math.pow(length / 2, 2) - (halfMassPotentialEnergy / springConstant));
             theoA[0] = theoR2[0];
@@ -161,6 +166,23 @@ public class SpringDB {
                 || !(halfMassPotentialEnergy / springConstant / finalR2[1] <= finalA[1])) {
               // We don't want this one - on to the next!
               continue;
+            }
+
+            /*
+             * If we're dynamically balancing then we also need to know that this spring can
+             * work within the A and R2 allowed ranges with no load
+             */
+            if (dynamicBalancingRequired) {
+              // We've picked springs that can cope with the max mass, now check mass with payloadMass=0
+              double minimumMass = includeSpringMassInSystem
+                  ? systemMassPerSpring + allEnergySpringsRS.getDouble(MASS_KG)
+                  : systemMassPerSpring;
+              double anchorPointMultiple = minimumMass * PhysicalConstants.GRAVITY * lengthToCOM / springConstant;
+              if (!(allowedRangeA_sc[0] * allowedRangeR2_sc[0] <= anchorPointMultiple
+                  && allowedRangeA_sc[1] * allowedRangeR2_sc[1] >= anchorPointMultiple)) {
+                // Can't meet the dynamic balancing requirement
+                continue;
+              }
             }
 
             // We've got this far so we DO want this Spring

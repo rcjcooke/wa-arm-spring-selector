@@ -8,7 +8,7 @@ run {
     // Make sure the user can see the output of the app 
     logging.captureStandardOutput LogLevel.LIFECYCLE
     // Some default arguments
-    args = ["data/Databases/basicData.csv", 1000, 1, 1, 1, 100, 200, 100, 200, 1000, "false"]
+    args = ["data/Databases/basicData.csv", 2500, 15000, 1, 1, 1, 50, 700, 50, 200, 750, "false", "false"]
 }
 
 

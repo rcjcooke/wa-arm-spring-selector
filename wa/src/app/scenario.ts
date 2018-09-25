@@ -1,4 +1,5 @@
 export class Scenario {
+  mSystemGrams                  : number;
   mMassGrams                    : number;
   mNumberOfParallelSprings      : number;
   mMechanicalAdvantageZaehler   : number;
@@ -9,4 +10,5 @@ export class Scenario {
   mAllowedRangeAMillimetersMax  : number;
   mR1                           : number;
   mIncludeSpringMassInSystem    : boolean;
+  mDynamicBalancingRequired     : boolean;
 }

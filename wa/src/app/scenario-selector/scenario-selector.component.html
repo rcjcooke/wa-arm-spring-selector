@@ -1,15 +1,27 @@
 <form class="scenario-selector-form-container">
 
   <!-- Mass -->
-  <mat-form-field class="scenario-selector-full-width">
-    <input [(ngModel)]="scenario.mMassGrams" name="mMassGrams" matInput type="number" placeholder="Combined System and Load Mass" min="1" />
-    <span matSuffix>g</span>
-  </mat-form-field>
-  <mat-checkbox [(ngModel)]="scenario.mIncludeSpringMassInSystem" name="mIncludeSpringMassInSystem" labelPosition="before">Springs are located on the balancing mechanism</mat-checkbox>
+  <table class="scenario-selector-full-width" cellspacing="0"><tr>
+    <td>
+      <mat-form-field class="scenario-selector-full-width">
+        <input [(ngModel)]="scenario.mSystemGrams" name="mSystemGrams" matInput type="number" placeholder="System Mass" min="1" />
+        <span matSuffix>g</span>
+      </mat-form-field>
+    </td>
+    <td><i class="material-icons range-icon">add</i></td>
+    <td>
+      <mat-form-field class="scenario-selector-full-width">
+        <input [(ngModel)]="scenario.mMassGrams" name="mMassGrams" matInput type="number" placeholder="Payload Mass" min="1" />
+        <span matSuffix>g</span>
+      </mat-form-field>
+    </td>
+  </tr></table>
+  <mat-checkbox [(ngModel)]="scenario.mDynamicBalancingRequired" name="mDynamicBalancingRequired" labelPosition="after">System is required to balance dynamically</mat-checkbox>
+  <mat-checkbox [(ngModel)]="scenario.mIncludeSpringMassInSystem" name="mIncludeSpringMassInSystem" labelPosition="after">Springs are located on the balancing mechanism</mat-checkbox>
 
   <!-- Number of Springs -->
   <mat-form-field class="scenario-selector-full-width">
-    <input [(ngModel)]="scenario.mNumberOfParallelSprings" name="mNumberOfParallelSprings" matInput type="number" placeholder="Number of parallel springs" />
+    <input [(ngModel)]="scenario.mNumberOfParallelSprings" name="mNumberOfParallelSprings" matInput type="number" placeholder="Number of parallel springs" min="1" />
   </mat-form-field>
 
   <!-- Mechanical Advantage -->
