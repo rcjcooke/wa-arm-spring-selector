@@ -67,7 +67,7 @@ Please note that, at the time of writing, Gradle test and Eclipse debug capabili
 * Angular + C3.js: https://stackoverflow.com/questions/46250941/how-add-c3-charts-to-angular-2-project
 * Angular observables: https://angular.io/guide/observables
 * Angular material icons: https://material.io/tools/icons/?style=baseline
-
+* Angular material theming: https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1
 
 * Angular + D3.js: https://jaxenter.com/d3-js-busy-angular-developer-146873.html
 * Angular + D3.js: https://medium.com/@balramchavan/integrating-d3js-with-angular-5-0-848ed45a8e19

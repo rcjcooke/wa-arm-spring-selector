@@ -1,0 +1,21 @@
+td {
+  padding: 5px;
+}
+
+tr:hover {background-color: dimgray;}
+
+.spring-detail-container {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  height: 100%;
+}
+
+.value-cell {
+  text-align: right;
+}
+
+.header-image {
+  background-image: url('../../assets/spring.png');
+  background-size: cover;
+}

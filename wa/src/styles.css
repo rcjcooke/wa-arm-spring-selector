@@ -26,3 +26,8 @@ overridden without the !important */
 .c3-circle {
   opacity: 1 !important;
 }
+
+#chart > svg {
+  width: 100%;
+  height: 100%;
+}

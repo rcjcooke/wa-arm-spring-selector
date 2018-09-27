@@ -11,6 +11,7 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 export class SpringListComponent implements OnInit {
   displayedColumns: string[] = ['mOrderNum', 'mManufacturer', 'mRate', 'mRelevantLength', 'mMaximumForceUnderStaticLoad', 'mMass', 'mWireDiameter', 'mOutsideDiameter'];  
   dataSource = new MatTableDataSource();
+  selectedSpring: Spring;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -20,7 +21,16 @@ export class SpringListComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource.sort = this.sort;
-    this.dataModelService.springs.subscribe(sps => this.dataSource.data = sps);
+    this.dataModelService.springs$.subscribe(sps => this.dataSource.data = sps);
+    this.dataModelService.selectedSpring$.subscribe(sp => this.selectedSpring = sp);
+  }
+
+  springSelected(spring: Spring) {
+    if (this.selectedSpring == spring) {
+      this.dataModelService.changeSelectedSpring(null);
+    } else {
+      this.dataModelService.changeSelectedSpring(spring);
+    }
   }
 
 }

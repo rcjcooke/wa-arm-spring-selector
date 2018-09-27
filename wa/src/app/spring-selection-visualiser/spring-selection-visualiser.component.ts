@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import * as c3 from 'c3';
 import { DataModelService } from '../data-model.service';
 import { Spring } from '../spring';
@@ -12,21 +12,23 @@ import * as d3 from 'd3';
 export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit {
 
   springChart: c3.ChartAPI;
-  currentSpringIDs: string[] = []; // orderNum-manufacturer
+  currentSpringIDs: string[] = []; // orderNum/manufacturer
+  selectedSpring: Spring;
 
   constructor(
     private dataModelService: DataModelService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngAfterViewInit() {
+  public resizeChart() {
+    if (this.springChart) this.springChart.resize();
+  }
+
+  ngAfterViewInit(): void {
     this.springChart = c3.generate({
-      bindto: '#chart',
-      size: {
-        height: 544
-      },
+      bindto: d3.select('#chart'),
       data: {
         xs: {
           springs: 'Relevent Length / mm'
@@ -34,9 +36,22 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
         columns: [
         ],
         type: 'scatter',
+        selection: {
+          enabled: true,
+          multiple: false
+        },
         color: function (color, d) {
           // d will be 'id' when called for legends
           return d3.rgb("#c2185b");
+        },
+        onclick: (d, element) => {
+          var springIDElements = d.id.split('/');
+          var spring = this.dataModelService.getSpring(springIDElements[0], springIDElements[1]);
+          if (spring == this.selectedSpring) {
+            this.dataModelService.changeSelectedSpring(null);
+          } else {
+            this.dataModelService.changeSelectedSpring(spring);
+          }
         }
       },
       axis: {
@@ -52,12 +67,12 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       },
       legend: {
         show: false
-      } 
+      }
     });
     
     this.springChart.resize();
     
-    this.dataModelService.springs.subscribe(sps => {
+    this.dataModelService.springs$.subscribe(sps => {
       // Put together the new data set
       var cols = [];
       var xs = {};
@@ -78,7 +93,16 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
         columns: cols,
         unload: springsToUnload
       });
-    })
+    });
+
+    this.dataModelService.selectedSpring$.subscribe(sp => {
+      if (sp) {
+        this.springChart.select([this.getSpringID(sp)], [0], true);
+      } else {
+        this.springChart.unselect();
+      }
+      this.selectedSpring = sp;
+    });
   }
 
   private getSpringID(s: Spring): string {

@@ -1,5 +1,9 @@
 <h1>Gravity balanced mechanical arm spring selector</h1>
 <table>
-  <tr><td><mat-card><app-scenario-selector></app-scenario-selector></mat-card></td><td><mat-card><app-spring-selection-visualiser></app-spring-selection-visualiser></mat-card></td></tr>
-  <tr><td colspan="2"><app-spring-list></app-spring-list></td></tr>
+  <tr>
+    <td class="fit-content"><mat-card class="fit-content"><app-scenario-selector class="fit-content"></app-scenario-selector></mat-card></td>
+    <td class="fill-space" (onresize)="resizeChartCellEH()"><mat-card class="full-height"><app-spring-selection-visualiser class="fill-space"></app-spring-selection-visualiser></mat-card></td>
+    <td *ngIf="selectedSpring" class="fit-content-width full-height"><mat-card class="fit-content-width full-height"><app-spring-detail (viewInitialised)="resizeChartCellEH()" class="fit-content-width full-height"></app-spring-detail></mat-card></td>
+  </tr>
+  <tr><td colspan="3"><app-spring-list></app-spring-list></td></tr>
 </table>

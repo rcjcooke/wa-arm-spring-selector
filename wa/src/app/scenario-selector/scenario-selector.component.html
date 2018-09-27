@@ -8,7 +8,7 @@
         <span matSuffix>g</span>
       </mat-form-field>
     </td>
-    <td><i class="material-icons range-icon">add</i></td>
+    <td><i class="material-icons spacer">add</i></td>
     <td>
       <mat-form-field class="scenario-selector-full-width">
         <input [(ngModel)]="scenario.mMassGrams" name="mMassGrams" matInput type="number" placeholder="Payload Mass" min="1" />
@@ -16,32 +16,36 @@
       </mat-form-field>
     </td>
   </tr></table>
-  <mat-checkbox [(ngModel)]="scenario.mDynamicBalancingRequired" name="mDynamicBalancingRequired" labelPosition="after">System is required to balance dynamically</mat-checkbox>
-  <mat-checkbox [(ngModel)]="scenario.mIncludeSpringMassInSystem" name="mIncludeSpringMassInSystem" labelPosition="after">Springs are located on the balancing mechanism</mat-checkbox>
+  <mat-checkbox [(ngModel)]="scenario.mDynamicBalancingRequired" name="mDynamicBalancingRequired" labelPosition="after" matTooltip="If checked, then this will find springs that can balance anything from no payload up to the specified payload. If this is not checked then it is assumed that the payload is constant and only the payload specified is used to filter the matching springs." matTooltipPosition="after">System is required to balance any mass up to payload</mat-checkbox>
+  <mat-checkbox id="include-spring-mass-checkbox" [(ngModel)]="scenario.mIncludeSpringMassInSystem" name="mIncludeSpringMassInSystem" labelPosition="after" matTooltip="Check this is the spring is also required to balance itself. Please note that this will introduce a small variable error into the balancing mechanism as the change in the position of the centre of mass of the system as a result of the spring changing length will be unknown." matTooltipPosition="after">Springs are located on the balancing mechanism</mat-checkbox>
 
-  <!-- Number of Springs -->
-  <mat-form-field class="scenario-selector-full-width">
-    <input [(ngModel)]="scenario.mNumberOfParallelSprings" name="mNumberOfParallelSprings" matInput type="number" placeholder="Number of parallel springs" min="1" />
-  </mat-form-field>
-
-  <!-- Mechanical Advantage -->
-  <table class="scenario-selector-full-width" cellspacing="0">
-    <tr><td>
-      <mat-form-field class="scenario-selector-full-width">
-        <mat-label>Mechanical Advantage</mat-label>
-        <input [(ngModel)]="scenario.mMechanicalAdvantageZaehler" name="mMechanicalAdvantageZaehler" matInput type="number" class="scenario-selector-right-align" />
-      </mat-form-field>
-    </td>
-    <td>:</td>
-    <td>
-      <mat-form-field class="scenario-selector-full-width">
-        <input [(ngModel)]="scenario.mMechanicalAdvantageNenner" name="mMechanicalAdvantageNenner" matInput type="number" />
-      </mat-form-field>
-    </td></tr>
+  <table id="springs-table" class="scenario-selector-full-width" cellspacing="0">
+    <tr>
+      <!-- Number of Springs -->
+      <td>
+        <mat-form-field id="num-springs-field">
+          <input [(ngModel)]="scenario.mNumberOfParallelSprings" name="mNumberOfParallelSprings" matInput type="number" placeholder="Number of parallel springs" min="1" />
+        </mat-form-field>
+      </td>
+      <td><span class="spacer"></span></td>
+      <!-- Mechanical Advantage -->
+      <td>
+        <mat-form-field id="mech-adv-min-field">
+          <mat-label>Mechanical Advantage</mat-label>
+          <input [(ngModel)]="scenario.mMechanicalAdvantageZaehler" name="mMechanicalAdvantageZaehler" matInput type="number" class="scenario-selector-right-align" />
+        </mat-form-field>
+      </td>
+      <td>:</td>
+      <td>
+        <mat-form-field id="mech-adv-max-field">
+          <input [(ngModel)]="scenario.mMechanicalAdvantageNenner" name="mMechanicalAdvantageNenner" matInput type="number" />
+        </mat-form-field>
+      </td>
+    </tr>
   </table>
 
   <!-- R2 -->
-  <mat-label>Distance spring connection on lever to Pivot</mat-label>
+  <mat-label class="field-title">Distance spring connection on lever to Pivot</mat-label>
   <table class="scenario-selector-full-width" cellspacing="0"><tr>
     <td>
       <mat-form-field class="scenario-selector-full-width">
@@ -49,7 +53,7 @@
         <span matSuffix>mm</span>
       </mat-form-field>
     </td>
-    <td><i class="material-icons range-icon">arrow_forward</i></td>
+    <td><i class="material-icons spacer">arrow_forward</i></td>
     <td>
       <mat-form-field class="scenario-selector-full-width">
         <input [(ngModel)]="scenario.mAllowedRangeR2MillimetersMax" name="mAllowedRangeR2MillimetersMax" matInput type="number" placeholder="max"/>
@@ -59,7 +63,7 @@
   </tr></table>
   
   <!-- A -->
-  <mat-label> Distance spring connection on fixed y-Axis to Pivot</mat-label>
+  <mat-label class="field-title"> Distance spring connection on fixed y-Axis to Pivot</mat-label>
   <table class="scenario-selector-full-width" cellspacing="0"><tr>
     <td>
       <mat-form-field class="scenario-selector-full-width">
@@ -67,7 +71,7 @@
         <span matSuffix>mm</span>
       </mat-form-field>
     </td>
-    <td><i class="material-icons range-icon">arrow_forward</i></td>
+    <td><i class="material-icons spacer">arrow_forward</i></td>
     <td>
       <mat-form-field class="scenario-selector-full-width">
         <input [(ngModel)]="scenario.mAllowedRangeAMillimetersMax" name="mAllowedRangeAMillimetersMax" matInput type="number" placeholder="max"/>
@@ -81,6 +85,7 @@
     <input [(ngModel)]="scenario.mR1" name="mR1" matInput type="number" placeholder="Distance of centre of mass to pivot" min="1" />
     <span matSuffix>mm</span>
   </mat-form-field>
+  
+  <button mat-flat-button (click)="findSprings()">Find Springs</button>
 
 </form>
-<button mat-flat-button (click)="findSprings()">Find Springs</button>

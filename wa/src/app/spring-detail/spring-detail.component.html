@@ -1,0 +1,23 @@
+<div class="spring-detail-container">
+  <mat-card-header>
+    <div mat-card-avatar class="header-image"></div>
+    <mat-card-title>{{spring.mOrderNum}}</mat-card-title>
+    <mat-card-subtitle>{{spring.mManufacturer}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <table>
+      <tr><td>Rate</td><td class="value-cell">{{spring.mRate | number : '1.0-2'}}</td><td>Nm<sup>-1</sup></td></tr>
+      <tr><td>Max force under static load</td><td class="value-cell">{{spring.mMaximumForceUnderStaticLoad | number : '1.0-2'}}</td><td>N</td></tr>
+      <tr><td>Max length under max force</td><td class="value-cell">{{spring.mRelevantLength | number : '1.0-2'}}</td><td>mm</td></tr>
+      <tr><td>Mass</td><td class="value-cell">{{spring.mMass | number : '1.0-2'}}</td><td>g</td></tr>
+      <tr><td>Outside Diameter</td><td class="value-cell">{{spring.mOutsideDiameter | number : '1.0-2'}}</td><td>mm</td></tr>
+      <tr><td>Wire Diameter</td><td class="value-cell">{{spring.mWireDiameter | number : '1.0-2'}}</td><td>mm</td></tr>
+    </table>
+    <h4>Connections Points</h4>
+    <table>
+      <tr><th></th><th>Min / mm</th><th>Max / mm</th></tr>
+      <tr><td>A</td><td class="value-cell">{{spring.mAMin | number : '1.0-2'}}</td><td class="value-cell">{{spring.mAMax | number : '1.0-2'}}</td></tr>
+      <tr><td>R<sub>2</sub></td><td class="value-cell">{{spring.mR2Min | number : '1.0-2'}}</td><td class="value-cell">{{spring.mR2Max | number : '1.0-2'}}</td></tr>
+    </table>
+  </mat-card-content>
+</div>
