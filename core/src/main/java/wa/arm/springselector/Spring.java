@@ -30,6 +30,9 @@ public class Spring {
   public double mR2Max;
   public double mAMin;
   public double mAMax;
+  
+  public double mMaxPayloadAnchorPointFactor;
+  public double mZeroPayloadAnchorPointFactor;
 
   /**
    * Empty constructor for de/serialisation
@@ -171,6 +174,34 @@ public class Spring {
    */
   public void setAMax(double aMax) {
     mAMax = aMax;
+  }
+
+  /**
+   * @return the zeroPayloadAnchorPointFactor
+   */
+  public double getZeroPayloadAnchorPointFactor() {
+    return mZeroPayloadAnchorPointFactor;
+  }
+
+  /**
+   * @param zeroPayloadAnchorPointFactor the zeroPayloadAnchorPointFactor to set
+   */
+  public void setZeroPayloadAnchorPointFactor(double zeroPayloadAnchorPointFactor) {
+    mZeroPayloadAnchorPointFactor = zeroPayloadAnchorPointFactor;
+  }
+
+  /**
+   * @return the maxPayloadAnchorPointFactor
+   */
+  public double getMaxPayloadAnchorPointFactor() {
+    return mMaxPayloadAnchorPointFactor;
+  }
+
+  /**
+   * @param maxPayloadAnchorPointFactor the maxPayloadAnchorPointFactor to set
+   */
+  public void setMaxPayloadAnchorPointFactor(double maxPayloadAnchorPointFactor) {
+    mMaxPayloadAnchorPointFactor = maxPayloadAnchorPointFactor;
   }
 
   /*

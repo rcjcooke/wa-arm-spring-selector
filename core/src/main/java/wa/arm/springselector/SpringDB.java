@@ -96,8 +96,9 @@ public class SpringDB {
     // problem
     String query = "";
     if (includeSpringMassInSystem) {
-      query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= (" + (systemMassPerSpring + massPerSpring) + " + " + MASS_KG
-          + ")*" + PhysicalConstants.GRAVITY * 2 * lengthToCOM;
+      query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= ("
+          + (systemMassPerSpring + massPerSpring) + " + " + MASS_KG + ")*"
+          + PhysicalConstants.GRAVITY * 2 * lengthToCOM;
     } else {
       query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= "
           + (systemMassPerSpring + massPerSpring) * PhysicalConstants.GRAVITY * lengthToCOM * 2;
@@ -172,38 +173,49 @@ public class SpringDB {
              * If we're dynamically balancing then we also need to know that this spring can
              * work within the A and R2 allowed ranges with no load
              */
+            double zeroPayloadAnchorPointFactor = 0;
             if (dynamicBalancingRequired) {
-              // We've picked springs that can cope with the max mass, now check mass with payloadMass=0
+              // We've picked springs that can cope with the max mass, now check mass with
+              // payloadMass=0
               double minimumMass = includeSpringMassInSystem
                   ? systemMassPerSpring + allEnergySpringsRS.getDouble(MASS_KG)
                   : systemMassPerSpring;
-              double anchorPointMultiple = minimumMass * PhysicalConstants.GRAVITY * lengthToCOM / springConstant;
-              if (!(allowedRangeA_sc[0] * allowedRangeR2_sc[0] <= anchorPointMultiple
-                  && allowedRangeA_sc[1] * allowedRangeR2_sc[1] >= anchorPointMultiple)) {
+              zeroPayloadAnchorPointFactor = minimumMass * PhysicalConstants.GRAVITY * lengthToCOM / springConstant;
+              if (!(allowedRangeA_sc[0] * allowedRangeR2_sc[0] <= zeroPayloadAnchorPointFactor
+                  && allowedRangeA_sc[1] * allowedRangeR2_sc[1] >= zeroPayloadAnchorPointFactor)) {
                 // Can't meet the dynamic balancing requirement
                 continue;
               }
             }
 
             // We've got this far so we DO want this Spring
-
+            Spring spring = createNewSpringFromCurrentResultSetRow(allEnergySpringsRS);
             /*
              * Calculate intersection points of the characteristics with
-             * rect[FinalA[0],FinalR2[0],FinalA[1],FinalR2[2]] of the real spring (behind
+             * rect[FinalA[0],FinalR2[0],FinalA[1],FinalR2[1]] of the real spring (behind
              * ratio)
              */
             finalA[0] = Math.max(halfMassPotentialEnergy / springConstant / finalR2[1], finalA[0]);
             finalA[1] = Math.min(halfMassPotentialEnergy / springConstant / finalR2[0], finalA[1]);
             finalR2[0] = halfMassPotentialEnergy / springConstant / finalA[1];
             finalR2[1] = halfMassPotentialEnergy / springConstant / finalA[0];
-
             /*
              * Record real values for "R2min" ,"R2max", "Amin", "Amax" for the Spring given
              * the selection scenario
              */
-            selectedSpringList.add(createNewSpringFromCurrentResultSetRow(allEnergySpringsRS,
-                mechanicalAdvantage * finalR2[0], mechanicalAdvantage * finalR2[1], mechanicalAdvantage * finalA[0],
-                mechanicalAdvantage * finalA[1]));
+            spring.setAMin(mechanicalAdvantage * finalA[0]);
+            spring.setAMax(mechanicalAdvantage * finalA[1]);
+            spring.setR2Min(mechanicalAdvantage * finalR2[0]);
+            spring.setR2Max(mechanicalAdvantage * finalR2[1]);
+            // Record the multiple of A and R2 for the maximum payload against the spring (for client-side calcs)
+            spring.setMaxPayloadAnchorPointFactor(halfMassPotentialEnergy/springConstant);
+            
+            // Record the multiple of A and R2 for zero payload against the spring if required
+            if (dynamicBalancingRequired) spring.setZeroPayloadAnchorPointFactor(mechanicalAdvantage * mechanicalAdvantage * zeroPayloadAnchorPointFactor);
+
+            // Finally, make sure we add the spring to our selection
+            selectedSpringList.add(spring);
+
           } catch (SQLException e) {
             Logger.getLogger(SpringDB.class.getName()).log(Level.WARNING, "Problem processing spring at row "
                 + allEnergySpringsRS.getRow() + " in result set returned from query: " + query, e);
@@ -218,16 +230,11 @@ public class SpringDB {
     return selectedSpringList;
   }
 
-  private Spring createNewSpringFromCurrentResultSetRow(ResultSet rs, double r2Min, double r2Max, double aMin,
-      double aMax) throws SQLException {
+  private Spring createNewSpringFromCurrentResultSetRow(ResultSet rs) throws SQLException {
     // TODO: Future upgrade: make this dynamic
     Spring spring = new Spring(rs.getString(ORDER_NUM), rs.getString(SUPPLIER), rs.getDouble(RATE_N_MM),
         rs.getDouble(RELEVENT_LENGTH_MM), rs.getDouble(MAX_FORCE_UNDER_STATIC_LOAD), rs.getDouble(MASS_KG),
         rs.getDouble(WIRE_DIAMETER_MM), rs.getDouble(OUTSIDE_DIAMETER_MM));
-    spring.setR2Min(r2Min);
-    spring.setR2Max(r2Max);
-    spring.setAMin(aMin);
-    spring.setAMax(aMax);
     return spring;
   }
 
