@@ -3,6 +3,7 @@ import { Scenario } from '../scenario'
 import { SpringSelectorService } from '../spring-selector.service'
 import { Spring } from '../spring';
 import { DataModelService } from '../data-model.service';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-scenario-selector',
@@ -24,13 +25,32 @@ export class ScenarioSelectorComponent implements OnInit {
     mAllowedRangeAMillimetersMax: 150,
     mR1: 750,
     mIncludeSpringMassInSystem: true,
-    mDynamicBalancingRequired: true
+    mDynamicBalancingRequired: true,
+    mFixedVariable: 'A'
   };
+
+  fixedPositionA: boolean = true;
+  fixedPositionR2: boolean = false;
 
   constructor(
     private springSelectorService: SpringSelectorService,
     private dataModelService: DataModelService
   ) { }
+
+  valueChanged(event: MatButtonToggleChange) {
+    // It's ok to have both selected, but not neither
+    // If we deselect one, we have to select the other
+    console.log(event);
+    if (event.value == "movePositionR2") {
+      this.fixedPositionR2 = !event.source.checked;
+      if (this.fixedPositionR2) this.fixedPositionA = false;
+    } else if (event.value == "movePositionA") {
+      this.fixedPositionA = !event.source.checked;
+      if (this.fixedPositionA) this.fixedPositionR2 = false;
+    }
+    // Update the scenario
+    this.scenario.mFixedVariable = (!this.fixedPositionA && !this.fixedPositionR2) ? 'N' : this.fixedPositionA ? 'A' : 'R'; 
+  }
 
   ngOnInit() {
     this.findSprings();
@@ -64,6 +84,8 @@ export class ScenarioSelectorComponent implements OnInit {
   */
 
   findSprings() {
-    this.springSelectorService.findSprings(this.scenario).subscribe(sps => this.dataModelService.changeSprings(sps));
+    this.springSelectorService.findSprings(this.scenario).subscribe(sps => {
+      this.dataModelService.changeSprings(sps, this.scenario);
+    });
   }
 }

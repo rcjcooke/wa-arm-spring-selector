@@ -4,8 +4,12 @@
   margin: 0;
 }
 
-#springs-table {
+.top-padding {
   padding-top: 1.25em;
+}
+
+.table-row-filler-cell {
+  width: 100%;
 }
 
 #num-springs-field {

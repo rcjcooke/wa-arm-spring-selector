@@ -19,7 +19,7 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 /**
- * @author rcjco
+ * @author Ray Cooke
  *
  */
 public class WebServerMoxy extends ResourceConfig {

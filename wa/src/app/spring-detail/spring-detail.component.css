@@ -2,7 +2,9 @@ td {
   padding: 5px;
 }
 
-tr:hover {background-color: dimgray;}
+table.value-table tr:hover {
+  background-color: dimgray;
+}
 
 .spring-detail-container {
   width: -webkit-max-content;
@@ -15,7 +17,20 @@ tr:hover {background-color: dimgray;}
   text-align: right;
 }
 
+#connections-table {
+  
+}
+
+#connections-table .value-cell {
+  text-align: center;
+}
+
 .header-image {
   background-image: url('../../assets/spring.png');
   background-size: cover;
+}
+
+.spacer  {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }

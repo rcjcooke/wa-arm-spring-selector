@@ -33,6 +33,9 @@ public class Scenario {
   // True if the system needs to be able to balance with massPerSpring=0 as well
   // as massPerSpring
   public boolean mDynamicBalancingRequired;
+  // If dynamic balancing is required, then which point will be fixed (A, R, N)
+  // TODO: See if enums are supported for JSON serialisation
+  public char mFixedVariable;
 
   /**
    * Empty constructor for de/serialisation
@@ -68,7 +71,7 @@ public class Scenario {
   public Scenario(float systemGrams, float massGrams, int numberOfParallelSprings, float mechanicalAdvantageZaehler,
       float mechanicalAdvantageNenner, float allowedRangeR2MillimetersMin, float allowedRangeR2MillimetersMax,
       float allowedRangeAMillimetersMin, float allowedRangeAMillimetersMax, float r1, boolean includeSpringMassInSystem,
-      boolean dynamicBalancingRequired) {
+      boolean dynamicBalancingRequired, char fixedVariable) {
     mSystemGrams = systemGrams;
     mMassGrams = massGrams;
     mNumberOfParallelSprings = numberOfParallelSprings;
@@ -81,6 +84,7 @@ public class Scenario {
     mR1 = r1;
     mIncludeSpringMassInSystem = includeSpringMassInSystem;
     mDynamicBalancingRequired = dynamicBalancingRequired;
+    mFixedVariable = fixedVariable;
   }
 
 //  // constrains for the balancing system
@@ -177,6 +181,13 @@ public class Scenario {
     return mDynamicBalancingRequired;
   }
 
+  /**
+   * @return the fixedVariable
+   */
+  public char getFixedVariable() {
+    return mFixedVariable;
+  }
+
   /*
    * (non-Javadoc)
    * 
@@ -186,6 +197,8 @@ public class Scenario {
   public boolean equals(Object arg0) {
     if (arg0 instanceof Scenario) {
       Scenario other = (Scenario) arg0;
+      if (other.mSystemGrams != mSystemGrams)
+        return false;
       if (other.mMassGrams != mMassGrams)
         return false;
       if (other.mNumberOfParallelSprings != mNumberOfParallelSprings)
@@ -210,9 +223,36 @@ public class Scenario {
         return false;
       if (other.mDynamicBalancingRequired != mDynamicBalancingRequired)
         return false;
+      if (other.mFixedVariable != mFixedVariable)
+        return false;
       return true;
     } else {
       return false;
     }
   }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("Scenario[");
+    sb.append("system=").append(mSystemGrams);
+    sb.append(',').append("payload=").append(mMassGrams);
+    sb.append(',').append("parallelSprings=").append(mNumberOfParallelSprings);
+    sb.append(',').append("MANum=").append(mMechanicalAdvantageNenner);
+    sb.append(',').append("MADen=").append(mMechanicalAdvantageZaehler);
+    sb.append(',').append("AMax=").append(mAllowedRangeAMillimetersMax);
+    sb.append(',').append("AMin=").append(mAllowedRangeAMillimetersMin);
+    sb.append(',').append("R2Max=").append(mAllowedRangeR2MillimetersMax);
+    sb.append(',').append("R2Min=").append(mAllowedRangeR2MillimetersMin);
+    sb.append(',').append("R1=").append(mR1);
+    sb.append(',').append("includeSpringMass=").append(mIncludeSpringMassInSystem);
+    sb.append(',').append("dynamicBalancing=").append(mDynamicBalancingRequired);
+    sb.append(',').append("fixedPosition=").append(mFixedVariable);
+    sb.append(']');
+    return sb.toString();
+  }
+  
+  
 }

@@ -1,6 +1,8 @@
 package wa.arm.springselector.ws;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -33,6 +35,7 @@ public class SpringSelectorWebService {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public List<Spring> runScenario(Scenario scenario) {
+    Logger.getLogger(SpringSelectorWebService.class.getName()).log(Level.WARNING, "Running scenario: " + scenario);
     return mSpringSelector.runScenario(scenario);
   }
   

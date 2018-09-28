@@ -72,7 +72,7 @@ public class SpringDB {
    * A list of springs from the spring database that matches the criteria.
    * 
    * @param systemMassPerSpring       System mass handled by each spring
-   * @param massPerSpring             Additional load mass handled by each spring
+   * @param payloadMassPerSpring      Additional payload mass handled by each spring
    * @param lengthToCOM               the length from the pivot to the Centre of
    *                                  Mass of the system being balanced
    * @param allowedRangeA_sc          The allowed vertical connection range
@@ -84,11 +84,12 @@ public class SpringDB {
    * @param dynamicBalancingRequired  True if the system needs to be able to
    *                                  balance with massPerSpring=0 as well as
    *                                  massPerSpring
+   * @param fixedPosition             A = A, R = R2 or N = Neither: The position that will be fixed in a dynamically balancing system.
    * @return A list of springs that match the requirements
    */
-  public List<Spring> getMatchingSprings(double systemMassPerSpring, double massPerSpring, double lengthToCOM,
+  public List<Spring> getMatchingSprings(double systemMassPerSpring, double payloadMassPerSpring, double lengthToCOM,
       double[] allowedRangeA_sc, double[] allowedRangeR2_sc, double mechanicalAdvantage,
-      boolean includeSpringMassInSystem, boolean dynamicBalancingRequired) {
+      boolean includeSpringMassInSystem, boolean dynamicBalancingRequired, char fixedPosition) {
 
     ArrayList<Spring> selectedSpringList = new ArrayList<Spring>();
     ResultSet allEnergySpringsRS = null;
@@ -97,11 +98,11 @@ public class SpringDB {
     String query = "";
     if (includeSpringMassInSystem) {
       query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= ("
-          + (systemMassPerSpring + massPerSpring) + " + " + MASS_KG + ")*"
+          + (systemMassPerSpring + payloadMassPerSpring) + " + " + MASS_KG + ")*"
           + PhysicalConstants.GRAVITY * 2 * lengthToCOM;
     } else {
       query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= "
-          + (systemMassPerSpring + massPerSpring) * PhysicalConstants.GRAVITY * lengthToCOM * 2;
+          + (systemMassPerSpring + payloadMassPerSpring) * PhysicalConstants.GRAVITY * lengthToCOM * 2;
     }
     try {
       Statement s = mConnection.createStatement();
@@ -112,106 +113,81 @@ public class SpringDB {
     }
 
     if (allEnergySpringsRS != null) {
-      double halfMassPotentialEnergy = (systemMassPerSpring + massPerSpring) * PhysicalConstants.GRAVITY * lengthToCOM;
       // Now only keep the springs that fit the criteria
       try {
         while (allEnergySpringsRS.next()) {
+          
           try {
-            double length = allEnergySpringsRS.getDouble(RELEVENT_LENGTH_MM);
+            
+            double springMaxlength = allEnergySpringsRS.getDouble(RELEVENT_LENGTH_MM);
             double springConstant = allEnergySpringsRS.getDouble(RATE_N_MM);
+            double springMass = allEnergySpringsRS.getDouble(MASS_KG);
 
-            /*
-             * Calculate TheoAmin, TheoAmax, TheoR2min, TheoR2max for the current spring
-             * based on Lr,k and the balancing condition ???
-             * 
-             * k = spring constant = rate Lr = length = relevent length = maximum length the
-             * spring can extend to based on the maximum static force that can be applied to
-             * it
-             */
-            if (includeSpringMassInSystem) {
-              /*
-               * If we're not including the mass of the spring then we've already calculated
-               * this earlier and it applies equally to all springs, hence no "else"
-               * statement.
-               */
-              halfMassPotentialEnergy = (systemMassPerSpring + massPerSpring + allEnergySpringsRS.getDouble(MASS_KG))
-                  * PhysicalConstants.GRAVITY * lengthToCOM;
-            }
-
-            double[] theoR2 = { 0, 0 };
-            double[] theoA = { 0, 0 };
-            double[] finalR2 = { 0, 0 };
-            double[] finalA = { 0, 0 };
-
-            theoR2[0] = length / 2 - Math.sqrt(Math.pow(length / 2, 2) - (halfMassPotentialEnergy / springConstant));
-            theoR2[1] = length / 2 + Math.sqrt(Math.pow(length / 2, 2) - (halfMassPotentialEnergy / springConstant));
-            theoA[0] = theoR2[0];
-            theoA[1] = theoR2[1];
-
-            /*
-             * Calculate rect[FinalAmin,FinalR2min,FinalAmax,FinalR2max] by intersecting
-             * quad[TheoAmin,TheoR2min,TheoAmin,TheoAmax] and
-             * rect[AllowedRangeAmin,AllowedRangeAmax,AllowedRangeR2min,AllowedRangeR2max]
-             */
-            finalA[0] = Math.max(theoA[0], allowedRangeA_sc[0]);
-            finalA[1] = Math.min(theoA[1], allowedRangeA_sc[1]);
-            finalR2[0] = Math.max(theoR2[0], allowedRangeR2_sc[0]);
-            finalR2[1] = Math.min(theoR2[1], allowedRangeR2_sc[1]);
-
-            if ((finalA[0] > finalA[1]) || (finalR2[0] > finalR2[1])) {
-              // We don't want this one - on to the next!
-              continue;
-            }
-
-            if (!(halfMassPotentialEnergy / springConstant / finalR2[0] >= finalA[0])
-                || !(halfMassPotentialEnergy / springConstant / finalR2[1] <= finalA[1])) {
-              // We don't want this one - on to the next!
-              continue;
-            }
-
+            SpringScenario ssFP = testSpringAgainstScenario(
+                springMaxlength, 
+                springConstant, 
+                springMass, 
+                includeSpringMassInSystem, 
+                payloadMassPerSpring, 
+                systemMassPerSpring, 
+                lengthToCOM, 
+                allowedRangeA_sc, 
+                allowedRangeR2_sc);
+            
+            // Check that the spring passed the scenario
+            if (ssFP == null) continue;
+            SpringScenario ssZP = null;
             /*
              * If we're dynamically balancing then we also need to know that this spring can
              * work within the A and R2 allowed ranges with no load
              */
-            double zeroPayloadAnchorPointFactor = 0;
             if (dynamicBalancingRequired) {
-              // We've picked springs that can cope with the max mass, now check mass with
-              // payloadMass=0
-              double minimumMass = includeSpringMassInSystem
-                  ? systemMassPerSpring + allEnergySpringsRS.getDouble(MASS_KG)
-                  : systemMassPerSpring;
-              zeroPayloadAnchorPointFactor = minimumMass * PhysicalConstants.GRAVITY * lengthToCOM / springConstant;
-              if (!(allowedRangeA_sc[0] * allowedRangeR2_sc[0] <= zeroPayloadAnchorPointFactor
-                  && allowedRangeA_sc[1] * allowedRangeR2_sc[1] >= zeroPayloadAnchorPointFactor)) {
-                // Can't meet the dynamic balancing requirement
-                continue;
+              /* We've picked a spring that can cope with the max mass, now check it can still cope with
+               payloadMass=0 */
+              double[] a_range = allowedRangeA_sc;
+              double[] r2_range = allowedRangeR2_sc;
+              switch (fixedPosition) {
+              case 'A':
+                a_range[0] = ssFP.getAMin();
+                a_range[1] = ssFP.getAMax();
+                break;
+              case 'R':
+                r2_range[0] = ssFP.getR2Min();
+                r2_range[1] = ssFP.getR2Max();
+                break;
+              default:
+                a_range = allowedRangeA_sc;
+                r2_range = allowedRangeR2_sc;
+                break;
               }
+              ssZP = testSpringAgainstScenario(
+                  springMaxlength, 
+                  springConstant, 
+                  springMass, 
+                  includeSpringMassInSystem, 
+                  0, 
+                  systemMassPerSpring, 
+                  lengthToCOM, 
+                  a_range, 
+                  r2_range);
+              // Check that the spring passed the scenario
+              if (ssZP == null) continue;
             }
-
+            
             // We've got this far so we DO want this Spring
             Spring spring = createNewSpringFromCurrentResultSetRow(allEnergySpringsRS);
-            /*
-             * Calculate intersection points of the characteristics with
-             * rect[FinalA[0],FinalR2[0],FinalA[1],FinalR2[1]] of the real spring (behind
-             * ratio)
-             */
-            finalA[0] = Math.max(halfMassPotentialEnergy / springConstant / finalR2[1], finalA[0]);
-            finalA[1] = Math.min(halfMassPotentialEnergy / springConstant / finalR2[0], finalA[1]);
-            finalR2[0] = halfMassPotentialEnergy / springConstant / finalA[1];
-            finalR2[1] = halfMassPotentialEnergy / springConstant / finalA[0];
             /*
              * Record real values for "R2min" ,"R2max", "Amin", "Amax" for the Spring given
              * the selection scenario
              */
-            spring.setAMin(mechanicalAdvantage * finalA[0]);
-            spring.setAMax(mechanicalAdvantage * finalA[1]);
-            spring.setR2Min(mechanicalAdvantage * finalR2[0]);
-            spring.setR2Max(mechanicalAdvantage * finalR2[1]);
+            spring.setAMin(mechanicalAdvantage * ssFP.getAMin());
+            spring.setAMax(mechanicalAdvantage * ssFP.getAMax());
+            spring.setR2Min(mechanicalAdvantage * ssFP.getR2Min());
+            spring.setR2Max(mechanicalAdvantage * ssFP.getR2Max());
             // Record the multiple of A and R2 for the maximum payload against the spring (for client-side calcs)
-            spring.setMaxPayloadAnchorPointFactor(halfMassPotentialEnergy/springConstant);
-            
+            spring.setMaxPayloadAnchorPointFactor(mechanicalAdvantage * mechanicalAdvantage * ssFP.getPayloadAnchorPointFactor());
             // Record the multiple of A and R2 for zero payload against the spring if required
-            if (dynamicBalancingRequired) spring.setZeroPayloadAnchorPointFactor(mechanicalAdvantage * mechanicalAdvantage * zeroPayloadAnchorPointFactor);
+            if (dynamicBalancingRequired) spring.setZeroPayloadAnchorPointFactor(mechanicalAdvantage * mechanicalAdvantage * ssZP.getPayloadAnchorPointFactor());
 
             // Finally, make sure we add the spring to our selection
             selectedSpringList.add(spring);
@@ -228,6 +204,72 @@ public class SpringDB {
     }
 
     return selectedSpringList;
+  }
+  
+  private SpringScenario testSpringAgainstScenario(double springMaxlength, double springConstant, double springMass, boolean includeSpringMassInSystem, double payloadMassPerSpring, double systemMassPerSpring, double lengthToCOM, double[] allowedRangeA_sc, double[] allowedRangeR2_sc) {
+    /*
+     * Calculate TheoAmin, TheoAmax, TheoR2min, TheoR2max for the current spring
+     * based on Lr,k and the balancing condition ???
+     * 
+     * k = spring constant = rate Lr = length = relevent length = maximum length the
+     * spring can extend to based on the maximum static force that can be applied to
+     * it
+     */
+    double halfMassPotentialEnergy;
+    if (includeSpringMassInSystem) {
+      /*
+       * If we're not including the mass of the spring then we've already calculated
+       * this earlier and it applies equally to all springs, hence no "else"
+       * statement.
+       */
+      halfMassPotentialEnergy = (systemMassPerSpring + payloadMassPerSpring + springMass)
+          * PhysicalConstants.GRAVITY * lengthToCOM;
+    } else {
+      halfMassPotentialEnergy = (systemMassPerSpring + payloadMassPerSpring) * PhysicalConstants.GRAVITY * lengthToCOM;
+    }
+
+    double[] theoR2 = { 0, 0 };
+    double[] theoA = { 0, 0 };
+    double[] finalR2 = { 0, 0 };
+    double[] finalA = { 0, 0 };
+
+    theoR2[0] = springMaxlength / 2 - Math.sqrt(Math.pow(springMaxlength / 2, 2) - (halfMassPotentialEnergy / springConstant));
+    theoR2[1] = springMaxlength / 2 + Math.sqrt(Math.pow(springMaxlength / 2, 2) - (halfMassPotentialEnergy / springConstant));
+    theoA[0] = theoR2[0];
+    theoA[1] = theoR2[1];
+
+    /*
+     * Calculate rect[FinalAmin,FinalR2min,FinalAmax,FinalR2max] by intersecting
+     * quad[TheoAmin,TheoR2min,TheoAmin,TheoAmax] and
+     * rect[AllowedRangeAmin,AllowedRangeAmax,AllowedRangeR2min,AllowedRangeR2max]
+     */
+    finalA[0] = Math.max(theoA[0], allowedRangeA_sc[0]);
+    finalA[1] = Math.min(theoA[1], allowedRangeA_sc[1]);
+    finalR2[0] = Math.max(theoR2[0], allowedRangeR2_sc[0]);
+    finalR2[1] = Math.min(theoR2[1], allowedRangeR2_sc[1]);
+
+    if ((finalA[0] > finalA[1]) || (finalR2[0] > finalR2[1])) {
+      // This one doesn't fit the scenario - on to the next!
+      return null;
+    }
+
+    if (!(halfMassPotentialEnergy / springConstant / finalR2[0] >= finalA[0])
+        || !(halfMassPotentialEnergy / springConstant / finalR2[1] <= finalA[1])) {
+      // This one doesn't fit the scenario - on to the next!
+      return null;
+    }
+
+    /*
+     * Calculate intersection points of the characteristics with
+     * rect[FinalA[0],FinalR2[0],FinalA[1],FinalR2[1]] of the real spring (behind
+     * ratio)
+     */
+    finalA[0] = Math.max(halfMassPotentialEnergy / springConstant / finalR2[1], finalA[0]);
+    finalA[1] = Math.min(halfMassPotentialEnergy / springConstant / finalR2[0], finalA[1]);
+    finalR2[0] = halfMassPotentialEnergy / springConstant / finalA[1];
+    finalR2[1] = halfMassPotentialEnergy / springConstant / finalA[0];
+    
+    return new SpringScenario(finalR2[0], finalR2[1], finalA[0], finalA[1], halfMassPotentialEnergy / springConstant);
   }
 
   private Spring createNewSpringFromCurrentResultSetRow(ResultSet rs) throws SQLException {

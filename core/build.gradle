@@ -6,9 +6,9 @@ apply plugin: 'application'
 // Default arguments when executing the app directly with Gradle
 run {
     // Make sure the user can see the output of the app 
-    logging.captureStandardOutput LogLevel.LIFECYCLE
+    logging.captureStandardOutput LogLevel.INFO
     // Some default arguments
-    args = ["data/Databases/basicData.csv", 2500, 15000, 1, 1, 1, 50, 700, 50, 200, 750, "false", "false"]
+    args = ["data/Databases/basicData.csv", 2500, 15000, 1, 1, 1, 50, 700, 50, 200, 750, "false", "false", 'A', "-Djava.util.logging.config.file=logging.console.properties"]
 }
 
 

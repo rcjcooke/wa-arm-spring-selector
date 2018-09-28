@@ -5,7 +5,7 @@
     <mat-card-subtitle>{{spring.mManufacturer}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <table>
+    <table class="value-table">
       <tr><td>Rate</td><td class="value-cell">{{spring.mRate | number : '1.0-2'}}</td><td>Nm<sup>-1</sup></td></tr>
       <tr><td>Max force under static load</td><td class="value-cell">{{spring.mMaximumForceUnderStaticLoad | number : '1.0-2'}}</td><td>N</td></tr>
       <tr><td>Max length under max force</td><td class="value-cell">{{spring.mRelevantLength | number : '1.0-2'}}</td><td>mm</td></tr>
@@ -13,11 +13,35 @@
       <tr><td>Outside Diameter</td><td class="value-cell">{{spring.mOutsideDiameter | number : '1.0-2'}}</td><td>mm</td></tr>
       <tr><td>Wire Diameter</td><td class="value-cell">{{spring.mWireDiameter | number : '1.0-2'}}</td><td>mm</td></tr>
     </table>
-    <h4>Connections Points</h4>
     <table>
-      <tr><th></th><th>Min / mm</th><th>Max / mm</th></tr>
-      <tr><td>A</td><td class="value-cell">{{spring.mAMin | number : '1.0-2'}}</td><td class="value-cell">{{spring.mAMax | number : '1.0-2'}}</td></tr>
-      <tr><td>R<sub>2</sub></td><td class="value-cell">{{spring.mR2Min | number : '1.0-2'}}</td><td class="value-cell">{{spring.mR2Max | number : '1.0-2'}}</td></tr>
+      <tr>
+        <td>A / mm</td>
+        <td class="value-cell">{{spring.mAMin | number : '1.0-0'}}</td>
+        <td><mat-slider [(ngModel)]="aValue" [disabled]="!aValueLocked" (change)="onAValueChange($event)" step="1" thumbLabel="true" [displayWith]="formatSliderLabel" [min]="spring.mAMin" [max]="spring.mAMax"></mat-slider></td>
+        <td class="value-cell">{{spring.mAMax | number : '1.0-0'}}</td>
+        <td><i *ngIf="aValueLocked" class="material-icons">lock</i><i *ngIf="!aValueLocked" class="material-icons">lock_open</i></td>
+      </tr>
+      <tr>
+        <td>R<sub>2</sub> / mm</td>
+        <td class="value-cell">{{spring.mR2Min | number : '1.0-0'}}</td>
+        <td><mat-slider [(ngModel)]="r2Value" [disabled]="!r2ValueLocked" (change)="onR2ValueChange($event)" step="1" thumbLabel="true" [displayWith]="formatSliderLabel" [min]="spring.mR2Min" [max]="spring.mR2Max"></mat-slider></td>
+        <td class="value-cell">{{spring.mR2Max | number : '1.0-0'}}</td>
+        <td><i *ngIf="r2ValueLocked" class="material-icons">lock</i><i *ngIf="!r2ValueLocked" class="material-icons">lock_open</i></td>
+      </tr>
+    </table>
+    <table id="connections-table" cellspacing="0">
+      <tr>
+        <td>A / mm</td>
+        <td *ngIf="r2ValueLocked" class="value-cell">{{aZeroValue | number : '1.0-0'}}</td>
+        <td *ngIf="r2ValueLocked"><i class="material-icons spacer">arrow_forward</i></td>
+        <td class="value-cell">{{aValue | number : '1.0-0'}}</td>
+      </tr>
+      <tr>
+        <td>R<sub>2</sub>/mm</td>
+        <td *ngIf="aValueLocked" class="value-cell">{{r2ZeroValue | number : '1.0-0'}}</td>
+        <td *ngIf="aValueLocked"><i class="material-icons spacer">arrow_forward</i></td>
+        <td class="value-cell">{{r2Value | number : '1.0-0'}}</td>
+      </tr>
     </table>
   </mat-card-content>
 </div>

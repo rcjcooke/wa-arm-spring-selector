@@ -13,6 +13,9 @@ import { MatSortModule } from '@angular/material';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSliderModule } from '@angular/material/slider';
+// import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 // Component imports
 import { AppComponent } from './app.component';
@@ -41,6 +44,8 @@ import { SpringDetailComponent } from './spring-detail/spring-detail.component';
     MatCardModule,
     MatCheckboxModule,
     MatTooltipModule,
+    MatSliderModule,
+    MatButtonToggleModule,
     MatButtonModule
   ],
   providers: [],

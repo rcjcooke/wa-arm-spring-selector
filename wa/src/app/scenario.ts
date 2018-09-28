@@ -11,4 +11,5 @@ export class Scenario {
   mR1                           : number;
   mIncludeSpringMassInSystem    : boolean;
   mDynamicBalancingRequired     : boolean;
+  mFixedVariable                : string;
 }

@@ -22,7 +22,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.dataModelService.selectedSpring$.subscribe(sp => {
       this.selectedSpring = sp;
-      // if (this.springSelectionVisualiserComponent) this.springSelectionVisualiserComponent.resizeChart();
     });
   }
 
