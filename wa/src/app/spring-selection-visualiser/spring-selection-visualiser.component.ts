@@ -14,6 +14,9 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
   springChart: c3.ChartAPI;
   currentSpringIDs: string[] = []; // orderNum/manufacturer
   selectedSpring: Spring;
+  springs: Spring[];
+  maxMass: number;
+  minMass: number;
 
   constructor(
     private dataModelService: DataModelService
@@ -40,9 +43,21 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
           enabled: true,
           multiple: false
         },
-        color: function (color, d) {
+        color: (color, d) => {
           // d will be 'id' when called for legends
-          return d3.rgb("#c2185b");
+          if (d.id) {
+            var springIDElements = d.id.split('/');
+            var spring = this.springs.find(spring => spring.mManufacturer == springIDElements[0] && spring.mOrderNum == springIDElements[1]);
+            if (spring) {
+              var massFactor = 1-(spring.mMass-this.minMass)/(this.maxMass - this.minMass);
+              return d3.interpolateWarm(massFactor);
+            } else {
+              return d3.interpolateWarm(0);
+            }
+          } else {
+            return d3.interpolateWarm(0);
+          }
+          // return d3.rgb("#c2185b");
         },
         onclick: (d, element) => {
           var springIDElements = d.id.split('/');
@@ -88,6 +103,12 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       springsToUnload = [...springsToUnload, ...springsToUnload.map(s => s.concat("-rl"))];
       this.currentSpringIDs = springIDs;
 
+      // Retain the full spring details for the colour function
+      this.springs = sps;
+      this.maxMass = Math.max.apply(Math, sps.map(sp => sp.mMass));
+      this.minMass = Math.min.apply(Math, sps.map(sp => sp.mMass));
+
+      // Load up the new data
       this.springChart.load({
         xs: xs,
         columns: cols,
