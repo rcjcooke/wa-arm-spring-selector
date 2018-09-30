@@ -29,6 +29,7 @@
         <td><i *ngIf="r2ValueLocked" class="material-icons">lock</i><i *ngIf="!r2ValueLocked" class="material-icons">lock_open</i></td>
       </tr>
     </table>
+    <h4>Final Physical Connections</h4>
     <table id="connections-table" cellspacing="0">
       <tr>
         <td>A / mm</td>
@@ -37,7 +38,7 @@
         <td class="value-cell">{{aValue | number : '1.0-0'}}</td>
       </tr>
       <tr>
-        <td>R<sub>2</sub>/mm</td>
+        <td>R<sub>2</sub> / mm</td>
         <td *ngIf="aValueLocked" class="value-cell">{{r2ZeroValue | number : '1.0-0'}}</td>
         <td *ngIf="aValueLocked"><i class="material-icons spacer">arrow_forward</i></td>
         <td class="value-cell">{{r2Value | number : '1.0-0'}}</td>

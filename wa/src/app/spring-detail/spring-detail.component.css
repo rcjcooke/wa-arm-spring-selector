@@ -17,8 +17,16 @@ table.value-table tr:hover {
   text-align: right;
 }
 
+h4 {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 90%;
+  font-weight: 400;
+}
+
 #connections-table {
-  
+  margin: auto;
+  width: 50%;
+  padding: 5px;
 }
 
 #connections-table .value-cell {
