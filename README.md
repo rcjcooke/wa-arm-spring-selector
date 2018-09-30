@@ -1,12 +1,12 @@
 # wa-arm-spring-selector
 Workshop Automation: Workshop Arm: Spring selection service
 
-This repository contains of a small set of services that work together to provide an interface for selecting stock springs from a spring catalogue that will allow for the gravity balancing of a mechanical arm. This system is founded in earlier work done by Frank Beinersdorf with some minor expansions to allow for the spring mass to be included in the system mass and to allow for spring selections that can be used in dynamic gravity balanced systems.
+This repository contains of a small set of services that work together to provide an interface for selecting stock springs from a spring catalogue that will allow for the gravity balancing of a mechanical arm. This system is founded in earlier work done by Frank Beinersdorf with some minor expansions to allow for the spring mass to be included in the system mass and to allow for spring selections that can be used to balance variable payloads.
 
 ![Screenshot](media/Screenshot.PNG)
 
 This project is Gradle driven and consists of several sub-projects:
-* **core** - Core: The spring selection application. This is a command line app that contains the core logic.
+* **core** - Core: The spring selection application. This is where the core logic lives and can be executed as a command line app.
 * **ws** - Web Service: The RESTful web service wrapper around core
 * **wa** - Wep App: A GUI web front end for interacting with the web service
 
@@ -57,6 +57,12 @@ Despite the Gradle Eclipse plugin being applied in the build file, Eclipse integ
 
 Please note that, at the time of writing, Gradle test and Eclipse debug capability are not yet integrated in the Eclipse Gradle buildship plugin, though you can manually set up a remote debug target to a gradle test execution instance in Eclipse.
 
+#### Visual Studio Code
+VS Code was used for the creation and modification of the Web App. Simply opening the project folder in VS Code should be sufficient for VS Code to function. I use the following extensions for this project which youmaywish to consider:
+* Angular 6 Snippets
+* Markdown All In One
+* Java Extension Pack
+
 ## References
 * Gradle multi-project builds: https://docs.gradle.org/current/userguide/multi_project_builds.html
 * Jersey JSON / Moxy: https://jersey.github.io/documentation/latest/media.html#json.moxy
@@ -68,10 +74,4 @@ Please note that, at the time of writing, Gradle test and Eclipse debug capabili
 * Angular observables: https://angular.io/guide/observables
 * Angular material icons: https://material.io/tools/icons/?style=baseline
 * Angular material theming: https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1
-
-* Angular + D3.js: https://jaxenter.com/d3-js-busy-angular-developer-146873.html
-* Angular + D3.js: https://medium.com/@balramchavan/integrating-d3js-with-angular-5-0-848ed45a8e19
-* Using Gradle with Javascript: https://dzone.com/articles/javascript-webapps-gradle
-* Gradle + WebPack: https://objectpartners.com/2016/04/22/using-webpack-with-gradle/
-* Gradle Javascript dependency resolution: https://docs.gradle.org/current/userguide/declaring_dependencies.html
-
+* D3.js colour functions: https://github.com/d3/d3-scale-chromatic/blob/master/README.md#interpolateWarm
