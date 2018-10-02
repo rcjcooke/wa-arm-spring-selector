@@ -40,7 +40,6 @@ export class ScenarioSelectorComponent implements OnInit {
   valueChanged(event: MatButtonToggleChange) {
     // It's ok to have both selected, but not neither
     // If we deselect one, we have to select the other
-    console.log(event);
     if (event.value == "movePositionR2") {
       this.fixedPositionR2 = !event.source.checked;
       if (this.fixedPositionR2) this.fixedPositionA = false;

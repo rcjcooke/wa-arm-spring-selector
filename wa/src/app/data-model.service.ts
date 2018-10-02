@@ -36,7 +36,6 @@ export class DataModelService {
   }
 
   changeSelectedSpring(spring: Spring) {
-    console.log(spring);
     this.selectedSpringSource.next(spring);
   }
 
