@@ -3,6 +3,7 @@ import * as c3 from 'c3';
 import { DataModelService } from '../data-model.service';
 import { Spring } from '../spring';
 import * as d3 from 'd3';
+import { MatMenuTrigger } from '@angular/material';
 
 @Component({
   selector: 'app-spring-selection-visualiser',
@@ -46,8 +47,7 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
         color: (color, d) => {
           // d will be 'id' when called for legends
           if (d.id) {
-            var springIDElements = d.id.split('/');
-            var spring = this.springs.find(spring => spring.mManufacturer == springIDElements[0] && spring.mOrderNum == springIDElements[1]);
+            var spring = this.getSpringForID(d.id);
             if (spring) {
               var massFactor = 1-(spring.mMass-this.minMass)/(this.maxMass - this.minMass);
               return d3.interpolateWarm(massFactor);
@@ -57,11 +57,9 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
           } else {
             return d3.interpolateWarm(0);
           }
-          // return d3.rgb("#c2185b");
         },
         onclick: (d, element) => {
-          var springIDElements = d.id.split('/');
-          var spring = this.dataModelService.getSpring(springIDElements[0], springIDElements[1]);
+          var spring = this.getSpringForID(d.id);
           if (spring == this.selectedSpring) {
             this.dataModelService.changeSelectedSpring(null);
           } else {
@@ -124,6 +122,12 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       }
       this.selectedSpring = sp;
     });
+  }
+
+  private getSpringForID(id: String): Spring {
+    var manufacturer = id.split('/', 1)[0];
+    var orderNum = id.substr(manufacturer.length + 1);
+    return this.springs.find(spring => spring.mManufacturer == manufacturer && spring.mOrderNum == orderNum);
   }
 
   private getSpringID(s: Spring): string {
