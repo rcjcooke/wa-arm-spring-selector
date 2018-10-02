@@ -27,6 +27,8 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
 
   // The scenario used for test purposes
   private static final Scenario TEST_SCENARIO = new Scenario(2500, 12500, 1, 1, 1, 100, 200, 100, 200, 1200, false, false, 'A');
+  // The database used for test purposes
+  private static final String TEST_DATABASE_PATH = "data/Databases/basicData.csv";
 
   private static final List<Spring> EXPECTED_SPRINGS = Arrays.asList(
       new Spring("Z-377I", "Gutekunst", 2132, 6.382, 334.0645566, 0, 0, 0),
@@ -42,7 +44,7 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
   protected Application configure() {
 
     try {
-      ResourceConfig config = WebServerMoxy.createApp();
+      ResourceConfig config = WebServerMoxy.createApp(TEST_DATABASE_PATH);
 
       // Set up traffic logging -
       // http://www.indestructiblevinyl.com/2016/07/23/logging-with-jersey-and-maven.html

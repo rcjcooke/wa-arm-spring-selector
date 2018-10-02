@@ -25,13 +25,19 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 public class WebServerMoxy extends ResourceConfig {
 
   private static final URI BASE_URI = URI.create("http://localhost:8080/");
+  private static final String DEFAULT_DATABASE_PATH = "data/Databases/processed.csv";
 
   private final SpringSelector mSpringSelector;
 
-  public WebServerMoxy() throws InstantiationException {
+  /**
+   * Creates a new instance of the application as a JSON enabled Web App instance.
+   * @param databasePath The path to the database CSV file, e.g. data/Databases/processed.csv
+   * @throws InstantiationException If there's a problem loading the database
+   */
+  public WebServerMoxy(String databasePath) throws InstantiationException {
     // Create our singleton Spring Selector instance
     // TODO: Put the path in configuration
-    mSpringSelector = new SpringSelector("data/Databases/basicData.csv");
+    mSpringSelector = new SpringSelector(databasePath);
     // Pull in our web resources
     packages("wa.arm.springselector.ws");
     // Make sure we can talk JSON
@@ -57,7 +63,7 @@ public class WebServerMoxy extends ResourceConfig {
 
   public static void main(String[] args) {
     try {
-      final HttpServer server = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, createApp(), false);
+      final HttpServer server = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, createApp(DEFAULT_DATABASE_PATH), false);
       Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
         @Override
         public void run() {
@@ -74,8 +80,8 @@ public class WebServerMoxy extends ResourceConfig {
     }
   }
 
-  public static ResourceConfig createApp() throws InstantiationException {
-    return new WebServerMoxy();
+  public static ResourceConfig createApp(String databasePath) throws InstantiationException {
+    return new WebServerMoxy(databasePath);
   }
 
   public static ContextResolver<MoxyJsonConfig> createMoxyJsonResolver() {

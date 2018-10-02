@@ -62,6 +62,10 @@ public class SpringDB {
       mConnection.createStatement().execute("CREATE TEXT TABLE Springs (" + generateSpringTableDescription() + ")");
       // NOTE: DESC because we're only reading from it
       mConnection.createStatement().execute("SET TABLE Springs SOURCE \"" + dataSetPath + ";ignore_first=true\" DESC");
+      // Provide some useful logging
+      ResultSet rs = mConnection.createStatement().executeQuery("SELECT COUNT(*) AS rowcount FROM Springs");
+      rs.next();
+      Logger.getLogger(SpringDB.class.getName()).log(Level.INFO, "Successfully loaded " + rs.getInt("rowcount") + " springs");
     } catch (SQLException e) {
       e.printStackTrace();
       throw new InstantiationException(e.getLocalizedMessage());

@@ -6,6 +6,7 @@ This repository contains of a small set of services that work together to provid
 ![Screenshot](media/Screenshot.PNG)
 
 This project is Gradle driven and consists of several sub-projects:
+* **data** - Data: Spring databases and source files
 * **core** - Core: The spring selection application. This is where the core logic lives and can be executed as a command line app.
 * **ws** - Web Service: The RESTful web service wrapper around core
 * **wa** - Wep App: A GUI web front end for interacting with the web service
@@ -23,7 +24,7 @@ The other projects all require:
 * Gradle 4+ : https://gradle.org/install/ 
 
 ### Core
-This is the core logic and database executable as a command line application. It is also used as an integrated dependency of the web service. To run the application:
+This is the core logic and database executable as a command line application. It is also used as an integrated dependency of the web service. It is dependent on the data project. To run the application:
 
 * Change to the `core` directory
 * Execute `gradle run --args=''`. This will force the app to tell you what command line parameters are required to use it.
@@ -62,6 +63,23 @@ VS Code was used for the creation and modification of the Web App. Simply openin
 * Angular 6 Snippets
 * Markdown All In One
 * Java Extension Pack
+
+## Spring Manufacturers
+A web search of "local" New Zealand spring manufacturers was undertaken and those that had easier to parse stock catalogues have their springs listed in this app.
+
+Legend: R = Researched, L = Listed
+
+| Company | URL | Status |
+|---------|-----|--------|
+| Century Springs | http://centurysprings.co.nz/ | L |
+| Bearing & Engineering Supplies Ltd. | https://www.bearingandengineering.co.nz/ | R |
+| National Springs & Wire Products NZ Ltd. | http://www.natspring.co.nz/ | R |
+| Spring Specialists Limited | http://www.springspecialists.co.nz/ | R |
+
+### Century Springs
+The spring data was copied from their PDF catalogues available online. Once scraped, it became evident that the catalogues had a small number of data errors in addition to a significant number of problems being introduced as a result of scraping the data from PDF in the first place. The original scraped source pages can be found in the `data/centurysprings` directory. 
+
+Cleanup scripts were created to process the raw pages and generate a single CSV output. This process can be re-executed by running the `clean.sh` script (`-h` as an argument to get usage instructions). Please note that this requires `sed` and `awk` to be available on the command line. This was tested and proven to work on a MinGW terminal on Windows. No other environment has been verified at this stage.
 
 ## References
 * Gradle multi-project builds: https://docs.gradle.org/current/userguide/multi_project_builds.html
