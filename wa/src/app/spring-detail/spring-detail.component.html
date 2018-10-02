@@ -33,14 +33,14 @@
     <table id="connections-table" cellspacing="0">
       <tr>
         <td>A / mm</td>
-        <td *ngIf="r2ValueLocked" class="value-cell">{{aZeroValue | number : '1.0-0'}}</td>
-        <td *ngIf="r2ValueLocked"><i class="material-icons spacer">arrow_forward</i></td>
+        <td *ngIf="!aValueLocked" class="value-cell">{{aZeroValue | number : '1.0-0'}}</td>
+        <td *ngIf="!aValueLocked"><i class="material-icons spacer">arrow_forward</i></td>
         <td class="value-cell">{{aValue | number : '1.0-0'}}</td>
       </tr>
       <tr>
         <td>R<sub>2</sub> / mm</td>
-        <td *ngIf="aValueLocked" class="value-cell">{{r2ZeroValue | number : '1.0-0'}}</td>
-        <td *ngIf="aValueLocked"><i class="material-icons spacer">arrow_forward</i></td>
+        <td *ngIf="!r2ValueLocked" class="value-cell">{{r2ZeroValue | number : '1.0-0'}}</td>
+        <td *ngIf="!r2ValueLocked"><i class="material-icons spacer">arrow_forward</i></td>
         <td class="value-cell">{{r2Value | number : '1.0-0'}}</td>
       </tr>
     </table>

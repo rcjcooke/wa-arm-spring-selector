@@ -39,19 +39,24 @@ export class SpringDetailComponent implements OnInit, AfterViewInit {
     });
     this.dataModelService.scenario$.subscribe(scenario => {
       this.scenario = scenario;
-      switch (scenario.mFixedVariable) {
-        case "A":
-          this.aValueLocked = true;
-          this.r2ValueLocked = false;
+      if (scenario.mDynamicBalancingRequired) {
+        switch (scenario.mFixedVariable) {
+          case "A":
+            this.aValueLocked = true;
+            this.r2ValueLocked = false;
+            break;
+          case "R":
+            this.aValueLocked = false;
+            this.r2ValueLocked = true;
+            break;
+          default:
+            this.aValueLocked = false;
+            this.r2ValueLocked = false;
           break;
-        case "R":
-          this.aValueLocked = false;
-          this.r2ValueLocked = true;
-          break;
-        default:
-          this.aValueLocked = false;
-          this.r2ValueLocked = false;
-        break;
+        }
+      } else {
+        this.aValueLocked = true;
+        this.r2ValueLocked = true;
       }
     });
   }
