@@ -1,0 +1,42 @@
+plugins {
+    id 'base' // For the basic lifecycle groups such as build and assemble 
+}
+
+/* 
+Directory structure:
+  src/main/resources - Raw PDF scraped pages
+  ${buildDir}/csvs/gutekunst.csv - the Gutekunst output CSV
+*/
+
+def csvResources = "$buildDir/csvs/"
+
+configurations {
+  // Define a configuration for CSVs
+  csvs
+}
+
+/**
+ * Fixes, reformats and combines PDF copy and paste scrapes from the Century Springs catalogue into a single clean CSV file.
+ */
+task copyGutekunstCSV(type: Copy) {
+  group BasePlugin.BUILD_GROUP;
+  description 'Grab the manually created CSV and put it in the outputs folder with the right name'
+
+  from file('src/main/resources/Federndatenbank2.csv')
+  into "${csvResources}"
+
+  rename 'Federndatenbank2.csv', "${project.name}.csv"
+}
+assemble.dependsOn copyGutekunstCSV
+
+// For annoying inter-project dependency reasons, we need to publish an artefact
+task dist(type: Tar) {
+  dependsOn copyGutekunstCSV
+  compression 'gzip'
+  from csvResources
+}
+
+artifacts {
+  // Define that output artifact for the csvs configuration is produced by the copyGutekunstCSV task
+  csvs dist
+}

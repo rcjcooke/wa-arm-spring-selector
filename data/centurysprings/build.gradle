@@ -1,0 +1,40 @@
+plugins {
+    id 'base' // For the basic lifecycle groups such as assemble and artifacts 
+}
+
+/* 
+Directory structure:
+  src/main/resources - Raw PDF scraped pages
+  ${buildDir}/csvs/centurysprings.csv - the CenturySprings output CSV
+*/
+
+def csvResources = "$buildDir/csvs/"
+
+configurations {
+  // Define a configuration for CSVs
+  csvs
+}
+
+/**
+ * Fixes, reformats and combines PDF copy and paste scrapes from the Century Springs catalogue into a single clean CSV file.
+ */
+task processScrape(type: Exec) {
+  group BasePlugin.BUILD_GROUP;
+  description 'Process and clean data from the raw data files to create the Century Springs CSV'
+
+  executable "sh"
+  args '-c',"./clean.sh -o '${csvResources}/${project.name}.csv' -i 'src/main/resources/'"
+}
+assemble.dependsOn processScrape
+
+// For annoying inter-project dependency reasons, we need to publish an artefact
+task dist(type: Tar) {
+  dependsOn processScrape
+  compression 'gzip'
+  from csvResources
+}
+
+artifacts {
+  // Define that output artifact for the csvs configuration is produced by the copyGutekunstCSV task
+  csvs dist
+}
