@@ -1,11 +1,18 @@
 /****************************
  * Build Environment Setup
  ****************************/
+apply plugin: 'java'
+apply plugin: 'eclipse'
 apply plugin: 'application'
+
+def localServerRepoURL = "file://${projectDir}/../build/repo"
 
 /****************************
  * Project Descriptors
  ****************************/
+group = 'wa.arm.springselector.ws'
+version = '1.0-SNAPSHOT'
+
 description = "Workshop Automation: Workshop Arm: Spring selection service: Web Service"
 mainClassName = 'wa.arm.springselector.ws.WebServerMoxy'
 
@@ -13,6 +20,10 @@ mainClassName = 'wa.arm.springselector.ws.WebServerMoxy'
 run{
 	standardInput = System.in
 }
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 
 /****************************
  * Project Output
@@ -24,9 +35,29 @@ jar {
 }
 
 /****************************
+ * Project File Structure
+ ****************************/
+/* 
+Note: Useful reference for integration test addition: 
+  https://spin.atomicobject.com/2018/07/18/gradle-integration-tests/
+*/
+// By default, src/main and src/test are set up correctly
+sourceSets {
+    // Add integration tests
+    intTest {
+        // Note: configuration.testCompile includes (unit) testCompile dependencies in compilation of integration tests 
+        compileClasspath += sourceSets.main.output + configurations.testCompile
+        runtimeClasspath += output + compileClasspath + configurations.testRuntime
+    }
+}
+
+/****************************
  * Project Dependencies
  ****************************/
 dependencies {
+    // Core logic
+    compile "wa.arm.springselector:core:1.0-SNAPSHOT"
+
     // Web Server
     compile "org.glassfish.jersey.containers:jersey-container-grizzly2-http:2.27"
     // Web Services annotations etc.
@@ -34,7 +65,47 @@ dependencies {
     // Provide JSON support
     compile "org.glassfish.jersey.media:jersey-media-moxy:2.27"
     
+    // Unit testing dependencies
+    testCompile 'junit:junit:4.12'
     // Test helpers
     testCompile group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-bundle', version:'2.27'
-    
+    // Integration testing dependencies
+    intTestImplementation 'junit:junit:4.12'
 }
+
+// Library repositories
+repositories {
+    maven {
+        url localServerRepoURL
+    }
+    jcenter()
+    mavenCentral()
+}
+
+/****************************
+ * Process Additions
+ ****************************/
+// Adding additional configuration for integration testing
+configurations {
+    intTestImplementation.extendsFrom implementation
+    intTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+// Integration test task
+task integrationTest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+    classpath = sourceSets.intTest.runtimeClasspath
+    /* Forces Gradle to always run the integration tests when asked to. 
+    By default, Gradle attempts to optimize task execution by not re-running 
+    tasks whose inputs have not changed. Since integration tests may fail 
+    due to external systems, we want to run them even if no code has changed. */
+    outputs.upToDateWhen { false }
+    shouldRunAfter test
+}
+
+// Adds integration tests to the "check" task list 
+check.dependsOn integrationTest
+

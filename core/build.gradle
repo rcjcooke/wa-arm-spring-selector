@@ -1,29 +1,55 @@
 /****************************
  * Build Environment Setup
  ****************************/
+apply plugin: 'java'
+apply plugin: 'eclipse'
 apply plugin: 'application'
+apply plugin: 'maven-publish'
 
-// Default arguments when executing the app directly with Gradle
-run {
-    // Make sure the user can see the output of the app 
-    logging.captureStandardOutput LogLevel.INFO
-    // Some default arguments
-    args = ["data/Databases/basicData.csv", 2500, 15000, 1, 1, 1, 50, 700, 50, 200, 750, "false", "false", 'A', "-Djava.util.logging.config.file=logging.console.properties"]
-}
-
+def localServerRepoURL = "file://${projectDir}/../build/repo"
 
 /****************************
  * Project Descriptors
  ****************************/
+group = 'wa.arm.springselector'
+version = '1.0-SNAPSHOT'
+
 description = "Workshop Automation: Workshop Arm: Spring selection Service: Application"
 mainClassName = 'wa.arm.springselector.SpringSelector'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8    
 
 /****************************
  * Project Output
  ****************************/
+// Default arguments when executing the app directly with Gradle
+run {
+    // Make sure the user can see the output of the app 
+    logging.captureStandardOutput LogLevel.INFO
+    //-Djava.util.logging.config.file=logging.console.properties
+    // Some default arguments
+    args = ["data/Databases/basicData.csv", 2500, 15000, 1, 1, 1, 50, 700, 50, 200, 750, "false", "false", 'A']
+}
+
 jar {
     manifest {
         attributes 'Main-Class': 'wa.arm.springselector.SpringSelector'
+    }
+}
+
+publishing {
+    publications {
+        core(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name = 'onMachineRepo'
+            url = localServerRepoURL
+        }
     }
 }
 
@@ -31,13 +57,17 @@ jar {
  * Process Dependencies
  ****************************/
 dependencies {
-    // This dependency is found on compile classpath of this component and consumers.
-    // compile 'com.google.guava:guava:23.0'
-	// https://mvnrepository.com/artifact/org.processing/core
-	//compile group: 'org.processing', name: 'core', version: '3.3.7'
-    
     // Database dependencies
     compile "org.hsqldb:hsqldb:2.4.1"
     compile "org.hsqldb:hsqldb:2.4.1:sources"
     compile "org.hsqldb:hsqldb:2.4.1:javadoc"
+
+    // Unit testing dependencies
+    testCompile 'junit:junit:4.12'
+}
+
+// Library repositories
+repositories {
+    jcenter()
+    mavenCentral()
 }

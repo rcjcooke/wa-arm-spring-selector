@@ -41,6 +41,10 @@ public class SpringSelector {
     Scenario scenario = null;
     try {
       if (args.length != 14) {
+        System.err.println("Invalid number of command line arguments. 14 expected, received " + args.length);
+        for (String arg: args) {
+          System.err.println(arg);
+        }
         printUsage();
         System.exit(INVALID_NUMBER_OF_ARGUMENTS_EXIT_CODE);
       }
@@ -49,7 +53,7 @@ public class SpringSelector {
           Float.parseFloat(args[9]), Float.parseFloat(args[10]), Boolean.parseBoolean(args[11]), Boolean.parseBoolean(args[12]), args[13].charAt(0));
     } catch (Exception e) {
       // Some kind of parsing exception, we don't care what it was
-      System.out.println("Problem parsing command line arguments");
+      System.err.println("Problem parsing command line arguments");
       e.printStackTrace();
       printUsage();
       System.exit(INVALID_ARGUMENTS_EXIT_CODE);
