@@ -11,6 +11,7 @@ Directory structure:
 */
 configurations {
   csvsSource
+  csvs
 }
 
 dependencies {
@@ -22,6 +23,7 @@ dependencies {
 
 def tarResources = new File("$buildDir/tars/")
 def csvResources = new File("$buildDir/csvs/")
+def outputCSV = new File(csvResources, "springs.csv")
 
 task collectTARs(type: Copy) {
   group BasePlugin.BUILD_GROUP
@@ -48,5 +50,18 @@ task compileCSVs(type: Exec) {
   dependsOn extractCSVs
   // Do the work with the bash script
   executable "sh"
-  args '-c',"./process-raw-csvs.sh -s 'src/main/scripts' -c '${csvResources}' -o '${csvResources}/springs.csv'"
+  args '-c',"./process-raw-csvs.sh -s 'src/main/scripts' -c '${csvResources}' -o '${outputCSV}'"
+}
+
+// For annoying inter-project dependency reasons, we need to publish an artefact
+task dist(type: Tar) {
+  group BasePlugin.DISTRIBUTION_GROUP
+  dependsOn compileCSVs
+  compression 'gzip'
+  from outputCSV
+}
+
+artifacts {
+  // Define that output artifact for the csvs configuration is produced by the copyGutekunstCSV task
+  csvs dist
 }

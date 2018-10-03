@@ -31,6 +31,7 @@ assemble.dependsOn copyGutekunstCSV
 
 // For annoying inter-project dependency reasons, we need to publish an artefact
 task dist(type: Tar) {
+  group BasePlugin.DISTRIBUTION_GROUP
   dependsOn copyGutekunstCSV
   compression 'gzip'
   from csvResources

@@ -29,6 +29,7 @@ assemble.dependsOn processScrape
 
 // For annoying inter-project dependency reasons, we need to publish an artefact
 task dist(type: Tar) {
+  group BasePlugin.DISTRIBUTION_GROUP
   dependsOn processScrape
   compression 'gzip'
   from csvResources
