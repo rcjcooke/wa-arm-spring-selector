@@ -1,6 +1,5 @@
 plugins {
     id 'base' // For the basic lifecycle groups such as build and assemble and for artifacts support
-    id 'java-base' // For the SourceSets structure
 }
 
 /* 
@@ -52,10 +51,12 @@ task compileCSVs(type: Exec) {
   executable "sh"
   args '-c',"./process-raw-csvs.sh -s 'src/main/scripts' -c '${csvResources}' -o '${outputCSV}'"
 }
+assemble.dependsOn compileCSVs
 
 // For annoying inter-project dependency reasons, we need to publish an artefact
-task dist(type: Tar) {
-  group BasePlugin.DISTRIBUTION_GROUP
+task bundleCSVTar(type: Tar) {
+  group 'distribution'
+  description 'Bundle the output CSV for distribution as a TAR GZ ball'
   dependsOn compileCSVs
   compression 'gzip'
   from outputCSV
@@ -63,5 +64,5 @@ task dist(type: Tar) {
 
 artifacts {
   // Define that output artifact for the csvs configuration is produced by the copyGutekunstCSV task
-  csvs dist
+  csvs bundleCSVTar
 }
