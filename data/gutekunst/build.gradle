@@ -30,14 +30,14 @@ task copyGutekunstCSV(type: Copy) {
 assemble.dependsOn copyGutekunstCSV
 
 // For annoying inter-project dependency reasons, we need to publish an artefact
-task dist(type: Tar) {
-  group BasePlugin.DISTRIBUTION_GROUP
-  dependsOn copyGutekunstCSV
+task bundleCSVTar(type: Tar) {
+  group 'distribution'
+  description 'Bundle the output CSV for distribution as a TAR GZ ball'
   compression 'gzip'
-  from csvResources
+  from copyGutekunstCSV.outputs
 }
 
 artifacts {
   // Define that output artifact for the csvs configuration is produced by the copyGutekunstCSV task
-  csvs dist
+  csvs bundleCSVTar
 }

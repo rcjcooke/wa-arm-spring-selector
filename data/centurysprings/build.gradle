@@ -22,20 +22,29 @@ task processScrape(type: Exec) {
   group BasePlugin.BUILD_GROUP;
   description 'Process and clean data from the raw data files to create the Century Springs CSV'
 
+  // Define parameters
+  def outputFile="${csvResources}/${project.name}.csv"
+  def inputDir="src/main/resources/"
+
+  // Define inputs and outputs for build caching purposes
+  inputs.files(fileTree("src/main/resources/"))
+  outputs.file(outputFile)
+
+  // Define the cleaning process command - NOTE: This doesn't actually run anything at the point it's evaluted. It's just config.
   executable "sh"
-  args '-c',"./clean.sh -o '${csvResources}/${project.name}.csv' -i 'src/main/resources/'"
+  args '-c',"./clean.sh -o '${outputFile}' -i '${inputDir}'"
 }
 assemble.dependsOn processScrape
 
 // For annoying inter-project dependency reasons, we need to publish an artefact
-task dist(type: Tar) {
-  group BasePlugin.DISTRIBUTION_GROUP
-  dependsOn processScrape
+task bundleCSVTar(type: Tar) {
+  group 'distribution'
+  description 'Bundle the output CSV for distribution as a TAR GZ ball'
   compression 'gzip'
-  from csvResources
+  from processScrape.outputs
 }
 
 artifacts {
   // Define that output artifact for the csvs configuration is produced by the copyGutekunstCSV task
-  csvs dist
+  csvs bundleCSVTar
 }
