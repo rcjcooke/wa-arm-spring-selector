@@ -1,17 +1,37 @@
 # wa-arm-spring-selector
-Workshop Automation: Workshop Arm: Spring selection service
+**Workshop Automation: Workshop Arm: Spring selection service**
 
-This repository contains of a small set of services that work together to provide an interface for selecting stock springs from a spring catalogue that will allow for the gravity balancing of a mechanical arm. This system is founded in earlier work done by Frank Beinersdorf with some minor expansions to allow for the spring mass to be included in the system mass and to allow for spring selections that can be used to balance variable payloads.
+This repository contains of a small set of services that work together to provide an interface for selecting stock springs from a spring catalogue that will allow for the gravity balancing of a mechanical arm. This system is founded in earlier work done by Frank Beinersdorf with some minor functional expansions to allow for the spring mass to be included in the system mass and to allow for spring selections that can be used to balance variable payloads.
 
 ![Screenshot](media/Screenshot.PNG)
+
+This project is part of wider work to design a template for a robotic arm to assist solo inventors in a workshop context, however, this tool can be used standalone for balancing any mechanical arm. It is assumed that the mechanical arm can be modelled such that it conforms to the general mechanical model shown below. Note that for a parallogram 4-bar linkage, the connection points for the spring will work can be either of the horizontal bars and on either of the respective vertical bars, as visualised by the dotted line in the diagram.
+
+![Generic Mechanical Model](media/model.PNG)
+
+The tool reflects the mechanical structure shown using the following variables:
+
+| Variable      | Description                                                                                          |
+|---------------|------------------------------------------------------------------------------------------------------|
+| R             | Distance from the pivot of the arm to the centre of mass of the arm (including the payload)          |
+| R<sub>2</sub> | Distance from the pivot of the arm to the arm connection point of the spring(s)                      |
+| A             | Distance from the pivot to the vertical connection point of the spring(s)                            |
+| MA            | The mechanical advantage of the system, presumably provided by a pulley system                       |
+| m<sub>s</sub> | System mass - this is the mass of the mechanical arm being pivoted, excluding the spring if relevant |
+| m<sub>p</sub> | Payload mass - the mass of the payload                                                               |
+| N             | The number of springs to be used                                                                     |
+
+## Tool Usage
+
+Note: The separation between m<sub>p</sub> and m<sub>s</sub> is only relevant for
+
+## Project Usage
 
 This project is Gradle driven and consists of several sub-projects:
 * **data** - Data: Spring databases and source files
 * **core** - Core: The spring selection application. This is where the core logic lives and can be executed as a command line app.
 * **ws** - Web Service: The RESTful web service wrapper around core
 * **wa** - Wep App: A GUI web front end for interacting with the web service
-
-## Usage
 
 Executing `gradle tasks` in the root folder of the main project or any of the sub-projects will provide a relevant lists of tasks that can be executed against that projeoct, e.g. gradle run or gradle build.
 
