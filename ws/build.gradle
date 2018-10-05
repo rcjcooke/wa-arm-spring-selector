@@ -37,6 +37,10 @@ jar {
 /****************************
  * Project File Structure
  ****************************/
+configurations {
+	data ( transitive = false }
+}
+
 /* 
 Note: Useful reference for integration test addition: 
   https://spin.atomicobject.com/2018/07/18/gradle-integration-tests/
@@ -71,6 +75,9 @@ dependencies {
     testCompile group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-bundle', version:'2.27'
     // Integration testing dependencies
     intTestImplementation 'junit:junit:4.12'
+    
+    // Data dependencies
+    data 'wa.arm.springselector:data:1.0-SNAPSHOT'    
 }
 
 // Library repositories
@@ -81,6 +88,18 @@ repositories {
     jcenter()
     mavenCentral()
 }
+
+task untarData(type: Copy) {
+	/* The data TAR ball contains the Springs.csv database this app uses. However, to
+	use it in HSQL the file itself needs to be accessible on disk and not buried in
+	an archive. At runtime this will therefore be invoked to untar the springs.csv
+	into the data subdirectory of the project */
+	from tarTree(configurations.data.singleFile) matching {
+		include "springs.csv"
+	}
+	into "${projectDir}/data/"
+}
+run.dependsOn untarData
 
 /****************************
  * Process Additions
