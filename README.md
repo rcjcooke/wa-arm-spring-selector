@@ -5,7 +5,7 @@ This repository contains of a small set of services that work together to provid
 
 ![Screenshot](media/Screenshot.PNG)
 
-This project is part of wider work to design a template for a robotic arm to assist solo inventors in a workshop context, however, this tool can be used standalone for balancing any mechanical arm. It is assumed that the mechanical arm can be modelled such that it conforms to the general mechanical model shown below. Note that for a parallogram 4-bar linkage, the connection points for the spring will work can be either of the horizontal bars and on either of the respective vertical bars, as visualised by the dotted line in the diagram.
+This project is part of wider work to design a template for a robotic arm to assist solo inventors in a workshop context, however, this tool can be used standalone for balancing any mechanical arm. It is assumed that the mechanical arm can be modelled such that it conforms to the general mechanical model shown below. Note that for a parallogram 4-bar linkage, the connection points for the spring will work on either of the horizontal bars and their respective vertical bars, as visualised by the dotted line in the diagram.
 
 ![Generic Mechanical Model](media/model.PNG)
 
@@ -20,6 +20,8 @@ The tool reflects the mechanical structure shown using the following variables:
 | m<sub>s</sub> | System mass - this is the mass of the mechanical arm being pivoted, excluding the spring if relevant |
 | m<sub>p</sub> | Payload mass - the mass of the payload                                                               |
 | N             | The number of springs to be used                                                                     |
+
+If the arm is being designed to handle a variable payload then this needs to be taken in to account when selecting the spring(s) to balance it. For a spring-based gravity balancing mechanism there are two options for balancing a variable payload. Either the spring constant of the spring needs to change, or the connection points need to be moved based on the payload. It is impractical to physically swap the spring out during operation so it is assumed that balancing of a variable payload is achieved by moving one or both of the connection points, i.e. dynamically changing the distances A and R<sub>2</sub>.
 
 ## Tool Usage
 
