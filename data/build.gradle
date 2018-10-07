@@ -1,7 +1,23 @@
-plugins {
-    id 'base' // For the basic lifecycle groups such as build and assemble and for artifacts support
-}
+/****************************
+ * Build Environment Setup
+ ****************************/
+apply plugin: 'base' // For the basic lifecycle groups such as build and assemble and for artifacts support
+apply plugin: 'maven-publish' // For publishing the dataset as a Jar for access by other projects
 
+// Used for publishing the core Jar and for finding the data Jar
+def localServerRepoURL = "file://${projectDir}/../build/repo"
+
+/****************************
+ * Project Descriptors
+ ****************************/
+group = 'wa.arm.springselector'
+version = '1.0-SNAPSHOT'
+
+description = "Workshop Automation: Workshop Arm: Spring selection Service: Spring Database"
+
+/****************************
+ * Project File Structure
+ ****************************/
 /* 
 Directory structure:
   src/main/scripts - awk script for selecting correct columns from supplier CSVs
@@ -13,16 +29,37 @@ configurations {
   csvs
 }
 
+def tarResources = new File("$buildDir/tars/")
+def csvResources = new File("$buildDir/csvs/")
+def outputCSV = new File(csvResources, "springs.csv")
+
+/****************************
+ * Project Output
+ ****************************/
+publishing {
+    publications {
+        data(MavenPublication) {
+            artifact bundleCSVTar
+        }
+    }
+
+    repositories {
+        maven {
+            name = 'onMachineRepo'
+            url = localServerRepoURL
+        }
+    }
+}
+
+/****************************
+ * Process Dependencies
+ ****************************/
 dependencies {
   // Set up dependencies on the csvs configuration of all sub-projects
   for (Project p : rootProject.getSubprojects()) {
     csvsSource project(path: p.getPath(), configuration: 'csvs')
   }
 }
-
-def tarResources = new File("$buildDir/tars/")
-def csvResources = new File("$buildDir/csvs/")
-def outputCSV = new File(csvResources, "springs.csv")
 
 task collectTARs(type: Copy) {
   group BasePlugin.BUILD_GROUP
@@ -45,6 +82,8 @@ task extractCSVs(type: Copy) {
 task compileCSVs(type: Exec) {
   group BasePlugin.BUILD_GROUP
   description 'Builds CSV Spring Database for all suppliers from raw CSV datafiles'
+  // Sort out build caching and inherent dependencies
+  outputs.file(outputCSV)
   // We need the CSVs to be in place
   dependsOn extractCSVs
   // Do the work with the bash script
@@ -57,9 +96,8 @@ assemble.dependsOn compileCSVs
 task bundleCSVTar(type: Tar) {
   group 'distribution'
   description 'Bundle the output CSV for distribution as a TAR GZ ball'
-  dependsOn compileCSVs
   compression 'gzip'
-  from outputCSV
+  from compileCSVs.outputs
 }
 
 artifacts {

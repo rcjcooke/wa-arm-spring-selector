@@ -6,13 +6,14 @@ apply plugin: 'eclipse'
 apply plugin: 'application'
 apply plugin: 'maven-publish'
 
+// Used for publishing the core Jar and for finding the data Jar
 def localServerRepoURL = "file://${projectDir}/../build/repo"
 
 /****************************
  * Project File Structure
  ****************************/
 configurations {
-	data ( transitive = false }
+	data { transitive = false }
 }
 
 /****************************
@@ -36,7 +37,7 @@ run {
     logging.captureStandardOutput LogLevel.INFO
     //-Djava.util.logging.config.file=logging.console.properties
     // Some default arguments
-    args = ["data/Databases/basicData.csv", 2500, 15000, 1, 1, 1, 50, 700, 50, 200, 750, "false", "false", 'A']
+    args = ["data/springs.csv", 2500, 15000, 1, 1, 1, 50, 700, 50, 200, 750, "false", "false", 'A']
 }
 
 jar {
@@ -78,6 +79,10 @@ dependencies {
 
 // Library repositories
 repositories {
+    maven {
+        name = 'onMachineRepo'
+        url = localServerRepoURL
+    }
     jcenter()
     mavenCentral()
 }
@@ -87,7 +92,7 @@ task untarData(type: Copy) {
 	use it in HSQL the file itself needs to be accessible on disk and not buried in
 	an archive. At runtime this will therefore be invoked to untar the springs.csv
 	into the data subdirectory of the project */
-	from tarTree(configurations.data.singleFile) matching {
+	from tarTree(configurations.data.singleFile).matching {
 		include "springs.csv"
 	}
 	into "${projectDir}/data/"

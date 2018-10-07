@@ -28,7 +28,7 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
   // The scenario used for test purposes
   private static final Scenario TEST_SCENARIO = new Scenario(2500, 12500, 1, 1, 1, 100, 200, 100, 200, 1200, false, false, 'A');
   // The database used for test purposes
-  private static final String TEST_DATABASE_PATH = "data/Databases/basicData.csv";
+  private static final String TEST_DATABASE_PATH = "build/resources/intTest/basicData.csv";
 
   private static final List<Spring> EXPECTED_SPRINGS = Arrays.asList(
       new Spring("Z-377I", "Gutekunst", 2132, 6.382, 334.0645566, 0, 0, 0),

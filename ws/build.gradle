@@ -38,7 +38,7 @@ jar {
  * Project File Structure
  ****************************/
 configurations {
-	data ( transitive = false }
+	data { transitive = false }
 }
 
 /* 
@@ -94,7 +94,7 @@ task untarData(type: Copy) {
 	use it in HSQL the file itself needs to be accessible on disk and not buried in
 	an archive. At runtime this will therefore be invoked to untar the springs.csv
 	into the data subdirectory of the project */
-	from tarTree(configurations.data.singleFile) matching {
+	from tarTree(configurations.data.singleFile).matching {
 		include "springs.csv"
 	}
 	into "${projectDir}/data/"

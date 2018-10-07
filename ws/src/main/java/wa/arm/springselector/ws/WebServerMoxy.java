@@ -25,7 +25,7 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 public class WebServerMoxy extends ResourceConfig {
 
   private static final URI BASE_URI = URI.create("http://localhost:8080/");
-  private static final String DEFAULT_DATABASE_PATH = "data/Databases/processed.csv";
+  private static final String DEFAULT_DATABASE_PATH = "data/springs.csv";
 
   private final SpringSelector mSpringSelector;
 
