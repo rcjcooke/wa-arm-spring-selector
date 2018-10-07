@@ -46,7 +46,7 @@ The other projects all require:
 * Gradle 4+ : https://gradle.org/install/ 
 
 ### Core
-This is the core logic and database executable as a command line application. It is also used as an integrated dependency of the web service. It is dependent on the data project. To run the application:
+This is the core logic and database executable as a command line application. It is also used as an integrated dependency of the web service. It is dependent on the data project and will compile and this include this as required. To run the application:
 
 * Change to the `core` directory
 * Execute `gradle run --args=''`. This will force the app to tell you what command line parameters are required to use it.
@@ -87,7 +87,7 @@ VS Code was used for the creation and modification of the Web App. Simply openin
 * Java Extension Pack
 
 ## Spring Manufacturers
-A web search of "local" New Zealand spring manufacturers was undertaken and those that had easier to parse stock catalogues have their springs listed in this app.
+A web search of "local" New Zealand spring manufacturers was undertaken and those that had easier to parse stock catalogues have their springs listed in this app. In addition to these, Gutekunst and Knoerzer had previously been compiled by Frank Beinersdorf and these are also included in the Spring database.
 
 Legend: R = Researched, L = Listed
 
@@ -97,11 +97,19 @@ Legend: R = Researched, L = Listed
 | Bearing & Engineering Supplies Ltd. | https://www.bearingandengineering.co.nz/ | R |
 | National Springs & Wire Products NZ Ltd. | http://www.natspring.co.nz/ | R |
 | Spring Specialists Limited | http://www.springspecialists.co.nz/ | R |
+| Gutekunst Federn | https://www.federnshop.com/en/ | L |
+| Federntechnik Knoenzer | https://www.knoerzer.eu/ | L |
 
 ### Century Springs
 The spring data was copied from their PDF catalogues available online. Once scraped, it became evident that the catalogues had a small number of data errors in addition to a significant number of problems being introduced as a result of scraping the data from PDF in the first place. The original scraped source pages can be found in the `data/centurysprings` directory. 
 
 Cleanup scripts were created to process the raw pages and generate a single CSV output. This process can be re-executed by running the `clean.sh` script (`-h` as an argument to get usage instructions). Please note that this requires `sed` and `awk` to be available on the command line. This was tested and proven to work on a MinGW terminal on Windows. No other environment has been verified at this stage.
+
+### Gutekunst Federn
+The spring data was collated from their catalogue by Frank Beinersdorf and the final curated CSV can be found in the `data/gutekunst` project.
+
+### Knoerzer
+Spring data from Knoerzer was already included in the curated spring data collected by Frank Beinersdorf and can therefore be found in the `data/gutekunst` project.
 
 ## References
 * Gradle multi-project builds: https://docs.gradle.org/current/userguide/multi_project_builds.html
