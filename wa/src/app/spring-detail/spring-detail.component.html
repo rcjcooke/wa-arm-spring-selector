@@ -42,7 +42,7 @@
         <td>R<sub>2</sub> / mm</td>
         <td *ngIf="!r2ValueLocked" class="value-cell">{{r2ZeroValue | number : '1.0-0'}}</td>
         <td *ngIf="!r2ValueLocked" class="value-cell"><i class="material-icons spacer">arrow_forward</i></td>
-        <td class="value-cell">{{r2Value | number : '1.0-0'}}</td>
+        <td class="value-cell" colSpan="{{r2ValueLocked ? 3 : 1}}">{{r2Value | number : '1.0-0'}}</td>
       </tr>
     </table>
     <table class="value-table full-width">
