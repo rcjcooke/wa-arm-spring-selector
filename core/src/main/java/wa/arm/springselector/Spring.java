@@ -19,7 +19,7 @@ public class Spring {
   public String mOrderNum;
   public String mManufacturer;
   public double mRate;
-  public double mRelevantLength;
+  public double mMaximumDeflection;
   public double mMaximumForceUnderStaticLoad;
   public double mMass;
   public double mOutsideDiameter;
@@ -44,7 +44,7 @@ public class Spring {
    * @param orderNum                    The manufacturer's order number
    * @param manufacturer                The manufacturer
    * @param rate                        The spring constant for the spring / Nm-1
-   * @param relevantLength              The maximum length of the spring under
+   * @param maximumDeflection           The maximum deflection of the spring under
    *                                    it's maximum static force / m
    * @param maximumForceUnderStaticLoad The maximum static force that can be
    *                                    applied to the spring
@@ -52,12 +52,12 @@ public class Spring {
    * @param wireDiameter                The diameter of the spring wire
    * @param outsideDiameter             The outside diameter of the spring
    */
-  public Spring(String orderNum, String manufacturer, double rate, double relevantLength,
+  public Spring(String orderNum, String manufacturer, double rate, double maximumDeflection,
       double maximumForceUnderStaticLoad, double mass, double wireDiameter, double outsideDiameter) {
     mOrderNum = orderNum;
     mManufacturer = manufacturer;
     mRate = rate;
-    mRelevantLength = relevantLength;
+    mMaximumDeflection = maximumDeflection;
     mMaximumForceUnderStaticLoad = maximumForceUnderStaticLoad;
     mMass = mass;
     mOutsideDiameter = outsideDiameter;
@@ -86,10 +86,10 @@ public class Spring {
   }
 
   /**
-   * @return the relevantLength
+   * @return the maximum deflection of the spring under it's maximum static load
    */
-  public double getRelevantLength() {
-    return mRelevantLength;
+  public double getMaximumDeflection() {
+    return mMaximumDeflection;
   }
 
   /**
@@ -229,7 +229,7 @@ public class Spring {
     StringBuilder sb = new StringBuilder("Spring[");
     sb.append(mOrderNum).append(',').append(mManufacturer);
     sb.append(',').append("rate=").append(mRate);
-    sb.append(',').append("relevantLength=").append(mRelevantLength);
+    sb.append(',').append("maximumDeflection=").append(mMaximumDeflection);
     sb.append(']');
     return sb.toString();
   }

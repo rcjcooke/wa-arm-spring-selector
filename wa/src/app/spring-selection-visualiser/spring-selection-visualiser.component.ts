@@ -35,7 +35,7 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       bindto: d3.select('#chart'),
       data: {
         xs: {
-          springs: 'Relevent Length / mm'
+          springs: 'Maximum Deflection / mm'
         },
         columns: [
         ],
@@ -69,7 +69,7 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       },
       axis: {
         x: {
-          label: 'Maximum Length / mm',
+          label: 'Maximum Deflection / mm',
           tick: {
             fit: false
           }
@@ -90,7 +90,7 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       var cols = [];
       var xs = {};
       sps.forEach(s => {
-        cols.push([this.getSpringID(s).concat("-rl"), s.mRelevantLength]);
+        cols.push([this.getSpringID(s).concat("-rl"), s.mMaximumDeflection]);
         cols.push([this.getSpringID(s), s.mMaximumForceUnderStaticLoad]);
         xs[this.getSpringID(s)] = this.getSpringID(s).concat("-rl");
       });

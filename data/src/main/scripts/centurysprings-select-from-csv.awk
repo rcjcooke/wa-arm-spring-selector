@@ -31,7 +31,7 @@ FNR > 1 {
   #  2 Manufacturer,
   #  3 Rate / N per mm,
   #  4 Mass / g,
-  #  5 Maximum length under max load / mm,
+  #  5 Maximum deflection under max load / mm,
   #  6 Max potential energy / Nmm,
   #  7 Max static load / N,
   #  8 Outer Diameter / mm,

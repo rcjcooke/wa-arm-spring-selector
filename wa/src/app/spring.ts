@@ -3,7 +3,7 @@ export class Spring {
   mOrderNum: string = "";
   mManufacturer: string = "";
   mRate: number = 0;
-  mRelevantLength: number = 0;
+  mMaximumDeflection: number = 0;
   mMaximumForceUnderStaticLoad: number = 0;
   mMass: number = 0;
   mOutsideDiameter: number = 0;
