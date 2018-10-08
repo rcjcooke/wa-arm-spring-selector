@@ -41,7 +41,7 @@
                       [(ngModel)]="scenario.mIncludeSpringMassInSystem" 
                       name="mIncludeSpringMassInSystem" 
                       labelPosition="after" 
-                      matTooltip="Check this if the spring is also required to balance itself. Please note that this will introduce a small variable error into the balancing mechanism as the change in the position of the centre of mass of the system as a result of the spring changing length will be unknown." 
+                      matTooltip="Check this if the spring is also required to balance itself. Please note that this will introduce a small variable error into the balancing mechanism as the change in the position of the centre of mass of the system as a result of the spring changing length will be unknown. Please note that not all manufacturers in the spring database supply spring mass data so they therefore can't be correctly applied in this scenario." 
                       matTooltipPosition="after">
           Springs are located on the balancing mechanism
         </mat-checkbox>
@@ -56,7 +56,7 @@
   </mat-form-field>
 
   <!-- R2 -->
-  <mat-label class="field-title">Distance spring connection on lever to Pivot</mat-label>
+  <mat-label class="field-title">Distance spring connection on lever to Pivot (R<sub>2</sub>)</mat-label>
   <table class="scenario-selector-full-width" cellspacing="0"><tr>
     <td>
       <mat-form-field class="scenario-selector-full-width">
@@ -74,7 +74,7 @@
   </tr></table>
   
   <!-- A -->
-  <mat-label class="field-title">Distance spring connection on fixed y-Axis to Pivot</mat-label>
+  <mat-label class="field-title">Distance spring connection on fixed vertical axis to Pivot (A)</mat-label>
   <table class="scenario-selector-full-width" cellspacing="0"><tr>
     <td>
       <mat-form-field class="scenario-selector-full-width">
