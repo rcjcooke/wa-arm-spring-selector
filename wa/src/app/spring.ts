@@ -8,6 +8,7 @@ export class Spring {
   mMass: number = 0;
   mOutsideDiameter: number = 0;
   mWireDiameter: number = 0;
+  mUnstressedLength: number = 0;
 
   mR2Min: number = 0;
   mR2Max: number = 0;

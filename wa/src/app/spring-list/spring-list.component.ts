@@ -9,7 +9,16 @@ import { MatSort, MatTableDataSource } from '@angular/material';
   styleUrls: ['./spring-list.component.css']
 })
 export class SpringListComponent implements OnInit {
-  displayedColumns: string[] = ['mOrderNum', 'mManufacturer', 'mRate', 'mMaximumDeflection', 'mMaximumForceUnderStaticLoad', 'mMass', 'mWireDiameter', 'mOutsideDiameter'];  
+  displayedColumns: string[] = [
+    'mOrderNum', 
+    'mManufacturer', 
+    'mRate', 
+    'mMaximumDeflection', 
+    'mMaximumForceUnderStaticLoad', 
+    'mMass', 
+    'mWireDiameter', 
+    'mOutsideDiameter',
+    'mUnstressedLength'];  
   dataSource = new MatTableDataSource();
   selectedSpring: Spring;
 

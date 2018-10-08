@@ -36,6 +36,7 @@ FNR > 1 {
   #  7 Max static load / N,
   #  8 Outer Diameter / mm,
   #  9 Wire Diameter / mm
+  #  10 Unstressed Length / mm
 
   # All data as raw input except: 
   #  * The max potential energy is calculated
@@ -47,5 +48,5 @@ FNR > 1 {
   if (rate == 0) {
     rate = $6 * 0.175126835;
   }
-  print $3, "Century Springs", rate, 0, $11, ($13 * $13 / rate / 2), $13, $2, $15
+  print $3, "Century Springs", rate, 0, $11, ($13 * $13 / rate / 2), $13, $2, $15, $5
 }

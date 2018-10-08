@@ -24,6 +24,7 @@ public class Spring {
   public double mMass;
   public double mOutsideDiameter;
   public double mWireDiameter;
+  public double mUnstressedLength;
   
   // Scenario specific values
   public double mR2Min;
@@ -45,15 +46,16 @@ public class Spring {
    * @param manufacturer                The manufacturer
    * @param rate                        The spring constant for the spring / Nm-1
    * @param maximumDeflection           The maximum deflection of the spring under
-   *                                    it's maximum static force / m
+   *                                    it's maximum static force / mm
    * @param maximumForceUnderStaticLoad The maximum static force that can be
-   *                                    applied to the spring
-   * @param mass                        The mass of the spring
-   * @param wireDiameter                The diameter of the spring wire
-   * @param outsideDiameter             The outside diameter of the spring
+   *                                    applied to the spring / N
+   * @param mass                        The mass of the spring / g
+   * @param wireDiameter                The diameter of the spring wire / mm
+   * @param outsideDiameter             The outside diameter of the spring / mm
+   * @param unstressedLength            The unstressed length of the spring / mm 
    */
   public Spring(String orderNum, String manufacturer, double rate, double maximumDeflection,
-      double maximumForceUnderStaticLoad, double mass, double wireDiameter, double outsideDiameter) {
+      double maximumForceUnderStaticLoad, double mass, double wireDiameter, double outsideDiameter, double unstressedLength) {
     mOrderNum = orderNum;
     mManufacturer = manufacturer;
     mRate = rate;
@@ -62,6 +64,7 @@ public class Spring {
     mMass = mass;
     mOutsideDiameter = outsideDiameter;
     mWireDiameter = wireDiameter;
+    mUnstressedLength = unstressedLength;
   }
 
   /**
@@ -146,6 +149,13 @@ public class Spring {
    */
   public double getWireDiameter() {
     return mWireDiameter;
+  }
+
+  /**
+   * @return the unstressed length of the spring / mm
+   */
+  public double getUnstressedLength() {
+    return mUnstressedLength;
   }
 
   /**

@@ -26,12 +26,14 @@ public class SpringDB {
   private static final String ORDER_NUM = "order_num";
   private static final String SUPPLIER = "supplier";
   private static final String MAX_POTENTIAL_ENERGY_NMM = "max_potential_energy_nnm";
-  private static final String RELEVENT_LENGTH_MM = "relevent_length_mm";
+  private static final String MAXIMUM_DEFLECTION_MM = "maximum_deflection_mm";
   private static final String RATE_N_MM = "rate_n_mm";
   private static final String MASS_KG = "mass_kg";
   private static final String MAX_FORCE_UNDER_STATIC_LOAD = "max_force_under_static_load";
   private static final String OUTSIDE_DIAMETER_MM = "outside_diameter";
   private static final String WIRE_DIAMETER_MM = "wire_diameter";
+  private static final String UNSTRESSED_LENGTH_MM = "unstressed_length_mm";
+  
 
   // Relevant type constants
   private static final String DECIMAL = "DECIMAL(20,20)";
@@ -123,7 +125,7 @@ public class SpringDB {
           
           try {
             
-            double springMaxlength = allEnergySpringsRS.getDouble(RELEVENT_LENGTH_MM);
+            double springMaxlength = allEnergySpringsRS.getDouble(MAXIMUM_DEFLECTION_MM);
             double springConstant = allEnergySpringsRS.getDouble(RATE_N_MM);
             double springMass = allEnergySpringsRS.getDouble(MASS_KG);
 
@@ -279,8 +281,8 @@ public class SpringDB {
   private Spring createNewSpringFromCurrentResultSetRow(ResultSet rs) throws SQLException {
     // TODO: Future upgrade: make this dynamic
     Spring spring = new Spring(rs.getString(ORDER_NUM), rs.getString(SUPPLIER), rs.getDouble(RATE_N_MM),
-        rs.getDouble(RELEVENT_LENGTH_MM), rs.getDouble(MAX_FORCE_UNDER_STATIC_LOAD), rs.getDouble(MASS_KG),
-        rs.getDouble(WIRE_DIAMETER_MM), rs.getDouble(OUTSIDE_DIAMETER_MM));
+        rs.getDouble(MAXIMUM_DEFLECTION_MM), rs.getDouble(MAX_FORCE_UNDER_STATIC_LOAD), rs.getDouble(MASS_KG),
+        rs.getDouble(WIRE_DIAMETER_MM), rs.getDouble(OUTSIDE_DIAMETER_MM), rs.getDouble(UNSTRESSED_LENGTH_MM));
     return spring;
   }
 
@@ -294,12 +296,13 @@ public class SpringDB {
     sb.append(',').append(SUPPLIER).append(' ').append(VARCHAR); // Hersteller
     sb.append(',').append(RATE_N_MM).append(' ').append(DECIMAL); // k[N/mm] Federrate
     sb.append(',').append(MASS_KG).append(' ').append(DECIMAL); // Masse
-    sb.append(',').append(RELEVENT_LENGTH_MM).append(' ').append(DECIMAL); // Lr[mm] Relevante Laenge
+    sb.append(',').append(MAXIMUM_DEFLECTION_MM).append(' ').append(DECIMAL); // Lr[mm] Relevante Laenge
     sb.append(',').append(MAX_POTENTIAL_ENERGY_NMM).append(' ').append(DECIMAL); // V[Nmm] Maximale potentielle Energie
     sb.append(',').append(MAX_FORCE_UNDER_STATIC_LOAD).append(' ').append(DECIMAL); // V[Nmm] Maximale potentielle
                                                                                     // Energie
     sb.append(',').append(OUTSIDE_DIAMETER_MM).append(' ').append(DECIMAL); // De
     sb.append(',').append(WIRE_DIAMETER_MM).append(' ').append(DECIMAL); // d
+    sb.append(',').append(UNSTRESSED_LENGTH_MM).append(' ').append(DECIMAL); // L0
     return sb.toString();
   }
 

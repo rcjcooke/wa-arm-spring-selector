@@ -62,7 +62,7 @@ if [ "$outputFile" = "" ]; then
 fi
 
 # Put the headers in
-echo "Bestellnummer,Hersteller,k[N/mm] Federrate,Masse,Lr[mm] Relevante Laenge,V[Nmm] Maximale potentielle Energie,Fn[N] Hoechstkraft bei statischer Belastung,De[mm] Ausserer Windungsdurchmesser,d[mm] Drahtdurchmesser" > $outputFile
+echo "Bestellnummer,Hersteller,k[N/mm] Federrate,Masse,Lr[mm] Relevante Laenge,V[Nmm] Maximale potentielle Energie,Fn[N] Hoechstkraft bei statischer Belastung,De[mm] Ausserer Windungsdurchmesser,d[mm] Drahtdurchmesser,L0[mm] Unstressed Length" > $outputFile
 # Process all sources
 for scriptFile in $scriptInputPath/*.awk; do
   # Skip over if there's no match

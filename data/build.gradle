@@ -82,10 +82,12 @@ task extractCSVs(type: Copy) {
 task compileCSVs(type: Exec) {
   group BasePlugin.BUILD_GROUP
   description 'Builds CSV Spring Database for all suppliers from raw CSV datafiles'
-  // Sort out build caching and inherent dependencies
-  outputs.file(outputCSV)
   // We need the CSVs to be in place
   dependsOn extractCSVs
+  // Sort out build caching and inherent dependencies
+  inputs.file("./process-raw-csvs.sh")
+  inputs.files(fileTree("src/main/scripts/"))
+  outputs.file(outputCSV)
   // Do the work with the bash script
   executable "sh"
   args '-c',"./process-raw-csvs.sh -s 'src/main/scripts' -c '${csvResources}' -o '${outputCSV}'"

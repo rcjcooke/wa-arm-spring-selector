@@ -47,5 +47,5 @@ FNR > 1 {
   #  9 d[mm] Drahtdurchmesser
 
   # All data as raw input 
-  print $1, $2, $18, $20, $24, $26, $16, $6, $5
+  print $1, $2, $18, $20, $24, $26, $16, $6, $5, $11
 }
