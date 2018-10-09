@@ -49,6 +49,13 @@ The `data` project uses bash scripts and relies on `sed`, `awk` and `grep` as we
 
 While most of the projects use Gradle for dependency management, the Web App project (wa sub-folder) uses NPM via Angular to manage dependencies. This will result in the creation of a local `node_modules` folder. Please see the Web App section below for details on it's dependencies.
 
+Once you've got the dependencies above installed, the following steps should get the web app up and running:
+
+1. Change to the `data` sub-directory and run `gradle publish`. This will compile the datasets together to form the spring database and then publish that to a locally created Maven repository for the other projects to access. This is used by the Core application if it's run independently and the Web Service.
+2. Change to the `core` sub-directory and run `gradle publish`. This will compile the core libraries and publish them to a local Maven repository for the Web Service to access.
+3. Change to the `ws` sub-directory and run `gradle run`. This will compile and execute the web service which will start an embedded web server for the web app to connect to. You'll need to leave this running while you use the web app.
+4. In a new terminal, change to the `wa` sub-directory and run `npm i` to download and install all javascript dependencies. This will take a while but you only ever have to do it once. Once that's complete run `ng server -open`. This will start the Web App in a local Node.js instance and then open a web browser page pointing at it.
+
 ### Core
 This is the core logic and database executable as a command line application. It is also used as an integrated dependency of the web service. It is dependent on the data project and will compile and this include this as required. To run the application:
 
@@ -57,11 +64,15 @@ This is the core logic and database executable as a command line application. It
 
 **Note**: Running `gradle run` with no arguments will execute the app with some default command line arguments. These arguments can be found in the `gradle.build` file under the core sub-project directory.
 
+Core does not need to be run as a stand-alone application to be able to use the Web App.
+
 ### Web Service
 This is the RESTful web service that allows for remote connection and use of the Core app and database.
 
 * Change to the `ws` directory
 * Execute `gradle run`. This will start up the web service at http://localhost:8080/.
+
+The Web Service must be running for the Web App to work.
 
 ### Web App
 This is the graphical front end interface to the web service.
