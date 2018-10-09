@@ -37,13 +37,17 @@ This project is Gradle driven and consists of several sub-projects:
 
 Executing `gradle tasks` in the root folder of the main project or any of the sub-projects will provide a relevant lists of tasks that can be executed against that projeoct, e.g. gradle run or gradle build.
 
-### Dependencies
-While most of the projects use Gradle for dependency management, the Web App project (wa sub-folder) uses NPM via Angular to manage dependencies. This will result in the creation of a local `node_modules` folder. Please see the Web App section below for details on it's dependencies.
-
-The other projects all require:
+### Getting Started / Dependencies
+You'll need the following installed to get this project fully up and running on your machine:
 
 * Java 1.8+ : http://www.oracle.com/technetwork/java/javase/downloads/index.html
-* Gradle 4+ : https://gradle.org/install/ 
+* Gradle 4+ : https://gradle.org/install/
+* Node.js and NPM: https://nodejs.org/en/download/
+* Angular CLI: To install this, execute `npm install -g @angular/cli`
+
+The `data` project uses bash scripts and relies on `sed`, `awk` and `grep` as well as a handful of other standard bash shell lanugage commands. This therefore means that it can only be run on a Linux or Linux emulating environment such as Cygwin on Windows. To date this project has been entirely developed on a Windows machine using a MinGW 32-bit terminal (https://osdn.net/projects/mingw/releases/) and therefore it has been proven to work correctly in that environment. While it should theoretically work fine in a native Linux build this hasn't been tested. The `data` sub-project is NOT Windows native compatible at this time.
+
+While most of the projects use Gradle for dependency management, the Web App project (wa sub-folder) uses NPM via Angular to manage dependencies. This will result in the creation of a local `node_modules` folder. Please see the Web App section below for details on it's dependencies.
 
 ### Core
 This is the core logic and database executable as a command line application. It is also used as an integrated dependency of the web service. It is dependent on the data project and will compile and this include this as required. To run the application:
