@@ -26,7 +26,7 @@ Directory structure:
 */
 configurations {
   csvsSource
-  csvs
+  data
 }
 
 def tarResources = new File("$buildDir/tars/")
@@ -116,5 +116,5 @@ task bundleCSVTar(type: Tar) {
 
 artifacts {
   // Define that output artifact for the csvs configuration is produced by the copyGutekunstCSV task
-  csvs bundleCSVTar
+  data bundleCSVTar
 }

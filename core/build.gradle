@@ -16,6 +16,8 @@ configurations {
 	data { transitive = false }
 }
 
+def dataDir="${projectDir}/data/"
+
 /****************************
  * Project Descriptors
  ****************************/
@@ -95,7 +97,11 @@ task untarData(type: Copy) {
 	from tarTree(configurations.data.singleFile).matching {
 		include "springs.csv"
 	}
-	into "${projectDir}/data/"
+	into dataDir
 }
 run.dependsOn untarData
 
+task cleanData(type: Delete) {
+    delete dataDir
+}
+clean.dependsOn cleanData
