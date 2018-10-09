@@ -68,15 +68,25 @@ task collectTARs(type: Copy) {
   into tarResources
 }
 
-task extractCSVs(type: Copy) {
+task extractCSVs {
   group BasePlugin.BUILD_GROUP
   description 'Extract supplier CSVs from the supplier TAR balls'
   // Can't do it until the TAR balls have been collated
   dependsOn collectTARs
-  tarResources.eachFileRecurse {
-    from tarTree(it)
+  // Define inputs and outputs for build caching purposes
+  inputs.files collectTARs
+  outputs.dir csvResources
+  // Have to do this as a doLast because the from closure evaluation occurs during the 
+  // configuration phase at which point we don't know what TAR balls will exist:
+  // https://discuss.gradle.org/t/why-is-the-closure-in-from-method-of-copy-task-evaluated-in-config-phase/23469/3
+  doLast {
+    fileTree(dir: tarResources).each { tarBall ->
+      copy {
+        from tarTree(tarBall.getPath())
+        into csvResources
+      }
+    }
   }
-  into csvResources
 }
 
 task compileCSVs(type: Exec) {
