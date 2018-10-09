@@ -4,3 +4,4 @@
  */
 rootProject.name = 'data'
 include 'gutekunst', 'centurysprings'
+enableFeaturePreview('STABLE_PUBLISHING')

@@ -37,18 +37,20 @@ def outputCSV = new File(csvResources, "springs.csv")
  * Project Output
  ****************************/
 publishing {
-    publications {
-        data(MavenPublication) {
-            artifact bundleCSVTar
-        }
+  publications {
+    data(MavenPublication) {
+      afterEvaluate {
+        artifact bundleCSVTar
+      }
     }
+  }
 
-    repositories {
-        maven {
-            name = 'onMachineRepo'
-            url = localServerRepoURL
-        }
+  repositories {
+    maven {
+      name = 'onMachineRepo'
+      url = localServerRepoURL
     }
+  }
 }
 
 /****************************
