@@ -7,7 +7,7 @@ This repository contains of a small set of services that work together to provid
 
 This project is part of wider work to design a template for a robotic arm to assist solo inventors in a workshop context, however, this tool can be used standalone for balancing any mechanical arm. It is assumed that the mechanical arm can be modelled such that it conforms to the general mechanical model shown below. Note that for a parallogram 4-bar linkage, the connection points for the spring will work on either of the horizontal bars and their respective vertical bars, as visualised by the dotted line in the diagram.
 
-![Generic Mechanical Model](media/model.PNG)
+![Generic Mechanical Model](media/model.png)
 
 The tool reflects the mechanical structure shown using the following variables:
 
