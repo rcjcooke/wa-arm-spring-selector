@@ -1,6 +1,64 @@
-// Inter-project dependencies
-project(':ws') {
-    dependencies {
-        compile project(':core')
+/****************************
+ * Build Environment Setup
+ ****************************/
+apply plugin: 'base'
+apply plugin: 'java'
+
+// buildScan { termsOfServiceUrl = 'https://gradle.com/terms-of-service'; termsOfServiceAgree = 'yes' }
+
+// /****************************
+//  * Project File Structure
+//  ****************************/
+// configurations {
+// 	data { transitive = false }
+// }
+
+/****************************
+ * Project Dependencies
+ ****************************/
+// Replace project dependencies with artifacts if the project can't be found
+// configurations.all {
+//   resolutionStrategy.dependencySubstitution.all { DependencySubstitution dependency ->
+//     if (dependency.requested instanceof ProjectComponentSelector) {
+//       def targetProject = findProject(":${dependency.requested.path}")
+//       if (targetProject == null) {
+//         dependency.useTarget "wa.arm.springselector:" + dependency.requested.path + ":+"
+//       }
+//     }
+//   }
+// }
+// Replace local module dependencies with project dependencies if the project exists
+allprojects {
+  configurations.all {
+    resolutionStrategy.dependencySubstitution.all { DependencySubstitution dependency ->
+      if (dependency.requested instanceof ModuleComponentSelector && dependency.requested.group == "wa.arm.springselector") {
+        def targetProject = findProject(":${dependency.requested.module}")
+        if (targetProject != null) {
+          println "Substituting dependency for project " + targetProject.getName();
+          dependency.useTarget(targetProject, "Substituted dependency for local project as it exists")
+        }
+      }
     }
+  }
 }
+
+// Define the inter-project dependency tree (otherwise theyuse Maven for JARs)
+// project(':core') {
+//     dependencies {
+//         data project(':data')
+//     }
+// }
+// project(':ws') {
+//     dependencies {
+//         compile project(':core')
+//         // data project(':data')
+//     }
+// }
+
+// repositories {
+//     maven {
+//         url localServerRepoURL
+//     }
+//     jcenter()
+//     mavenCentral()
+// }

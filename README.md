@@ -118,6 +118,8 @@ Legend: R = Researched, L = Listed
 | Extex Stock Springs | http://www.entexstocksprings.co.uk/index.php?route=common/home | R |
 | Flexo Springs | http://www.flexosprings.com/stock-springs/extension-springs | R |
 | Lee Springs | https://www.leespring.com/uk_index.asp | R |
+| ABSSAC | https://www.abssac.co.uk/ | R |
+
 
 ### Century Springs
 The spring data was copied from their PDF catalogues available online. Once scraped, it became evident that the catalogues had a small number of data errors in addition to a significant number of problems being introduced as a result of scraping the data from PDF in the first place. The original scraped source pages can be found in the `data/centurysprings` directory. 

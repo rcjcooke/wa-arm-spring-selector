@@ -66,6 +66,24 @@ publishing {
 /****************************
  * Project Dependencies
  ****************************/
+// // Replace local module dependencies with project dependencies if the project exists
+// configurations.all {
+//   resolutionStrategy.dependencySubstitution.all { DependencySubstitution dependency ->
+//     if (dependency.requested instanceof ModuleComponentSelector && dependency.requested.group == "wa.arm.springselector") {
+//       println dependency.requested.module
+//       def targetProject = findProject(":${dependency.requested.module}")
+//       if (targetProject != null) {
+//         println "Substituting for project " + targetProject.getName();
+//         // if (targetProject.getName().equals("data")) {
+//         //     dependency.useTarget("project(path: ':" + targetProject.getName() + "', configuration: 'data')");
+//         // } else {
+//             dependency.useTarget(targetProject, "Substituted dependency for local project as it exists")
+//         // }
+//       }
+//     }
+//   }
+// }
+
 dependencies {
     // Database dependencies
     compile "org.hsqldb:hsqldb:2.4.1"
@@ -76,7 +94,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     
     // Data dependencies
-    data 'wa.arm.springselector:data:1.0-SNAPSHOT'
+    data 'wa.arm.springselector:data:+'
 }
 
 // Library repositories

@@ -4,3 +4,4 @@
  */
 rootProject.name = 'wa-arm-spring-selector'
 include 'core', 'ws', 'data'
+enableFeaturePreview('STABLE_PUBLISHING')
