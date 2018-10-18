@@ -13,21 +13,21 @@ public class Scenario {
 
   // NOTE: THESE FIELDS HAVE TO BE PUBLIC FOR SERIALISATION PURPOSES
   // System mass / g
-  public float mSystemGrams;
+  public double mSystemGrams;
   // Payload mass / g
-  public float mMassGrams;
+  public double mMassGrams;
   // Number of equivalent parallel springs
   public int mNumberOfParallelSprings;
-  public float mMechanicalAdvantageZaehler; // TODO
-  public float mMechanicalAdvantageNenner; // TODO
+  public double mMechanicalAdvantageZaehler; // TODO
+  public double mMechanicalAdvantageNenner; // TODO
   // Distance spring connection on lever to Pivot [mm]
-  public float mAllowedRangeR2MillimetersMin;
-  public float mAllowedRangeR2MillimetersMax;
+  public double mAllowedRangeR2MillimetersMin;
+  public double mAllowedRangeR2MillimetersMax;
   // Distance spring connection on fixed y-Axis to Pivot [mm]
-  public float mAllowedRangeAMillimetersMin;
-  public float mAllowedRangeAMillimetersMax;
+  public double mAllowedRangeAMillimetersMin;
+  public double mAllowedRangeAMillimetersMax;
   // Lever => distance CoM to Pivot [mm]
-  public float mR1;
+  public double mR1;
   // True if the spring(s) are to be part of the system being balanced
   public boolean mIncludeSpringMassInSystem;
   // True if the system needs to be able to balance with massPerSpring=0 as well
@@ -68,9 +68,9 @@ public class Scenario {
    *                                     balance with massPerSpring=0 as well as
    *                                     massPerSpring
    */
-  public Scenario(float systemGrams, float massGrams, int numberOfParallelSprings, float mechanicalAdvantageZaehler,
-      float mechanicalAdvantageNenner, float allowedRangeR2MillimetersMin, float allowedRangeR2MillimetersMax,
-      float allowedRangeAMillimetersMin, float allowedRangeAMillimetersMax, float r1, boolean includeSpringMassInSystem,
+  public Scenario(double systemGrams, double massGrams, int numberOfParallelSprings, double mechanicalAdvantageZaehler,
+      double mechanicalAdvantageNenner, double allowedRangeR2MillimetersMin, double allowedRangeR2MillimetersMax,
+      double allowedRangeAMillimetersMin, double allowedRangeAMillimetersMax, double r1, boolean includeSpringMassInSystem,
       boolean dynamicBalancingRequired, char fixedVariable) {
     mSystemGrams = systemGrams;
     mMassGrams = massGrams;
@@ -89,13 +89,13 @@ public class Scenario {
 
 //  // constrains for the balancing system
 //  private int MaxNumberOfParallelSprings = 20;
-//  private float MaxMechanicalAdvantageZaehler = 10;
-//  private float MaxMechanicalAdvantageNenner = 10; //
+//  private double MaxMechanicalAdvantageZaehler = 10;
+//  private double MaxMechanicalAdvantageNenner = 10; //
 //
 //  //
 //  // draw()
-//  private float[] AllowedRangeLr = { 0, 0 };
-//  private float[] AllowedRangeFn = { 0, 0 };
+//  private double[] AllowedRangeLr = { 0, 0 };
+//  private double[] AllowedRangeFn = { 0, 0 };
 //
 //  private int WorkContext = 1;
 //
@@ -104,7 +104,7 @@ public class Scenario {
 //
 //  private ArrayList<SpringParameter> SpringParameterList; // dynamic list of SpringParameters
 //
-//  private float MinimumMass = 1000000000;
+//  private double MinimumMass = 1000000000;
 //  private int CounterX = 0;
 //  private int NumberOfSelectedSprings = 0;
 //  private int SelectionCounter = 0;
@@ -116,7 +116,7 @@ public class Scenario {
   /**
    * @return the systemGrams
    */
-  public float getSystemGrams() {
+  public double getSystemGrams() {
     return mSystemGrams;
   }
   
@@ -134,35 +134,35 @@ public class Scenario {
   /**
    * @return the mechanicalAdvantageZaehler
    */
-  public float getMechanicalAdvantageZaehler() {
+  public double getMechanicalAdvantageZaehler() {
     return mMechanicalAdvantageZaehler;
   }
 
   /**
    * @return the mechanicalAdvantageNenner
    */
-  public float getMechanicalAdvantageNenner() {
+  public double getMechanicalAdvantageNenner() {
     return mMechanicalAdvantageNenner;
   }
 
   /**
    * @return the allowedRangeR2
    */
-  public float[] getAllowedRangeR2() {
-    return new float[] { mAllowedRangeR2MillimetersMin, mAllowedRangeR2MillimetersMax };
+  public double[] getAllowedRangeR2() {
+    return new double[] { mAllowedRangeR2MillimetersMin, mAllowedRangeR2MillimetersMax };
   }
 
   /**
    * @return the allowedRangeA
    */
-  public float[] getAllowedRangeA() {
-    return new float[] { mAllowedRangeAMillimetersMin, mAllowedRangeAMillimetersMax };
+  public double[] getAllowedRangeA() {
+    return new double[] { mAllowedRangeAMillimetersMin, mAllowedRangeAMillimetersMax };
   }
 
   /**
    * @return the r1
    */
-  public float getR1() {
+  public double getR1() {
     return mR1;
   }
 
