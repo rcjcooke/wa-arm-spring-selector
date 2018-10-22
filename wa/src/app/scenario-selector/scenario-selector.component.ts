@@ -83,7 +83,7 @@ export class ScenarioSelectorComponent implements OnInit {
   */
 
   findSprings() {
-    this.springSelectorService.findSprings(this.scenario).subscribe(sps => {
+    this.springSelectorService.findSprings(this.scenario, this.dataModelService.isShowAllSprings()).subscribe(sps => {
       this.dataModelService.changeSprings(sps, this.scenario);
     });
   }

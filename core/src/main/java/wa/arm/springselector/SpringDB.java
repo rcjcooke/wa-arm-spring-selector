@@ -91,24 +91,30 @@ public class SpringDB {
    *                                  balance with massPerSpring=0 as well as
    *                                  massPerSpring
    * @param fixedPosition             A = A, R = R2 or N = Neither: The position that will be fixed in a dynamically balancing system.
+   * @param returnAllSprings          If true then all springs are returned regardless of whether they match. Springs that fit the 
+   *                                  scenario have the "mInScenario" flag set to true on them. 
    * @return A list of springs that match the requirements
    */
   public List<Spring> getMatchingSprings(double systemMassPerSpring, double payloadMassPerSpring, double lengthToCOM,
       double[] allowedRangeA_sc, double[] allowedRangeR2_sc, double mechanicalAdvantage,
-      boolean includeSpringMassInSystem, boolean dynamicBalancingRequired, char fixedPosition) {
+      boolean includeSpringMassInSystem, boolean dynamicBalancingRequired, char fixedPosition, boolean returnAllSprings) {
 
     ArrayList<Spring> selectedSpringList = new ArrayList<Spring>();
     ResultSet allEnergySpringsRS = null;
     // Different query based on whether the mass of the spring is included in the
     // problem
     String query = "";
-    if (includeSpringMassInSystem) {
-      query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= ("
-          + (systemMassPerSpring + payloadMassPerSpring) + " + " + MASS_KG + ")*"
-          + PhysicalConstants.GRAVITY * 2 * lengthToCOM;
+    if (!returnAllSprings) {
+      if (includeSpringMassInSystem) {
+        query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= ("
+            + (systemMassPerSpring + payloadMassPerSpring) + " + " + MASS_KG + ")*"
+            + PhysicalConstants.GRAVITY * 2 * lengthToCOM;
+      } else {
+        query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= "
+            + (systemMassPerSpring + payloadMassPerSpring) * PhysicalConstants.GRAVITY * lengthToCOM * 2;
+      }
     } else {
-      query = "SELECT * FROM SPRINGS WHERE " + MAX_POTENTIAL_ENERGY_NMM + " >= "
-          + (systemMassPerSpring + payloadMassPerSpring) * PhysicalConstants.GRAVITY * lengthToCOM * 2;
+      query = "SELECT * FROM SPRINGS";
     }
     try {
       Statement s = mConnection.createStatement();
@@ -125,9 +131,31 @@ public class SpringDB {
           
           try {
             
-            double springMaxlength = allEnergySpringsRS.getDouble(MAXIMUM_DEFLECTION_MM);
-            double springConstant = allEnergySpringsRS.getDouble(RATE_N_MM);
-            double springMass = allEnergySpringsRS.getDouble(MASS_KG);
+            // Create the spring
+            Spring spring = createNewSpringFromCurrentResultSetRow(allEnergySpringsRS);
+            if (returnAllSprings) {
+              // We want every spring, even if it doesn't fit the scenario
+              selectedSpringList.add(spring);
+            }
+            
+            // First check energy requirements if we haven't already
+            if (returnAllSprings) {
+              if (includeSpringMassInSystem) {
+                if (spring.getMaximumPotentialEnergy() < (systemMassPerSpring + payloadMassPerSpring + spring.getMass()) * PhysicalConstants.GRAVITY * lengthToCOM * 2) {
+                  // This spring doesn't cut it - next!
+                  continue;
+                }
+              } else {
+                if (spring.getMaximumPotentialEnergy() < (systemMassPerSpring + payloadMassPerSpring) * PhysicalConstants.GRAVITY * lengthToCOM * 2) {
+                  // This spring doesn't cut it - next!
+                  continue;
+                }
+              }
+            }
+
+            double springMaxlength = spring.getMaximumDeflection();
+            double springConstant = spring.getRate();
+            double springMass = spring.getMass();
 
             SpringScenario ssFP = testSpringAgainstScenario(
                 springMaxlength, 
@@ -181,7 +209,12 @@ public class SpringDB {
             }
             
             // We've got this far so we DO want this Spring
-            Spring spring = createNewSpringFromCurrentResultSetRow(allEnergySpringsRS);
+            spring.setInScenario(true);
+            if (!returnAllSprings) {
+              // We only return the springs that fit the scenario
+              selectedSpringList.add(spring);
+            }
+            
             /*
              * Record real values for "R2min" ,"R2max", "Amin", "Amax" for the Spring given
              * the selection scenario
@@ -192,11 +225,11 @@ public class SpringDB {
             spring.setR2Max(mechanicalAdvantage * ssFP.getR2Max());
             // Record the multiple of A and R2 for the maximum payload against the spring (for client-side calcs)
             spring.setMaxPayloadAnchorPointFactor(mechanicalAdvantage * mechanicalAdvantage * ssFP.getPayloadAnchorPointFactor());
-            // Record the multiple of A and R2 for zero payload against the spring if required
+            // Record the optimum connection point for minimising the max deflection
+            spring.setOptimumConnectionPointA(mechanicalAdvantage * ssFP.getOptimumConnectionPointA());
+            spring.setOptimumMaxLengthInScenario(spring.getUnstressedLength() + mechanicalAdvantage * (ssFP.getOptimumConnectionPointA() + ssFP.getPayloadAnchorPointFactor() / ssFP.getOptimumConnectionPointA()));
+            // Record the multiple of A and R2 for zero payload against the spring if required (for client-side calcs)
             if (dynamicBalancingRequired) spring.setZeroPayloadAnchorPointFactor(mechanicalAdvantage * mechanicalAdvantage * ssZP.getPayloadAnchorPointFactor());
-
-            // Finally, make sure we add the spring to our selection
-            selectedSpringList.add(spring);
 
           } catch (SQLException e) {
             Logger.getLogger(SpringDB.class.getName()).log(Level.WARNING, "Problem processing spring at row "
@@ -275,14 +308,38 @@ public class SpringDB {
     finalR2[0] = halfMassPotentialEnergy / springConstant / finalA[1];
     finalR2[1] = halfMassPotentialEnergy / springConstant / finalA[0];
     
-    return new SpringScenario(finalR2[0], finalR2[1], finalA[0], finalA[1], halfMassPotentialEnergy / springConstant);
+    double payloadAnchorPointFactor = halfMassPotentialEnergy / springConstant;
+    
+    // Calculate the optimum connection points to minimise maximum deflection
+    double optConnectionPointA = Math.sqrt(payloadAnchorPointFactor);
+    double optConnectionPointR2 = optConnectionPointA;
+    // Fit these to what's available
+    if (optConnectionPointA > finalA[1]) { // above rectangle
+      optConnectionPointA = finalA[1];
+      optConnectionPointR2 = payloadAnchorPointFactor / optConnectionPointA;
+    }
+    if (optConnectionPointR2 < finalR2[0]) { // left of rectangle
+      optConnectionPointR2 = finalR2[0];
+      optConnectionPointA = payloadAnchorPointFactor / optConnectionPointR2;
+    }
+    if (optConnectionPointA < finalA[0]) { // below rectangle
+      optConnectionPointA = finalA[0];
+      optConnectionPointR2 = payloadAnchorPointFactor / optConnectionPointA;
+    }
+    if (optConnectionPointR2 > finalR2[1]) { // right of rectangle
+      optConnectionPointR2 = finalR2[1];
+      optConnectionPointA = payloadAnchorPointFactor / optConnectionPointR2;
+    }
+    
+    return new SpringScenario(finalR2[0], finalR2[1], finalA[0], finalA[1], payloadAnchorPointFactor, optConnectionPointA);
   }
 
   private Spring createNewSpringFromCurrentResultSetRow(ResultSet rs) throws SQLException {
     // TODO: Future upgrade: make this dynamic
     Spring spring = new Spring(rs.getString(ORDER_NUM), rs.getString(SUPPLIER), rs.getDouble(RATE_N_MM),
         rs.getDouble(MAXIMUM_DEFLECTION_MM), rs.getDouble(MAX_FORCE_UNDER_STATIC_LOAD), rs.getDouble(MASS_KG),
-        rs.getDouble(WIRE_DIAMETER_MM), rs.getDouble(OUTSIDE_DIAMETER_MM), rs.getDouble(UNSTRESSED_LENGTH_MM));
+        rs.getDouble(WIRE_DIAMETER_MM), rs.getDouble(OUTSIDE_DIAMETER_MM), rs.getDouble(UNSTRESSED_LENGTH_MM), 
+        rs.getDouble(MAX_POTENTIAL_ENERGY_NMM));
     return spring;
   }
 

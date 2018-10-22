@@ -32,7 +32,7 @@ export class SpringDetailComponent implements OnInit, AfterViewInit {
     this.dataModelService.selectedSpring$.subscribe(sp => {
       if (sp) {
         this.spring = sp;
-        this.aValue = sp.mAMax;
+        this.aValue = sp.mOptimumConnectionPointA;
         this.r2Value = sp.mMaxPayloadAnchorPointFactor/this.aValue;
         this.calculateZeroPayloadValues();
       }

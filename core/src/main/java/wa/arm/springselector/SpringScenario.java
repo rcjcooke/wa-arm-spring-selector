@@ -13,6 +13,7 @@ public class SpringScenario {
   public double mAMax;
   
   public double mPayloadAnchorPointFactor;
+  public double mOptimumConnectionPointA;
 
   /**
    * @param r2Min
@@ -20,13 +21,15 @@ public class SpringScenario {
    * @param aMin
    * @param aMax
    * @param payloadAnchorPointFactor
+   * @param optimumConnectionPointA The optimum connection point A to give the smallest maximum spring deflection
    */
-  public SpringScenario(double r2Min, double r2Max, double aMin, double aMax, double payloadAnchorPointFactor) {
+  public SpringScenario(double r2Min, double r2Max, double aMin, double aMax, double payloadAnchorPointFactor, double optimumConnectionPointA) {
     mR2Min = r2Min;
     mR2Max = r2Max;
     mAMin = aMin;
     mAMax = aMax;
     mPayloadAnchorPointFactor = payloadAnchorPointFactor;
+    mOptimumConnectionPointA = optimumConnectionPointA;
   }
 
   /**
@@ -62,6 +65,13 @@ public class SpringScenario {
    */
   public double getPayloadAnchorPointFactor() {
     return mPayloadAnchorPointFactor;
+  }
+
+  /**
+   * @return the optimumConnectionPointA
+   */
+  public double getOptimumConnectionPointA() {
+    return mOptimumConnectionPointA;
   }
   
 }

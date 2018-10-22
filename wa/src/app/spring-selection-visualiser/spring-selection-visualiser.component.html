@@ -1,3 +1,37 @@
-<div #chartContainer>
-  <div id="chart"></div>
-</div>
+<table class="full-height">
+  <tr class="full-height">
+    <td>
+      <div #chartContainer>
+        <div id="chart"></div>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table>
+        <tr>
+          <td class="full-width">
+            <!-- Legend -->
+          </td>
+          <td *ngIf="ft_showAllSpringsToggle">
+            <!-- All Springs selection -->
+            <mat-slide-toggle [(ngModel)]="showAllSprings" (change)="onShowAllSpringsChange($event)">
+              Show all Springs
+            </mat-slide-toggle>
+          </td>
+          <td>X:</td>
+          <td>
+            <!-- Max Spring Length / Deflection toggle -->
+            <mat-form-field>
+                <mat-select [(value)]="selectedAxisFieldName" (selectionChange)="onXAxisFieldChange($event)">
+                <mat-option *ngFor="let field of axisFields" [value]="field.name">
+                  {{field.axisLabel}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>  
+</table>

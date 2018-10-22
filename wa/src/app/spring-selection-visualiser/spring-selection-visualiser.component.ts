@@ -3,7 +3,12 @@ import * as c3 from 'c3';
 import { DataModelService } from '../data-model.service';
 import { Spring } from '../spring';
 import * as d3 from 'd3';
-import { MatMenuTrigger } from '@angular/material';
+import { MatSlideToggleChange, MatSelectChange } from '@angular/material';
+
+export interface AxisField {
+  name: string;
+  axisLabel: string;
+}
 
 @Component({
   selector: 'app-spring-selection-visualiser',
@@ -12,12 +17,21 @@ import { MatMenuTrigger } from '@angular/material';
 })
 export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit {
 
+  private ft_showAllSpringsToggle: boolean = false;
+
   springChart: c3.ChartAPI;
   currentSpringIDs: string[] = []; // orderNum/manufacturer
   selectedSpring: Spring;
   springs: Spring[];
   maxMass: number;
   minMass: number;
+  showAllSprings: boolean = false;
+
+  axisFields: AxisField[] = [
+    { name: 'mMaximumDeflection', axisLabel: 'Maximum Deflection / mm' },
+    { name: 'mOptimumMaxLengthInScenario', axisLabel: 'Maximum Length / mm' }
+  ];
+  selectedAxisFieldName: string = this.axisFields[0].name;
 
   constructor(
     private dataModelService: DataModelService
@@ -35,7 +49,7 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       bindto: d3.select('#chart'),
       data: {
         xs: {
-          springs: 'Maximum Deflection / mm'
+          springs: this.axisFields.find(f => f.name == this.selectedAxisFieldName).axisLabel
         },
         columns: [
         ],
@@ -49,8 +63,14 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
           if (d.id) {
             var spring = this.getSpringForID(d.id);
             if (spring) {
-              var massFactor = 1-(spring.mMass-this.minMass)/(this.maxMass - this.minMass);
-              return d3.interpolateWarm(massFactor);
+              var massFactor = 1 - (spring.mMass - this.minMass) / (this.maxMass - this.minMass);
+              let col = d3.interpolateWarm(massFactor);
+              if (spring.mInScenario) {
+                return col;
+              } else {
+                // Darken springs that aren't in the scenario
+                return d3.rgb(col).darker(3).toString();
+              }
             } else {
               return d3.interpolateWarm(0);
             }
@@ -69,7 +89,7 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
       },
       axis: {
         x: {
-          label: 'Maximum Deflection / mm',
+          label: this.axisFields.find(f => f.name == this.selectedAxisFieldName).axisLabel,
           tick: {
             fit: false
           }
@@ -82,37 +102,10 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
         show: false
       }
     });
-    
+
     this.springChart.resize();
-    
-    this.dataModelService.springs$.subscribe(sps => {
-      // Put together the new data set
-      var cols = [];
-      var xs = {};
-      sps.forEach(s => {
-        cols.push([this.getSpringID(s).concat("-rl"), s.mMaximumDeflection]);
-        cols.push([this.getSpringID(s), s.mMaximumForceUnderStaticLoad]);
-        xs[this.getSpringID(s)] = this.getSpringID(s).concat("-rl");
-      });
 
-      // Work out what data sets need unloading - i.e. which springs are no longer present
-      let springIDs = sps.map(s => this.getSpringID(s));
-      let springsToUnload = this.currentSpringIDs.filter(curSpring => !springIDs.includes(curSpring));
-      springsToUnload = [...springsToUnload, ...springsToUnload.map(s => s.concat("-rl"))];
-      this.currentSpringIDs = springIDs;
-
-      // Retain the full spring details for the colour function
-      this.springs = sps;
-      this.maxMass = Math.max.apply(Math, sps.map(sp => sp.mMass));
-      this.minMass = Math.min.apply(Math, sps.map(sp => sp.mMass));
-
-      // Load up the new data
-      this.springChart.load({
-        xs: xs,
-        columns: cols,
-        unload: springsToUnload
-      });
-    });
+    this.dataModelService.springs$.subscribe(sps => this.regenerateChart(sps));
 
     this.dataModelService.selectedSpring$.subscribe(sp => {
       if (sp) {
@@ -121,6 +114,64 @@ export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit
         this.springChart.unselect();
       }
       this.selectedSpring = sp;
+    });
+  }
+
+  onXAxisFieldChange(event: MatSelectChange) {
+    console.log(this.selectedAxisFieldName);
+    this.regenerateChart(this.springs);
+  }
+
+  onShowAllSpringsChange(event: MatSlideToggleChange) {
+    this.dataModelService.changeShowAllSprings(this.showAllSprings);
+    /* 
+      Note: At the moment, this doesn't trigger a call to the underlying REST service. 
+      Once it does, the round trip will result in the chart regenerating. At that point, 
+      the call below should be removed.
+    */
+    this.regenerateChart(this.springs);
+  }
+
+  private regenerateChart(sps: Spring[]) {
+    // Put together the new data set
+    var cols = [];
+    var xs = {};
+    sps.forEach(s => {
+      if (this.showAllSprings || (!this.showAllSprings && s.mInScenario)) {
+        cols.push([this.getSpringID(s).concat("-rl"), s[this.selectedAxisFieldName]]);
+        cols.push([this.getSpringID(s), s.mMaximumForceUnderStaticLoad]);
+        xs[this.getSpringID(s)] = this.getSpringID(s).concat("-rl");
+      }
+    });
+
+    // Work out what data sets need unloading - i.e. which springs are no longer present
+    let springsToUnload = [];
+    let springIDs = [];
+    if (!this.showAllSprings) {
+      springIDs = sps.filter(s => s.mInScenario).map(s => this.getSpringID(s));
+      springsToUnload = this.currentSpringIDs.filter(curSpring => !springIDs.includes(curSpring));
+      springsToUnload = [...springsToUnload, ...springsToUnload.map(s => s.concat("-rl"))];
+    } else {
+      springIDs = sps.map(s => this.getSpringID(s));
+    }
+    this.currentSpringIDs = springIDs;
+
+    // Retain the full spring details for the colour function
+    this.springs = sps;
+    this.maxMass = Math.max.apply(Math, sps.map(sp => sp.mMass));
+    this.minMass = Math.min.apply(Math, sps.map(sp => sp.mMass));
+
+    // Update the axis labels
+    this.springChart.axis.labels({
+      x: this.axisFields.find(f => f.name == this.selectedAxisFieldName).axisLabel,
+      y: 'Maximum Force under Static Load / N'
+    })
+    
+    // Load up the new data
+    this.springChart.load({
+      xs: xs,
+      columns: cols,
+      unload: springsToUnload
     });
   }
 

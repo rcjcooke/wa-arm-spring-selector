@@ -23,8 +23,8 @@ export class SpringSelectorService {
     private http: HttpClient
   ) { }
 
-  findSprings(scenario: Scenario): Observable<Spring[]> {
-    return this.http.post<Spring[]>(this.springSelectorWSURL, scenario, httpOptions);
+  findSprings(scenario: Scenario, returnAllSprings: boolean): Observable<Spring[]> {
+    return this.http.post<Spring[]>(this.springSelectorWSURL + "?returnAllSprings=" + returnAllSprings, scenario, httpOptions);
   }
 
 }

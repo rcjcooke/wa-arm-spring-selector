@@ -61,7 +61,7 @@ public class SpringSelector {
 
     try {
       SpringSelector ss = new SpringSelector(args[0]);
-      List<Spring> matchingSprings = ss.runScenario(scenario);
+      List<Spring> matchingSprings = ss.runScenario(scenario, false);
       if (matchingSprings.size() == 0) {
         System.out.println("No springs meet the requirements of the specified scenario");
       } else {
@@ -169,7 +169,15 @@ public class SpringSelector {
 //		}
   }
 
-  public List<Spring> runScenario(Scenario scenario) {
+  /**
+   * Finds and return springs that match the specified mechanical scenario.
+   * 
+   * @param scenario                  The mechanical scenario to match springs against
+   * @param returnAllSprings          If true then all springs are returned regardless of whether they match. Springs that fit the 
+   *                                  scenario have the "mInScenario" flag set to true on them. 
+   * @return The list of springs that match the scenario
+   */
+  public List<Spring> runScenario(Scenario scenario, boolean returnAllSprings) {
     // Calculate scaled values
     double system_sc = scenario.getSystemGrams() / scenario.getNumberOfParallelSprings();
     double mass_sc = scenario.getMass() / scenario.getNumberOfParallelSprings();
@@ -184,7 +192,7 @@ public class SpringSelector {
     allowedRangeR2_sc[1] = scenario.getAllowedRangeR2()[1] / mechanicalAdvantage;
 
     List<Spring> matchingSprings = mSpringDB.getMatchingSprings(system_sc, mass_sc, scenario.getR1(), allowedRangeA_sc,
-        allowedRangeR2_sc, mechanicalAdvantage, scenario.includeSpringMassInSystem(), scenario.isDynamicBalancingRequired(), scenario.getFixedVariable());
+        allowedRangeR2_sc, mechanicalAdvantage, scenario.includeSpringMassInSystem(), scenario.isDynamicBalancingRequired(), scenario.getFixedVariable(), returnAllSprings);
 
     // TODO: Filter based on other dynamic parameters
 //      for (int i = 0; i < SpringParameterList.size();i++) {

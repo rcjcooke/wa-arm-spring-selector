@@ -14,8 +14,11 @@ export class Spring {
   mR2Max: number = 0;
   mAMin: number = 0;
   mAMax: number = 0;
+  mInScenario: boolean = false;
 
   mMaxPayloadAnchorPointFactor: number = 0;
   mZeroPayloadAnchorPointFactor: number = 0;
+  mOptimumConnectionPointA: number = 0;
+  mOptimumMaxLengthInScenario: number = 0;
   
 }

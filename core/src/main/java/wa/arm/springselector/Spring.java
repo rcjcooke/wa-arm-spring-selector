@@ -25,15 +25,19 @@ public class Spring {
   public double mOutsideDiameter;
   public double mWireDiameter;
   public double mUnstressedLength;
+  public double mMaximumPotentialEnergy;
   
   // Scenario specific values
   public double mR2Min;
   public double mR2Max;
   public double mAMin;
   public double mAMax;
+  public boolean mInScenario = false;
   
   public double mMaxPayloadAnchorPointFactor;
   public double mZeroPayloadAnchorPointFactor;
+  public double mOptimumConnectionPointA;
+  public double mOptimumMaxLengthInScenario;
 
   /**
    * Empty constructor for de/serialisation
@@ -52,10 +56,11 @@ public class Spring {
    * @param mass                        The mass of the spring / g
    * @param wireDiameter                The diameter of the spring wire / mm
    * @param outsideDiameter             The outside diameter of the spring / mm
-   * @param unstressedLength            The unstressed length of the spring / mm 
+   * @param unstressedLength            The unstressed length of the spring / mm
+   * @param maximumPotentialEnergy      The maximum potential energy the spring can hold / Nmm
    */
   public Spring(String orderNum, String manufacturer, double rate, double maximumDeflection,
-      double maximumForceUnderStaticLoad, double mass, double wireDiameter, double outsideDiameter, double unstressedLength) {
+      double maximumForceUnderStaticLoad, double mass, double wireDiameter, double outsideDiameter, double unstressedLength, double maximumPotentialEnergy) {
     mOrderNum = orderNum;
     mManufacturer = manufacturer;
     mRate = rate;
@@ -65,6 +70,7 @@ public class Spring {
     mOutsideDiameter = outsideDiameter;
     mWireDiameter = wireDiameter;
     mUnstressedLength = unstressedLength;
+    mMaximumPotentialEnergy = maximumPotentialEnergy;
   }
 
   /**
@@ -159,6 +165,13 @@ public class Spring {
   }
 
   /**
+   * @return the maximumPotentialEnergy
+   */
+  public double getMaximumPotentialEnergy() {
+    return mMaximumPotentialEnergy;
+  }
+
+  /**
    * @param r2Min the r2Min to set
    */
   public void setR2Min(double r2Min) {
@@ -187,6 +200,20 @@ public class Spring {
   }
 
   /**
+   * @return true if this spring fits the scenario
+   */
+  public boolean isInScenario() {
+    return mInScenario;
+  }
+
+  /**
+   * @param inScenario true if this spring fits the scenario
+   */
+  public void setInScenario(boolean inScenario) {
+    mInScenario = inScenario;
+  }
+
+  /**
    * @return the zeroPayloadAnchorPointFactor
    */
   public double getZeroPayloadAnchorPointFactor() {
@@ -212,6 +239,34 @@ public class Spring {
    */
   public void setMaxPayloadAnchorPointFactor(double maxPayloadAnchorPointFactor) {
     mMaxPayloadAnchorPointFactor = maxPayloadAnchorPointFactor;
+  }
+
+  /**
+   * @return The optimum connection point A to give the smallest maximum spring deflection
+   */
+  public double getOptimumConnectionPointA() {
+    return mOptimumConnectionPointA;
+  }
+
+  /**
+   * @param optimumConnectionPointA The optimum connection point A to give the smallest maximum spring deflection
+   */
+  public void setOptimumConnectionPointA(double optimumConnectionPointA) {
+    mOptimumConnectionPointA = optimumConnectionPointA;
+  }
+
+  /**
+   * @return The maximum spring length at optimum maximum deflection reached in the scenario
+   */
+  public double getOptimumMaxLengthInScenario() {
+    return mOptimumMaxLengthInScenario;
+  }
+
+  /**
+   * @param optimumMaxLengthInScenario The maximum spring length at optimum maximum deflection reached in the scenario
+   */
+  public void setOptimumMaxLengthInScenario(double optimumMaxLengthInScenario) {
+    mOptimumMaxLengthInScenario = optimumMaxLengthInScenario;
   }
 
   /*

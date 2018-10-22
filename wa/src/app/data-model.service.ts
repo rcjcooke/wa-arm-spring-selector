@@ -14,6 +14,9 @@ export class DataModelService {
   private springsSource = new BehaviorSubject(<Spring[]>[]);
   springs$ = this.springsSource.asObservable();
 
+  private showAllSpringsSource = new BehaviorSubject(false);
+  showAllSprings$ = this.showAllSpringsSource.asObservable();
+
   // Use ReplaySubject as we don't have (or want) an initial value
   private selectedSpringSource = new ReplaySubject<Spring>();
   selectedSpring$ = this.selectedSpringSource.asObservable();
@@ -39,8 +42,16 @@ export class DataModelService {
     this.selectedSpringSource.next(spring);
   }
 
+  changeShowAllSprings(showAllSprings: boolean) {
+    this.showAllSpringsSource.next(showAllSprings);
+  }
+
   getSpring(manufacturer: string, orderNum: string): Spring {
     return this.springsSource.getValue().find(spring => spring.mManufacturer == manufacturer && spring.mOrderNum == orderNum);
+  }
+
+  isShowAllSprings() {
+    return this.showAllSpringsSource.getValue();
   }
 
 }

@@ -31,14 +31,14 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
   private static final String TEST_DATABASE_PATH = "build/resources/intTest/basicData.csv";
 
   private static final List<Spring> EXPECTED_SPRINGS = Arrays.asList(
-      new Spring("Z-377I", "Gutekunst", 2132, 6.382, 334.0645566, 0, 0, 0, 0),
-      new Spring("Z-377X", "Gutekunst", 2132, 6.348, 335.8538122, 0, 0, 0, 0),
-      new Spring("Z-378I", "Gutekunst", 2132, 5.547, 384.3519019, 0, 0, 0, 0),
-      new Spring("Z-378X", "Gutekunst", 2132, 5.521, 386.1619272, 0, 0, 0, 0),
-      new Spring("Z-379I", "Gutekunst", 2132, 4.826, 441.7737257, 0, 0, 0, 0),
-      new Spring("Z-379X", "Gutekunst", 2132, 4.806, 443.6121515, 0, 0, 0, 0),
-      new Spring("Z-387I", "Gutekunst", 2515, 8.104, 310.3405726, 0, 0, 0, 0),
-      new Spring("Z-387X", "Gutekunst", 2515, 8.075, 311.4551084, 0, 0, 0, 0));
+      new Spring("Z-377I", "Gutekunst", 2132, 6.382, 334.0645566, 0, 0, 0, 0, 0),
+      new Spring("Z-377X", "Gutekunst", 2132, 6.348, 335.8538122, 0, 0, 0, 0, 0),
+      new Spring("Z-378I", "Gutekunst", 2132, 5.547, 384.3519019, 0, 0, 0, 0, 0),
+      new Spring("Z-378X", "Gutekunst", 2132, 5.521, 386.1619272, 0, 0, 0, 0, 0),
+      new Spring("Z-379I", "Gutekunst", 2132, 4.826, 441.7737257, 0, 0, 0, 0, 0),
+      new Spring("Z-379X", "Gutekunst", 2132, 4.806, 443.6121515, 0, 0, 0, 0, 0),
+      new Spring("Z-387I", "Gutekunst", 2515, 8.104, 310.3405726, 0, 0, 0, 0, 0),
+      new Spring("Z-387X", "Gutekunst", 2515, 8.075, 311.4551084, 0, 0, 0, 0, 0));
 
   @Override
   protected Application configure() {
@@ -67,11 +67,13 @@ public class SpringSelectorWebServiceTest extends JerseyTest {
 
   @Test
   public void testRunScenario() {
-    final WebTarget target = target("springselector/runscenario");
+    final WebTarget target = target("springselector/runscenario").queryParam("returnAllSprings", "false");
     final List<Spring> springs = target.request(MediaType.APPLICATION_JSON_TYPE)
         .post(Entity.entity(TEST_SCENARIO, MediaType.APPLICATION_JSON_TYPE), new GenericType<List<Spring>>() {
         });
-
+    // Only test the ones that pass the scenario - i.e. the selection has worked
+    // Need this as the service now returns all springs but with flags
+//    springs.removeIf(sp -> !sp.isInScenario());
     assertEquals(EXPECTED_SPRINGS, springs);
   }
 }

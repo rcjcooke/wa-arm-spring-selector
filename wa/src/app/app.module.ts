@@ -14,8 +14,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSliderModule } from '@angular/material/slider';
-// import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 // Component imports
 import { AppComponent } from './app.component';
@@ -23,6 +24,8 @@ import { ScenarioSelectorComponent } from './scenario-selector/scenario-selector
 import { SpringListComponent } from './spring-list/spring-list.component';
 import { SpringSelectionVisualiserComponent } from './spring-selection-visualiser/spring-selection-visualiser.component';
 import { SpringDetailComponent } from './spring-detail/spring-detail.component';
+import { SpringDetailStaticComponent } from './spring-detail-static/spring-detail-static.component';
+import { SpringDetailScenarioComponent } from './spring-detail-scenario/spring-detail-scenario.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { SpringDetailComponent } from './spring-detail/spring-detail.component';
     ScenarioSelectorComponent,
     SpringListComponent,
     SpringSelectionVisualiserComponent,
-    SpringDetailComponent
+    SpringDetailComponent,
+    SpringDetailStaticComponent,
+    SpringDetailScenarioComponent
   ],
   imports: [
     BrowserModule,
@@ -46,6 +51,8 @@ import { SpringDetailComponent } from './spring-detail/spring-detail.component';
     MatTooltipModule,
     MatSliderModule,
     MatButtonToggleModule,
+    MatSelectModule,
+    MatSlideToggleModule,
     MatButtonModule
   ],
   providers: [],
