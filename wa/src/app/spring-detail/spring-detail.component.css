@@ -1,11 +1,3 @@
-td {
-  padding: 2px;
-}
-
-table.value-table tr:hover {
-  background-color: dimgray;
-}
-
 .spring-detail-container {
   width: -webkit-max-content;
   width: -moz-max-content;
@@ -13,39 +5,7 @@ table.value-table tr:hover {
   height: 100%;
 }
 
-.value-cell {
-  text-align: right;
-  margin-left: auto;
-}
-
-h4 {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 90%;
-  font-weight: 400;
-  margin-top: 0em;
-}
-
-#connections-table {
-  margin: auto;
-  width: 70%;
-  padding: 2px;
-}
-
-.full-width {
-  width: 100%;
-}
-
-#connections-table .value-cell {
-  text-align: center;
-}
-
 .header-image {
   background-image: url('../../assets/spring.png');
   background-size: cover;
-}
-
-.spacer  {
-  margin: auto;
-  margin-left: 0.5em;
-  margin-right: 0.5em;
 }

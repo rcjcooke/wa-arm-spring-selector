@@ -1,3 +1,35 @@
-<p>
-  spring-detail-scenario works!
-</p>
+<table>
+  <tr>
+    <td>A / mm</td>
+    <td class="value-cell">{{spring.mAMin | number : '1.0-0'}}</td>
+    <td><mat-slider [(ngModel)]="aValue" [disabled]="!aValueLocked" (change)="onAValueChange($event)" step="1" thumbLabel="true" [displayWith]="formatSliderLabel" [min]="spring.mAMin" [max]="spring.mAMax"></mat-slider></td>
+    <td class="value-cell">{{spring.mAMax | number : '1.0-0'}}</td>
+    <td><i *ngIf="aValueLocked" class="material-icons">lock</i><i *ngIf="!aValueLocked" class="material-icons">lock_open</i></td>
+  </tr>
+  <tr>
+    <td>R<sub>2</sub> / mm</td>
+    <td class="value-cell">{{spring.mR2Min | number : '1.0-0'}}</td>
+    <td><mat-slider [(ngModel)]="r2Value" [disabled]="!r2ValueLocked" (change)="onR2ValueChange($event)" step="1" thumbLabel="true" [displayWith]="formatSliderLabel" [min]="spring.mR2Min" [max]="spring.mR2Max"></mat-slider></td>
+    <td class="value-cell">{{spring.mR2Max | number : '1.0-0'}}</td>
+    <td><i *ngIf="r2ValueLocked" class="material-icons">lock</i><i *ngIf="!r2ValueLocked" class="material-icons">lock_open</i></td>
+  </tr>
+</table>
+<h4>Final System Parameters</h4>
+<table id="connections-table" cellspacing="0">
+  <tr>
+    <td>A / mm</td>
+    <td *ngIf="!aValueLocked" class="value-cell">{{aZeroValue | number : '1.0-0'}}</td>
+    <td *ngIf="!aValueLocked" class="value-cell"><i class="material-icons spacer">arrow_forward</i></td>
+    <td class="value-cell" colSpan="{{aValueLocked ? 3 : 1}}">{{aValue | number : '1.0-0'}}</td>
+  </tr>
+  <tr>
+    <td>R<sub>2</sub> / mm</td>
+    <td *ngIf="!r2ValueLocked" class="value-cell">{{r2ZeroValue | number : '1.0-0'}}</td>
+    <td *ngIf="!r2ValueLocked" class="value-cell"><i class="material-icons spacer">arrow_forward</i></td>
+    <td class="value-cell" colSpan="{{r2ValueLocked ? 3 : 1}}">{{r2Value | number : '1.0-0'}}</td>
+  </tr>
+</table>
+<table class="value-table full-width">
+  <tr><td>Max spring deflection</td><td class="value-cell">{{(r2Value + aValue) | number : '1.0-3'}}</td><td>mm</td></tr>
+  <tr><td>Max spring length</td><td class="value-cell">{{(r2Value + aValue + spring.mUnstressedLength ) | number : '1.0-3'}}</td><td>mm</td></tr>
+</table>

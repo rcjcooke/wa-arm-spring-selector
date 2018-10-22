@@ -17,6 +17,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
 
 // Component imports
 import { AppComponent } from './app.component';
@@ -53,6 +54,7 @@ import { SpringDetailScenarioComponent } from './spring-detail-scenario/spring-d
     MatButtonToggleModule,
     MatSelectModule,
     MatSlideToggleModule,
+    MatTabsModule,
     MatButtonModule
   ],
   providers: [],

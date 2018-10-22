@@ -1,3 +1,9 @@
-<p>
-  spring-detail-static works!
-</p>
+<table class="value-table">
+  <tr><td>Rate</td><td class="value-cell">{{spring.mRate | number : '1.0-3'}}</td><td>Nm<sup>-1</sup></td></tr>
+  <tr><td>Max force under static load</td><td class="value-cell">{{spring.mMaximumForceUnderStaticLoad | number : '1.0-3'}}</td><td>N</td></tr>
+  <tr><td>Max deflection at max force</td><td class="value-cell">{{spring.mMaximumDeflection | number : '1.0-3'}}</td><td>mm</td></tr>
+  <tr><td>Mass</td><td class="value-cell">{{spring.mMass | number : '1.0-3'}}</td><td>g</td></tr>
+  <tr><td>Outside diameter</td><td class="value-cell">{{spring.mOutsideDiameter | number : '1.0-3'}}</td><td>mm</td></tr>
+  <tr><td>Wire diameter</td><td class="value-cell">{{spring.mWireDiameter | number : '1.0-3'}}</td><td>mm</td></tr>
+  <tr><td>Unstressed length</td><td class="value-cell">{{spring.mUnstressedLength | number : '1.0-3'}}</td><td>mm</td></tr>
+</table>

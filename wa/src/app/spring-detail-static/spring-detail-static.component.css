@@ -1,0 +1,17 @@
+table {
+  width: 100%;
+  padding: 5px;
+}
+
+td {
+  padding: 3px;
+}
+
+table.value-table tr:hover {
+  background-color: dimgray;
+}
+
+.value-cell {
+  text-align: right;
+  margin-left: auto;
+}

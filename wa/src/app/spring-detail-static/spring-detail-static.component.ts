@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DataModelService } from '../data-model.service';
+import { Spring } from '../spring';
 
 @Component({
   selector: 'app-spring-detail-static',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SpringDetailStaticComponent implements OnInit {
 
-  constructor() { }
-
+  spring: Spring;
+    
+  constructor(
+    private dataModelService: DataModelService
+  ) {}
+  
   ngOnInit() {
+    this.dataModelService.selectedSpring$.subscribe(sp => {
+      if (sp) {
+        this.spring = sp;
+      }
+    });
   }
 
 }
