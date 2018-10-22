@@ -223,6 +223,8 @@ public class SpringDB {
             spring.setAMax(mechanicalAdvantage * ssFP.getAMax());
             spring.setR2Min(mechanicalAdvantage * ssFP.getR2Min());
             spring.setR2Max(mechanicalAdvantage * ssFP.getR2Max());
+            spring.setSpringCPMin(mechanicalAdvantage * ssFP.getSpringCPMin());
+            spring.setSpringCPMax(mechanicalAdvantage * ssFP.getSpringCPMax());
             // Record the multiple of A and R2 for the maximum payload against the spring (for client-side calcs)
             spring.setMaxPayloadAnchorPointFactor(mechanicalAdvantage * mechanicalAdvantage * ssFP.getPayloadAnchorPointFactor());
             // Record the optimum connection point for minimising the max deflection
@@ -331,7 +333,7 @@ public class SpringDB {
       optConnectionPointA = payloadAnchorPointFactor / optConnectionPointR2;
     }
     
-    return new SpringScenario(finalR2[0], finalR2[1], finalA[0], finalA[1], payloadAnchorPointFactor, optConnectionPointA);
+    return new SpringScenario(finalR2[0], finalR2[1], finalA[0], finalA[1], payloadAnchorPointFactor, optConnectionPointA, theoA[0], theoA[1]);
   }
 
   private Spring createNewSpringFromCurrentResultSetRow(ResultSet rs) throws SQLException {

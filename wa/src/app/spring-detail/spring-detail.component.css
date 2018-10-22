@@ -9,3 +9,23 @@
   background-image: url('../../assets/spring.png');
   background-size: cover;
 }
+
+mat-card-content {
+  margin-bottom: 0px;
+}
+
+mat-tab-group {
+  height: 100%;
+}
+
+mat-tab {
+  height: 100%;
+}
+
+app-spring-detail-static {
+  height: 100%;
+}
+
+app-spring-detail-scenario {
+  height: 100%;
+}

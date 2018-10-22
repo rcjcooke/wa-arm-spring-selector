@@ -27,6 +27,7 @@ import { SpringSelectionVisualiserComponent } from './spring-selection-visualise
 import { SpringDetailComponent } from './spring-detail/spring-detail.component';
 import { SpringDetailStaticComponent } from './spring-detail-static/spring-detail-static.component';
 import { SpringDetailScenarioComponent } from './spring-detail-scenario/spring-detail-scenario.component';
+import { SpringConnectionChartComponent } from './spring-connection-chart/spring-connection-chart.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { SpringDetailScenarioComponent } from './spring-detail-scenario/spring-d
     SpringSelectionVisualiserComponent,
     SpringDetailComponent,
     SpringDetailStaticComponent,
-    SpringDetailScenarioComponent
+    SpringDetailScenarioComponent,
+    SpringConnectionChartComponent
   ],
   imports: [
     BrowserModule,

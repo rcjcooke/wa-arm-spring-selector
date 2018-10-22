@@ -1,0 +1,10 @@
+/* 
+  Note: Chart styling can be found in root styles.css - Angular 
+  automatically renames component specific styles
+*/
+
+div {
+  width: 300px;
+  height: 140px;
+}
+

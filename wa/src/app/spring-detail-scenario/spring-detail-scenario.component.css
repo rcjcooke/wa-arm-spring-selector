@@ -10,13 +10,6 @@ table.value-table tr:hover {
   background-color: dimgray;
 }
 
-.spring-detail-container {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  height: 100%;
-}
-
 .value-cell {
   text-align: right;
   margin-left: auto;
@@ -47,4 +40,8 @@ h4 {
   margin: auto;
   margin-left: 0.5em;
   margin-right: 0.5em;
+}
+
+app-spring-connection-chart {
+  height: max-content; 
 }

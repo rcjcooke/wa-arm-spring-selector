@@ -31,3 +31,21 @@ overridden without the !important */
   width: 100%;
   height: 100%;
 }
+
+.spring-connection-chart-line {
+  fill: none;
+  stroke: #c2185b;
+  stroke-width: 2;
+}
+
+.spring-connection-chart-spring-rect {
+  fill: none;
+  stroke: #54ca5e;
+  stroke-width: 2;
+}
+
+.spring-connection-chart-allowed-rect {
+  fill: none;
+  stroke: #e29b2f;
+  stroke-width: 2;
+}

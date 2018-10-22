@@ -32,6 +32,8 @@ public class Spring {
   public double mR2Max;
   public double mAMin;
   public double mAMax;
+  public double mSpringCPMin;
+  public double mSpringCPMax;
   public boolean mInScenario = false;
   
   public double mMaxPayloadAnchorPointFactor;
@@ -197,6 +199,34 @@ public class Spring {
    */
   public void setAMax(double aMax) {
     mAMax = aMax;
+  }
+
+  /**
+   * @return the springCPMin
+   */
+  public double getSpringCPMin() {
+    return mSpringCPMin;
+  }
+
+  /**
+   * @return the springCPMax
+   */
+  public double getSpringCPMax() {
+    return mSpringCPMax;
+  }
+
+  /**
+   * @param springCPMin the springCPMin to set
+   */
+  public void setSpringCPMin(double springCPMin) {
+    mSpringCPMin = springCPMin;
+  }
+
+  /**
+   * @param springCPMax the springCPMax to set
+   */
+  public void setSpringCPMax(double springCPMax) {
+    mSpringCPMax = springCPMax;
   }
 
   /**
