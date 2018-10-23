@@ -13,14 +13,15 @@
           <td class="full-width">
             <!-- Legend -->
           </td>
-          <td *ngIf="ft_showAllSpringsToggle">
+          <td *ngIf="ft_showAllSpringsToggle" class="controls">
             <!-- All Springs selection -->
-            <mat-slide-toggle [(ngModel)]="showAllSprings" (change)="onShowAllSpringsChange($event)">
+            <mat-slide-toggle class="controls" [(ngModel)]="showAllSprings" (change)="onShowAllSpringsChange($event)">
               Show all Springs
             </mat-slide-toggle>
           </td>
-          <td>X:</td>
-          <td>
+          <td><div class="spacer"></div></td>
+          <td class="controls">X:</td>
+          <td class="controls">
             <!-- Max Spring Length / Deflection toggle -->
             <mat-form-field>
                 <mat-select [(value)]="selectedAxisFieldName" (selectionChange)="onXAxisFieldChange($event)">

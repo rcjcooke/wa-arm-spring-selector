@@ -144,3 +144,5 @@ Spring data from Knoerzer was already included in the curated spring data collec
 * Angular material icons: https://material.io/tools/icons/?style=baseline
 * Angular material theming: https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1
 * D3.js colour functions: https://github.com/d3/d3-scale-chromatic/blob/master/README.md#interpolateWarm
+* D3.js Curve Explorer: http://bl.ocks.org/d3indepth/b6d4845973089bc1012dec1674d3aff8
+* D3.js V5 Line Chart Example: https://bl.ocks.org/gordlea/27370d1eea8464b04538e6d8ced39e89

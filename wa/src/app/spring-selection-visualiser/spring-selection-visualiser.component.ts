@@ -17,6 +17,11 @@ export interface AxisField {
 })
 export class SpringSelectionVisualiserComponent implements OnInit, AfterViewInit {
 
+  /* 
+    Feature Toggle for turning on / off the "show all springs" toggle.
+    Note: There are serious performance issues with using this at present, hence
+    it being unavailable by default at this time.
+  */
   private ft_showAllSpringsToggle: boolean = false;
 
   springChart: c3.ChartAPI;

@@ -19,6 +19,10 @@ mat-form-field {
   width: 100%;
 }
 
-td {
+.controls {
   font-size: 80%;
+}
+
+.spacer {
+  width: 10px;
 }

@@ -65,9 +65,6 @@ export class SpringDetailScenarioComponent implements OnInit {
       height: '500px',
       data: this.spring
     });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
   }
 
   onR2ValueChange(event: MatSliderChange) {
