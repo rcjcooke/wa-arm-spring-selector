@@ -19,6 +19,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 // Component imports
 import { AppComponent } from './app.component';
@@ -60,6 +61,7 @@ import { SpringConnectionChartComponent } from './spring-connection-chart/spring
     MatSlideToggleModule,
     MatTabsModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     MatButtonModule
   ],
   entryComponents: [

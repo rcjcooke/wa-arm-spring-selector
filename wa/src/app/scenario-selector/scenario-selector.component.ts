@@ -32,6 +32,8 @@ export class ScenarioSelectorComponent implements OnInit {
   fixedPositionA: boolean = true;
   fixedPositionR2: boolean = false;
 
+  showSpinner: boolean = false;
+
   constructor(
     private springSelectorService: SpringSelectorService,
     private dataModelService: DataModelService
@@ -83,8 +85,10 @@ export class ScenarioSelectorComponent implements OnInit {
   */
 
   findSprings() {
+    this.showSpinner = true;
     this.springSelectorService.findSprings(this.scenario, this.dataModelService.isShowAllSprings()).subscribe(sps => {
       this.dataModelService.changeSprings(sps, this.scenario);
+      this.showSpinner = false;
     });
   }
 }

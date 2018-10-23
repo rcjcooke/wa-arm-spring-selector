@@ -116,6 +116,18 @@
     </tr>
   </table>
 
-  <button mat-flat-button (click)="findSprings()">Find Springs</button>
+  <table>
+    <tr>
+      <td>
+        <button mat-flat-button (click)="findSprings()" [disabled]="showSpinner">
+          Find Springs
+        </button>
+      </td>
+      <td class="scenario-selector-full-width"></td>
+      <td *ngIf="showSpinner">
+        <mat-spinner diameter="30"></mat-spinner>
+      </td>
+    </tr>
+  </table>
 
 </form>
