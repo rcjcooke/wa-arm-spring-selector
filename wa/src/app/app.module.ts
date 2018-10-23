@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // Component imports
 import { AppComponent } from './app.component';
@@ -26,7 +27,7 @@ import { SpringListComponent } from './spring-list/spring-list.component';
 import { SpringSelectionVisualiserComponent } from './spring-selection-visualiser/spring-selection-visualiser.component';
 import { SpringDetailComponent } from './spring-detail/spring-detail.component';
 import { SpringDetailStaticComponent } from './spring-detail-static/spring-detail-static.component';
-import { SpringDetailScenarioComponent } from './spring-detail-scenario/spring-detail-scenario.component';
+import { SpringDetailScenarioComponent, SpringConnectionChartDialog } from './spring-detail-scenario/spring-detail-scenario.component';
 import { SpringConnectionChartComponent } from './spring-connection-chart/spring-connection-chart.component';
 
 @NgModule({
@@ -38,6 +39,7 @@ import { SpringConnectionChartComponent } from './spring-connection-chart/spring
     SpringDetailComponent,
     SpringDetailStaticComponent,
     SpringDetailScenarioComponent,
+    SpringConnectionChartDialog,
     SpringConnectionChartComponent
   ],
   imports: [
@@ -57,7 +59,11 @@ import { SpringConnectionChartComponent } from './spring-connection-chart/spring
     MatSelectModule,
     MatSlideToggleModule,
     MatTabsModule,
+    MatDialogModule,
     MatButtonModule
+  ],
+  entryComponents: [
+    SpringConnectionChartDialog
   ],
   providers: [],
   bootstrap: [AppComponent]

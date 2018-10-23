@@ -305,10 +305,10 @@ public class SpringDB {
      * rect[FinalA[0],FinalR2[0],FinalA[1],FinalR2[1]] of the real spring (behind
      * ratio)
      */
-    finalA[0] = Math.max(halfMassPotentialEnergy / springConstant / finalR2[1], finalA[0]);
-    finalA[1] = Math.min(halfMassPotentialEnergy / springConstant / finalR2[0], finalA[1]);
-    finalR2[0] = halfMassPotentialEnergy / springConstant / finalA[1];
-    finalR2[1] = halfMassPotentialEnergy / springConstant / finalA[0];
+   finalA[0] = Math.max(halfMassPotentialEnergy / springConstant / finalR2[1], finalA[0]);
+   finalA[1] = Math.min(halfMassPotentialEnergy / springConstant / finalR2[0], finalA[1]);
+   finalR2[0] = halfMassPotentialEnergy / springConstant / finalA[1];
+   finalR2[1] = halfMassPotentialEnergy / springConstant / finalA[0];
     
     double payloadAnchorPointFactor = halfMassPotentialEnergy / springConstant;
     

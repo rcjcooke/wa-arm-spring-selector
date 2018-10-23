@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Spring } from '../spring';
 import { Scenario } from '../scenario';
 import { DataModelService } from '../data-model.service';
-import { MatSliderChange } from '@angular/material';
+import { MatSliderChange, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-spring-detail-scenario',
@@ -22,7 +22,8 @@ export class SpringDetailScenarioComponent implements OnInit {
   r2ZeroValue: number;
 
   constructor(
-    private dataModelService: DataModelService
+    private dataModelService: DataModelService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -58,6 +59,17 @@ export class SpringDetailScenarioComponent implements OnInit {
     });
   }
 
+  openBigChartDialog() {
+    const dialogRef = this.dialog.open(SpringConnectionChartDialog, {
+      width: '800px',
+      height: '500px',
+      data: this.spring
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
   onR2ValueChange(event: MatSliderChange) {
     var newA = this.spring.mMaxPayloadAnchorPointFactor/event.value;
     if (this.aValue != newA) this.aValue = newA;
@@ -81,4 +93,17 @@ export class SpringDetailScenarioComponent implements OnInit {
     }
     return Math.round(value);
   }
+}
+
+@Component({
+  selector: 'spring-connection-chart-dialog',
+  templateUrl: 'spring-connection-chart-dialog.html',
+})
+export class SpringConnectionChartDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<SpringConnectionChartDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: Spring)
+  {}
+
 }
