@@ -93,6 +93,16 @@ export class SpringConnectionChartComponent implements OnInit, AfterContentInit 
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
+      // Create a tooltip object to use later
+      d3.select(this.chartElement.nativeElement).select('div').remove();
+      var tooltip = d3.select(this.chartElement.nativeElement)
+        .append("div")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("visibility", "hidden")
+        .style("background", "#000")
+        .text("tooltip");
+
       // Create the axes
       svg.append("g")
         .attr("class", "x axis")
@@ -144,12 +154,17 @@ export class SpringConnectionChartComponent implements OnInit, AfterContentInit 
 
       // Append the optimum connection point marker
       if (this.bigMode) {
+        var optA = _this.spring.mOptimumConnectionPointA;
+        var optR2 = _this.spring.mMaxPayloadAnchorPointFactor/_this.spring.mOptimumConnectionPointA;
         svg.append("circle")
           .attr("class", "spring-connection-chart-optimum-connection-point")
-          .attr("cx", xScale(_this.spring.mMaxPayloadAnchorPointFactor/_this.spring.mOptimumConnectionPointA))
-          .attr("cy", yScale(_this.spring.mOptimumConnectionPointA))
+          .attr("cx", xScale(optR2))
+          .attr("cy", yScale(optA))
           .attr("r", '2')
-      }
+          .on("mouseover", function(d){tooltip.text("(R2: " + d3.format(".2f")(optR2) + ", A: " + d3.format(".2f")(optA) + ")"); return tooltip.style("visibility", "visible");})
+            .on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
+            .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+        }
 
     }
   }
