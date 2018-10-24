@@ -3,7 +3,7 @@
 
 This repository contains of a small set of services that work together to provide an interface for selecting stock springs from a spring catalogue that will allow for the gravity balancing of a mechanical arm. This system is founded in earlier work done by Frank Beinersdorf with some minor functional expansions to allow for the spring mass to be included in the system mass and to allow for spring selections that can be used to balance variable payloads.
 
-![Screenshot](media/Screenshot.PNG)
+![General screenshot](media/Screenshot2.PNG)
 
 This project is part of wider work to design a template for a robotic arm to assist solo inventors in a workshop context, however, this tool can be used standalone for balancing any mechanical arm. It is assumed that the mechanical arm can be modelled such that it conforms to the general mechanical model shown below. Note that for a parallogram 4-bar linkage, the connection points for the spring will work on either of the horizontal bars and their respective vertical bars, as visualised by the dotted line in the diagram.
 
@@ -21,11 +21,30 @@ The tool reflects the mechanical structure shown using the following variables:
 | m<sub>p</sub> | Payload mass - the mass of the payload                                                               |
 | N             | The number of springs to be used                                                                     |
 
-If the arm is being designed to handle a variable payload then this needs to be taken in to account when selecting the spring(s) to balance it. For a spring-based gravity balancing mechanism there are two options for balancing a variable payload. Either the spring constant of the spring needs to change, or the connection points need to be moved based on the payload. It is impractical to physically swap the spring out during operation so it is assumed that balancing of a variable payload is achieved by moving one or both of the connection points, i.e. dynamically changing the distances A and R<sub>2</sub>.
-
 ## Tool Usage
 
-Note: The separation between m<sub>p</sub> and m<sub>s</sub> is only relevant for
+The basic usage flow is as follows:
+
+1. Put in the values for the variables outlined above into the Scenario Setup panel on the left of the tool and press the "Find Springs" button.
+2. This will populate the Spring List that occupies the bottom of the tool with all the springs that match the specified scenario. Similarly the same springs will also be populated in the chart.
+3. Selecting a spring in either the list or by clicking on it in the chart will bring up the details for that spring in the pop-up panel on the right.
+4. There are two tabs on the Spring Details panel. The "Static" tab shows the manufacturing details of the spring, i.e. those unaffected by the scenario the spring is being used in. More interestingly to the designer, the "Scenario" tab allows the designer to determine the connection points (A and R<sub>2</sub>) for the spring(s) in the design.
+
+**Note**: The separation between m<sub>p</sub> and m<sub>s</sub> is only relevant for systems where a variable payload is to be supported. In this case the system mass is assumed to be constant and the payload mass is assumed to vary between zero grams and the specific payload mass.
+
+**Note**: Please note that, as the tooltip states, the checkbox allowing for a system design where the spring is essentially also balancing it's own mass will result in a system that doesn't perfectly balance at all pivot angles. This is because the centre of mass of the spring will change change as it stretches which will therefore also affect the force that needs to be applied to balance the system. This is a non-linear behaviour that cannot be accounted for in a design that uses springs to balance. This may well be an error that you choose to accept in the design of your system however and can probably be adequately compensated for simply by intentionally introducing some friction in to the rotation of the pivot. 
+
+### Variable Payload Design
+
+If the arm is being designed to handle a variable payload then this needs to be taken in to account when selecting the spring(s) to balance it. For a spring-based gravity balancing mechanism there are two options for balancing a variable payload. Either the spring constant of the spring needs to change, or the connection points need to be moved based on the payload. It is impractical to physically swap the spring out during operation so it is assumed that balancing of a variable payload is achieved by moving one or both of the connection points, i.e. dynamically changing the distances A and R<sub>2</sub>.
+
+### Understanding the spring fit
+
+To better understand how the spring fits the mechanical scenario outlined, a chart is available on the Spring Detail -> Scenario tab. Clicking on the chart will provide an enlarged version such as the one shown in the screenshot below.
+
+![Screenshot showing connection point chart](media/Screenshot.PNG)
+
+This chart shows the spring's behaviour as a function of it's connection points with the rectangles showing the bounds for allowed values of A and R<sub>2</sub> and those that the spring could theoretically manage. The intersection of these rectangles, limited by the function shown, gives the range of possible values for A and R<sub>2</sub> that are possible for your system which will correspond to the slider ranges you can move on the Spring Detail -> Scenario tab.
 
 ## Project Usage
 
