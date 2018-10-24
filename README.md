@@ -44,7 +44,7 @@ To better understand how the spring fits the mechanical scenario outlined, a cha
 
 ![Screenshot showing connection point chart](media/Screenshot.PNG)
 
-This chart shows the spring's behaviour as a function of it's connection points with the rectangles showing the bounds for allowed values of A and R<sub>2</sub> and those that the spring could theoretically manage. The intersection of these rectangles, limited by the function shown, gives the range of possible values for A and R<sub>2</sub> that are possible for your system which will correspond to the slider ranges you can move on the Spring Detail -> Scenario tab.
+This chart shows the spring's behaviour as a function of it's connection points with the rectangles showing the bounds for allowed values of A and R<sub>2</sub> and those that the spring could theoretically manage. The intersection of these rectangles, limited by the function shown, gives the range of possible values for A and R<sub>2</sub> that are possible for your system which will correspond to the slider ranges you can move on the Spring Detail -> Scenario tab. The small yellow dot represents the most optimal (meaning the smallest possible maximum spring deflection) connection point possible for the configuration required.
 
 ## Project Usage
 
@@ -66,14 +66,16 @@ You'll need the following installed to get this project fully up and running on 
 
 The `data` project uses bash scripts and relies on `sed`, `awk` and `grep` as well as a handful of other standard bash shell lanugage commands. This therefore means that it can only be run on a Linux or Linux emulating environment such as Cygwin on Windows. To date this project has been entirely developed on a Windows machine using a MinGW 32-bit terminal (https://osdn.net/projects/mingw/releases/) and therefore it has been proven to work correctly in that environment. While it should theoretically work fine in a native Linux build this hasn't been tested. The `data` sub-project is NOT Windows native compatible at this time.
 
-While most of the projects use Gradle for dependency management, the Web App project (wa sub-folder) uses NPM via Angular to manage dependencies. This will result in the creation of a local `node_modules` folder. Please see the Web App section below for details on it's dependencies.
-
 Once you've got the dependencies above installed, the following steps should get the web app up and running:
 
 1. Change to the `data` sub-directory and run `gradle publish`. This will compile the datasets together to form the spring database and then publish that to a locally created Maven repository for the other projects to access. This is used by the Core application if it's run independently and the Web Service.
 2. Change to the `core` sub-directory and run `gradle publish`. This will compile the core libraries and publish them to a local Maven repository for the Web Service to access.
 3. Change to the `ws` sub-directory and run `gradle run`. This will compile and execute the web service which will start an embedded web server for the web app to connect to. You'll need to leave this running while you use the web app.
 4. In a new terminal, change to the `wa` sub-directory and run `npm i` to download and install all javascript dependencies. This will take a while (and not say much on the command link so will look like it's not doing anything!) but you only ever have to do it once. Once that's complete run `ng serve --open`. This will start the Web App in a local Node.js instance and then open a web browser page pointing at it.
+
+That's it! You should have a fully functional app running in your browser at this point.
+
+**Note:** While most of the projects use Gradle for dependency management, the Web App project (wa sub-folder) uses NPM via Angular to manage dependencies. This will result in the creation of a local `node_modules` folder. Please see the Web App section below for details on it's dependencies.
 
 ### Core
 This is the core logic and database executable as a command line application. It is also used as an integrated dependency of the web service. It is dependent on the data project and will compile and this include this as required. To run the application:
@@ -139,11 +141,10 @@ Legend: R = Researched, L = Listed
 | Lee Springs | https://www.leespring.com/uk_index.asp | R |
 | ABSSAC | https://www.abssac.co.uk/ | R |
 
-
 ### Century Springs
 The spring data was copied from their PDF catalogues available online. Once scraped, it became evident that the catalogues had a small number of data errors in addition to a significant number of problems being introduced as a result of scraping the data from PDF in the first place. The original scraped source pages can be found in the `data/centurysprings` directory. 
 
-Cleanup scripts were created to process the raw pages and generate a single CSV output. This process can be re-executed by running the `clean.sh` script (`-h` as an argument to get usage instructions). Please note that this requires `sed` and `awk` to be available on the command line. This was tested and proven to work on a MinGW terminal on Windows. No other environment has been verified at this stage.
+Cleanup scripts were created to process the raw pages and generate a single CSV output. This process can be re-executed by running the `clean.sh` script (`-h` as an argument to get usage instructions). Please note that this requires `sed` and `awk` to be available on the command line. This was tested and proven to work on a MinGW terminal on Windows. No other environment has been verified at this stage. This process has now been integrated in to Gradle so using standard Gradle tasks will execute this for you.
 
 ### Gutekunst Federn
 The spring data was collated from their catalogue by Frank Beinersdorf and the final curated CSV can be found in the `data/gutekunst` project.
