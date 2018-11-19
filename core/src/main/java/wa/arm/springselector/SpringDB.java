@@ -153,12 +153,12 @@ public class SpringDB {
               }
             }
 
-            double springMaxlength = spring.getMaximumDeflection();
+            double springMaxDeflection = spring.getMaximumDeflection();
             double springConstant = spring.getRate();
             double springMass = spring.getMass();
 
             SpringScenario ssFP = testSpringAgainstScenario(
-                springMaxlength, 
+                springMaxDeflection, 
                 springConstant, 
                 springMass, 
                 includeSpringMassInSystem, 
@@ -195,7 +195,7 @@ public class SpringDB {
                 break;
               }
               ssZP = testSpringAgainstScenario(
-                  springMaxlength, 
+                  springMaxDeflection, 
                   springConstant, 
                   springMass, 
                   includeSpringMassInSystem, 
@@ -247,7 +247,7 @@ public class SpringDB {
     return selectedSpringList;
   }
   
-  private SpringScenario testSpringAgainstScenario(double springMaxlength, double springConstant, double springMass, boolean includeSpringMassInSystem, double payloadMassPerSpring, double systemMassPerSpring, double lengthToCOM, double[] allowedRangeA_sc, double[] allowedRangeR2_sc) {
+  private SpringScenario testSpringAgainstScenario(double springMaxDeflection, double springConstant, double springMass, boolean includeSpringMassInSystem, double payloadMassPerSpring, double systemMassPerSpring, double lengthToCOM, double[] allowedRangeA_sc, double[] allowedRangeR2_sc) {
     /*
      * Calculate TheoAmin, TheoAmax, TheoR2min, TheoR2max for the current spring
      * based on Lr,k and the balancing condition ???
@@ -274,8 +274,8 @@ public class SpringDB {
     double[] finalR2 = { 0, 0 };
     double[] finalA = { 0, 0 };
 
-    theoR2[0] = springMaxlength / 2 - Math.sqrt(Math.pow(springMaxlength / 2, 2) - (halfMassPotentialEnergy / springConstant));
-    theoR2[1] = springMaxlength / 2 + Math.sqrt(Math.pow(springMaxlength / 2, 2) - (halfMassPotentialEnergy / springConstant));
+    theoR2[0] = springMaxDeflection / 2 - Math.sqrt(Math.pow(springMaxDeflection / 2, 2) - (halfMassPotentialEnergy / springConstant));
+    theoR2[1] = springMaxDeflection / 2 + Math.sqrt(Math.pow(springMaxDeflection / 2, 2) - (halfMassPotentialEnergy / springConstant));
     theoA[0] = theoR2[0];
     theoA[1] = theoR2[1];
 
